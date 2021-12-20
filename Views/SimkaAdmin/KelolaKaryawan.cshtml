@@ -1,0 +1,462 @@
+﻿
+@{
+    ViewData["Title"] = "KelolaRekanan";
+    Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+}
+
+
+
+<head>
+    <title>Kelola Karyawan- SIMKA UAJY </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />*@
+
+    
+
+</head>
+
+
+
+<!-- Main content -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kelola Karyawan</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+
+                        <li class="breadcrumb-item active">Home</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+
+        <div style="width:100%; margin:0" class="tab-pane">
+            <div class="card cardMargin">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="flex-grow-1">Pencarian</h5>
+                    <a class=" text-light btn btn-success"
+                       onclick="ShowPopup('@Url.Action("AddEditKaryawan","SimkaAdmin")')"><i class="fa fa-plus"></i> Tambah Karyawan </a>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="inputNPP" class=" col-form-label">NPP</label>
+                            <input class="form-control form-control-sm" id="inputNPP" placeholder="00.000.001">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputJabAkademik" class=" col-form-labelf">Jabatan Akademik</label>
+                            <select class="form-control form-control-sm" id="inputJabAkademik">
+                                <option value="">-All-</option>
+
+                                @foreach (var item in Model.refJabatanAkademik)
+                                {
+                                    <option value="@item.IdRefJbtnAkademik">@item.Deskripsi</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="inputNama" class=" col-form-label">Nama</label>
+                            <input class="form-control form-control-sm" id="inputNama" placeholder="Nama">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputFungsional" class=" col-form-label">Jabatan Fungsional</label>
+                            <select class="form-control form-control-sm" id="inputFungsional">
+                                <option value="">-All-</option>
+
+                                @foreach (var item in Model.refFungsional)
+                                {
+                                    <option value="@item.IdRefFungsional">@item.Deskripsi</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="inputJenjang" class=" col-form-label">Jenjang</label>
+                            <select class="form-control form-control-sm" id="inputJenjang">
+                                <option value="">-All-</option>
+                                @foreach (var item in Model.refJenjang)
+                                {
+                                    <option value="@item.Deskripsi">@item.Deskripsi</option>
+                                }
+
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputUnit" class=" col-form-label">Unit</label>
+                            <select class="form-control form-control-sm" id="inputUnit" onchange="getSubUnit()">
+                                <option value="">-All-</option>
+                                @foreach (var item in Model.refUnit)
+                                {
+                                    <option value="@item.IdUnit">@item.NamaUnit</option>
+                                }
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="inputStatus" class=" col-form-label">Status</label>
+                            <select class="form-control form-control-sm" id="inputStatus">
+                                <option value="">-All-</option>
+                                @foreach (var item in Model.refStatus)
+                                {
+                                    <option value="@item.StatusKepegawaian">@item.StatusKepegawaian</option>
+                                }
+
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputSubUnit" class=" col-form-label">Sub Unit</label>
+                            <select class="form-control form-control-sm" id="inputSubUnit">
+                                <option value="">-All-</option>
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <button style="margin-right: 1%; padding: 0.3rem 2rem;" class="btn  btn-danger" onclick="resetPencarian()">Reset Filter</button>
+
+                    <button style="padding:0.3rem 2rem;" class="btn  btn-primary" onclick="getDataKaryawanByCriteria()">Cari</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10">
+                    
+                </div>
+            </div>
+            
+            <div class="card cardMargin">
+                <div class="card-header">
+                    <h5>Data Karyawan</h5>
+                </div>
+                <div class="card-body">
+                    <table id="example" class="  table-hover table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+
+                        <thead class="bg-primary"></thead>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.2
+    </div>
+    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+    reserved.
+</footer>
+
+<!-- Control Sidebar -->
+<!-- /.control-sidebar -->
+
+@section Scripts{
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"
+            crossorigin="anonymous"
+            integrity="sha384-Fnqn3nxp3506LP/7Y3j/25BlWeA3PXTyT1l78LjECcPaKCV12TsZP7yyMxOe/G/k">
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+            crossorigin="anonymous"
+            integrity="sha384-JrXK+k53HACyavUKOsL+NkmSesD2P+73eDMrbTtTk0h4RmOF8hF8apPlkp26JlyH">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.9.0/jquery.serializejson.min.js"></script>
+    <!--toastr-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--sweetalert-->
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>*@
+
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    <script>
+        var popup, dataTable;
+        var idJabatanAkademik = "", idFungsional = "", idJenjang = "", idUnit = "", idSubUnit = "", statusKepegawaian = "", npp = "", nama = "";
+
+        $(document).ready(function () {
+
+            dataTable = $('#example').DataTable({
+                dom: "<'row justify-content-between'<'col-sm-9 'l><'justify-content-between col-sm-3 mx-0 px-0'B>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                buttons: [{
+                    extend: 'pdf',
+                    text: 'Export to PDF',
+                    className: 'btn btn-secondary',
+                    title: 'Daftar karyawan ',
+                    filename: 'Karyawan',
+
+                }, {
+                    extend: 'excel',
+                    className:'btn btn-secondary',
+                    text: 'Export to Excel',
+                    title: 'Daftar karyawan',
+                    filename: 'Karyawan'
+                    ,
+
+                }
+                ],
+                "responsive": true,
+                "deferRender": true,
+                "ajax": {
+                    "url": "/SimkaAdmin/LoadDataKaryawanbyCriteria",
+                    "type": "POST",
+                    "datatype": "json",
+                    "data": function (d) {
+                        d.idJabatanAkademik = idJabatanAkademik,
+                            d.idFungsional = idFungsional,
+                            d.PendidikanTerakhir = idJenjang,
+                            d.idUnit = idUnit,
+                            d.statusKepegawaian = statusKepegawaian,
+                            d.npp = npp,
+                            d.nama = nama
+                    },
+
+                },
+                "columns": [
+                    {
+                        data: "NPP",
+                        title: "NPP",
+                        name: "NPP",
+                        type: "readonly",
+                        "visible": true,
+
+                    },
+                    {
+                        data: "NAMA",
+                        title: "Nama Karyawan",
+
+                    },
+                    {
+                        data: "FUNGSIONAL",
+                        title: "Fungsional",
+
+                    },
+                    {
+                        data: "NAMA_UNIT",
+                        title: "Unit",
+
+                    },
+                    {
+                        data: "PENEMPATAN",
+                        title: "Penempatan",
+
+                    },
+                    {
+                        data: "NAMA_UNIT_AKADEMIK",
+                        title: "Prodi",
+
+                    },
+
+                    {
+                        "data": "NPP", // diganti sama id
+                        "render": function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=ShowPopup('/SimkaAdmin/AddEditKaryawan?npp=" + data + "')><i class='fa fa-pencil'></i> Detail / Edit</a> ";
+
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable": "no data found."
+                }
+            });
+
+        });
+
+
+        function ShowPopup(url) {
+            toastr.info('Memuat Data')
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    popup = formDiv.dialog({
+                        modal: true,
+                        autoOpen: true,
+                        resizeable: false,
+                       
+                        width: "auto",
+                        height: 600,
+                        title: 'Detail Karyawan',
+                        close: function () {
+                            popup.dialog('destroy').remove();
+                        }
+                    });
+                });
+        }
+
+
+        function SubmitAddEdit(form) {
+            Swal.fire({
+                title: 'Apakah data yang Anda isi sudah benar?',
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                denyButtonText: `Don't save`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    //Swal.fire('Saved!', '', 'success')
+                    toastr.info('Menyimpan  Data')
+                    $.validator.unobtrusive.parse(form);
+                    if ($(form).valid) {
+                        var form = $('#formsimka')[0];
+                        var data = new FormData(form);
+                        var data = new FormData(document.getElementById("formsimka"));
+
+                        console.log(data);
+                        $.ajax({
+                            type: 'POST',
+                            url: '/SimkaAdmin/PostKaryawan',
+                            data: data,
+                            enctype: 'multipart/form-data',
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                if (data.success) {
+                                    popup.dialog('close');
+                                    ShowMessage(data.message);
+                                    dataTable.ajax.reload();
+                                }
+                            },
+                            error: function (data) {
+                                alert("Telah terjadi kesalahan dengan kode : " + data.status + ", Pastikan semua isian data sudah diisi");
+                            }
+                        });
+
+                    }
+                    else {
+                        console.log("form tidak valid")
+                    }
+                    
+                }
+            })
+
+            
+            
+            return false;
+        }
+        function ShowMessage(msg) {
+            toastr.success(msg);
+        }
+
+        function getSubUnit() {
+            var IdUnit = $("#inputUnit option:selected").val();
+            $('#inputSubUnit')
+                .find('option')
+                .remove()
+                .end()
+                .append('<option value="">-All-</option>')
+                .val('')
+                ;
+            $.ajax({
+                type: 'get',
+                // url: 'https://jsonplaceholder.typicode.com/todos/1',
+                url: '/SimkaAdmin/getSubUnit?id_unit=' + IdUnit,
+
+
+                datatype: 'json',
+                success: function (data) {
+
+                    var options = document.getElementById("inputSubUnit").options;
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        var index = data[i];
+                        options.add(new Option(index["namaUnit"], index["idUnit"]))
+                        console.log(index["namaUnit"]);
+
+                    }
+
+                },
+                error: function (data) {
+
+                    
+                }
+            });
+
+
+        }
+        function getDataKaryawanByCriteria() {
+            idJabatanAkademik = $("#inputJabAkademik").val()
+            idFungsional = $("#inputFungsional").val();
+            idJenjang = $("#inputJenjang").val();
+            idUnit = $("#inputUnit").val();
+            idSubUnit = $("#inputSubUnit").val();
+            statusKepegawaian = $("#inputStatus").val();
+            npp = $("#inputNPP").val();
+            nama = $("#inputNama").val();
+            console.log("npp =" + npp)
+
+            dataTable.ajax.reload();
+
+        }
+
+        function resetPencarian() {
+            $("#inputJabAkademik").val("");
+            $("#inputFungsional").val("");
+            $("#inputJenjang").val("");
+            $("#inputUnit").val("");
+            $("#inputSubUnit").val("");
+            $("#inputStatus").val("");
+            $("#inputNPP").val("");
+            $("#inputNama").val("");
+
+            getDataKaryawanByCriteria();
+        }
+
+    </script>
+
+
+    <style>
+        label {
+            font-weight: normal !important;
+        }
+    </style>
+}

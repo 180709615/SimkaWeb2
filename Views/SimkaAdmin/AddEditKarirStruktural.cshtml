@@ -1,0 +1,123 @@
+﻿@model TrKarirStrukturalForm
+@{
+    Layout = null;
+}
+
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form onsubmit="return SubmitAddEdit(this)">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="NoSk" class="control-label">No SK</label>
+                <input type="text" asp-for="NoSk" class="form-control" />
+                <span asp-validation-for="NoSk" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="" class="control-label">Pilih Karyawan / Dosen</label>
+                <select asp-for="Npp" class="form-control"
+                        asp-items="@(new SelectList(Model.karyawan,"Npp","Nama"))">
+                    <option value="">-</option>
+                </select>
+                <span asp-validation-for="Npp" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label for="IdUnit" class="control-label">Pilih Unit</label>
+                <select asp-for="IdUnit" class="form-control"
+                        asp-items="@(new SelectList(Model.unit,"IdUnit","NamaUnit"))">
+                    <option value="">-</option>
+                </select>
+                <span asp-validation-for="IdUnit" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label for="MstIdUnit" class="control-label">Unit Penempatan</label>
+                <select asp-for="MstIdUnit" class="form-control"
+                        asp-items="@(new SelectList(Model.unit,"IdUnit","NamaUnit"))">
+                    <option value="">-</option>
+                </select>
+                <span asp-validation-for="MstIdUnit" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label for="" class="control-label">Jabatan Struktural Baru</label>
+                <select asp-for="IdRefStruktural" class="form-control"
+                        asp-items="@(new SelectList(Model.struktural,"IdRefStruktural","Deskripsi"))">
+                    <option value="">-</option>
+                </select>
+                <span asp-validation-for="IdRefStruktural" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TglAwal" class="control-label"></label>
+                <input type="date" asp-for="TglAwal" class="form-control" />
+                <span asp-validation-for="TglAwal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TglAkhir" class="control-label"></label>
+                <input type="date" asp-for="TglAkhir" class="form-control" />
+                <span asp-validation-for="TglAkhir" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"> Jenis</label>
+                <select asp-for="Status" class="form-control">
+                    <option value="">- Select -</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="NonAktif">Tidak Aktif</option>
+
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        getSubUnit();
+    });
+    function getSubUnit() {
+        var IdUnit = $("#IdUnit option:selected").val();
+        $('#SubUnit')
+            .find('option')
+            .remove()
+            .end()
+
+            ;
+        $.ajax({
+            type: 'get',
+            // url: 'https://jsonplaceholder.typicode.com/todos/1',
+            url: '/SimkaAdmin/getSubUnit?id_unit=' + IdUnit,
+
+
+            datatype: 'json',
+            success: function (data) {
+
+                var select = document.getElementById("SubUnit");
+                var options = document.getElementById("SubUnit").options;
+
+                for (var i = 0; i < data.length; i++) {
+
+                    var index = data[i];
+                    options.add(new Option(index["namaUnit"], index["idUnit"]))
+                    console.log(index["namaUnit"]);
+
+                }
+
+            },
+            error: function (data) {
+
+                alert("Gagal mendapatkan sub unit");
+            }
+        });
+    }
+</script>

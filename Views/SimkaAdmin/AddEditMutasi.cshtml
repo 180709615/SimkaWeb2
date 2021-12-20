@@ -1,0 +1,44 @@
+﻿@model TrMutasiForm
+@{
+    Layout = null;
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form onsubmit="return SubmitAddEdit(this)">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTrMutasi" />
+            <div class="form-group">
+                <label asp-for="NoSk" class="control-label">No SK</label>
+                <input type="text" asp-for="NoSk" class="form-control" />
+                <span asp-validation-for="NoSk" class="text-danger"></span>
+
+                
+                <div class="form-group">
+                    <label for="" class="control-label">Pilih Karyawan / Dosen</label>
+                    <select asp-for="Npp" class="form-control"
+                            asp-items="@(new SelectList(Model.karyawan,"Npp","Nama"))">
+                        <option value="">-</option>
+                    </select>
+                    <span asp-validation-for="Npp" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="control-label">Unit Baru</label>
+                    <select asp-for="IdUnit" class="form-control"
+                            asp-items="@(new SelectList(Model.unit,"IdUnit","NamaUnit"))">
+                        <option value="">-</option>
+                    </select>
+                    <span asp-validation-for="IdUnit" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

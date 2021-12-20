@@ -1,0 +1,165 @@
+﻿@model APIConsume.Models.TblSumberBiayaForm
+
+@{
+    ViewData["Title"] = "AddEditStudiLanjut";
+    Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+}
+
+
+
+<head>
+    <title>Add Edit Studi Lanjut - SIMKA UAJY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h3>Add Edit Sumber Biaya</h3>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="content-wrapper">
+
+        <section class="content">
+            <div class="container-fluid">
+
+                <form class="needs-validation" novalidate method="post" asp-action="AddEditSumberBiaya">
+
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Add or Edit Sumber Biaya</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <input asp-for="npp" type="hidden" class="form-control" />
+                            <input asp-for="id_sumber_biaya_sl" type="hidden" class="form-control" />
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label asp-for="id_studi_lanjut" class="control-label">ID Studi Lanjut</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input asp-for="id_studi_lanjut" readonly class="form-control" readonly />
+                                    <span asp-validation-for="id_studi_lanjut" class="text-danger"></span>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label asp-for="id_sumber_biaya" class="control-label">Sumber Biaya</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <select asp-for="id_sumber_biaya" class="form-select" id="inputSumberBiaya" required>
+                                        <option value="">-All-</option>
+
+                                        @foreach (var item in Model.listSumberBiaya)
+                                        {
+                                            <option value="@item.IdSumberBiaya">@item.Deskripsi</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="id_sumber_biaya" class="text-danger"></span>
+
+                                </div>
+                            </div>
+
+                            @*<div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label asp-for="sumber_biaya_ke" class="control-label">Sumber Biaya Ke</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <select asp-for="sumber_biaya_ke" class="form-select" id="inputSumberBiaya" required>
+                                        <option value="">-All-</option>
+
+                                        @foreach (var item in Model.listSumberBiaya)
+                                        {
+                                            <option value="@item.IdSumberBiaya">@item.Deskripsi</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="sumber_biaya_ke" class="text-danger"></span>
+
+                                </div>
+                            </div>*@
+
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" value="Simpan" class="btn btn-primary">Simpan</button>
+
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            @Html.Raw(TempData["alert"])
+            @Html.Raw(TempData["href"])
+            @Html.Raw(TempData["swal"])
+
+
+        </section>
+    </div>
+
+
+
+
+
+
+    @section Scripts{
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <!--sweetalert-->
+        @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>*@
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+        @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
+        @*<script src="~/jquery.min.js"></script>*@
+        @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>*@
+
+        <script>
+            var idSL;
+            var countSB = 0;
+
+            $(document).ready(function () {
+
+                
+
+            });
+          
+
+        </script>
+        <script>
+            (function () {
+                'use strict';
+                window.addEventListener('load', function () {
+                    var forms = document.getElementsByClassName('needs-validation');
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+        </script>
+    }
+
+
+
+</body>

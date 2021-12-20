@@ -1,0 +1,356 @@
+﻿
+@{
+
+    Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+}
+<head>
+    <title>Kelola Pencairan YSR - SIMKA UAJY </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />*@
+
+    <style scoped>
+        .table td, .table th {
+            border-top: none !important;
+        }
+    </style>
+</head>
+
+
+<!-- Main content -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Pencairan YSR</h1>
+                </div>
+
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+
+
+        <div class="card cardMargin">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="flex-grow-1">Data Pencarian YSR</h5>
+
+            </div>
+            <div class="card-body">
+                <table id="example" class="  table-hover table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                    <thead class="bg-primary"></thead>
+                </table>
+                @*<button class="btn btn-info" onclick="showDetailSB(271)">tesssssss</button>*@
+            </div>
+        </div>
+    </section>
+    <br />
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.2
+    </div>
+    <small>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</small> All rights
+    reserved.
+</footer>
+
+<!-- Control Sidebar -->
+<!-- /.control-sidebar -->
+<div class="modal fade" id="modalSumberBiaya" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg  " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Pencairan YSR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <table class="table caption-top table-borderless table-responsive" style="width: 100%; display: table ">
+                        <tbody>
+                            <tr>
+                                <th>Karyawan</th>
+                                <td id="Nama"></td>
+                                <th>Nama Sekolah</th>
+                                <td id="NamaSekolah"></td>
+                            </tr>
+                            <tr>
+                                <th>Program Studi</th>
+                                <td id="Prodi"></td>
+                                <th>Tahun</th>
+                                <td id="tahun"></td>
+                            </tr>
+                            <tr>
+                                <th>Semester</th>
+                                <td id="semester"></td>
+                                <th>Deskripsi</th>
+                                <td id="deskripsi"></td>
+                            </tr>
+                            <tr>
+                                <th>Tanggal Pengajuan</th>
+                                <td id="tgl_pengajuan"></td>
+                                <th>Jumlah Pengajuan</th>
+                                <td id="jumlah_pengajuan"></td>
+                            </tr>
+
+                        </tbody>
+
+
+                    </table>
+                    <hr />
+                    <form id="formSumberBiaya" class="needs-validation" novalidate>
+                        <div class="form-group row">
+
+                            <div class="col-6">
+                                <label class="control-label">Tanggal Pencairan</label>
+                                <input id="tgl_pencairan" type="date" class="form-control" required />
+                            </div>
+                            <div class="col-6">
+                                <label class="control-label">Jumlah Dicairkan</label>
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Rp</div>
+                                    </div>
+                                    <input type="number" class="form-control" id="jml_pencairan" placeholder="100000" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Foto Bukti</label>
+                            <input type="file" class="form-control-file" id="Bukti" required />
+                            <div id="previewFoto"></div>
+                        </div>
+
+                        <hr />
+                        <button class="btn btn-success btn-block shadow " type="submit" style="margin-top:3%;">Konfirmasi</button>
+                        <button class="btn btn-danger btn-block shadow " data-dismiss="modal">Kembali</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"
+            crossorigin="anonymous"
+            integrity="sha384-Fnqn3nxp3506LP/7Y3j/25BlWeA3PXTyT1l78LjECcPaKCV12TsZP7yyMxOe/G/k">
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+            crossorigin="anonymous"
+            integrity="sha384-JrXK+k53HACyavUKOsL+NkmSesD2P+73eDMrbTtTk0h4RmOF8hF8apPlkp26JlyH">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.9.0/jquery.serializejson.min.js"></script>
+    <!--toastr-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--sweetalert-->
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>*@
+
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+    <script>
+        var popup, dataTable;
+        var idSBInt;
+        $(document).ready(function () {
+            dataTable = $('#example').DataTable({
+                "responsive": true,
+                "ajax": {
+                    "url": "/SimkaAdmin/LoadDataListPencairanYSR",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        data: "ID_BIAYA_SL_INT",
+                        title: "ID",
+                        type: "readonly"
+
+                    },
+                    { data: "NAMA", title: "Nama"},
+                    { data: "DESKRIPSI",title: "Deskripsi",},
+                    { data: "TGL_PENGAJUAN", title: "Tanggal Pengajuan", render: function (data) { return moment(data).format('DD-MM-YYYY') } },
+                    { data: "JUMLAH_PENGAJUAN", title: "Jumlah Pengajuan", render: function (data) { return "Rp " + data } },
+                    { data: "TGL_APPROVAL_FAKULTAS", title: "Tanggal Approval", render: function (data) { return moment(data).format('DD-MM-YYYY') } },
+
+                    {
+                        "data": "ID_SUMBER_BIAYA_SL", // diganti sama id
+                        "render": function (data) {
+                            return ` <button class="btn btn-info" onclick="showDetailSB(`+data+`)">Konfirmasi</button>`;
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable": "no data found."
+                }
+            });
+        });
+
+        function previewFoto() {
+
+            var preview = document.querySelector('#previewFoto');
+
+            if (this.files) {
+                [].forEach.call(this.files, readAndPreview);
+            }
+
+            function readAndPreview(file) {
+
+
+                // Make sure `file.name` matches our extensions criteria
+                if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                    document.getElementById("Bukti").value = "";
+                    $("#previewFoto").empty();
+                    return alert(file.name + " is not an image");
+                } // else...
+                if (file.size > 512000) {
+                    document.getElementById("Bukti").value = "";
+                    $("#previewFoto").empty();
+                    return alert(file.name + " Lebih dari 500Kb");
+                } // else...
+                var reader = new FileReader();
+
+                reader.addEventListener("load", function () {
+                    var image = new Image();
+                    image.style.height = "100%";
+                    image.style.width = "100%";
+                    image.title = file.name;
+                    image.src = this.result;
+                    $("#previewFoto").empty();
+                    preview.append(image);
+
+                });
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.querySelector('#Bukti').addEventListener("change", previewFoto);
+
+        function showDetailSB(idSB) {
+            console.log(idSB)
+            $.ajax({
+                type: 'GET',
+                url: '/SimkaAdmin/GetSumberBiayaByIdSB?idSB=' + idSB,
+                contentType: 'application/json',
+                success: function (data) {
+                    idSBInt = data["ID_BIAYA_SL_INT"];
+                    $("#Nama").html(data["NAMA"]);
+                    $("#NamaSekolah").html(data["NAMA_SEKOLAH"]);
+                    $("#Prodi").html(data["PRODI"]);
+
+                    $("#tahun").html(data["TAHUN"]);
+                    $("#semester").html(data["SEMESTER"]);
+                    $("#deskripsi").html(data["DESKRIPSI"]);
+                    $("#tgl_pengajuan").html(moment(data["TGL_PENGAJUAN"]).format('YYYY-MM-DD'));
+                    $("#jumlah_pengajuan").html("Rp "+ data["JUMLAH_PENGAJUAN"]);
+                    //$("#Bukti").val(data["NO_BUKTI"]);
+                    $('#modalSumberBiaya').modal('toggle');
+
+
+
+                },
+
+            });
+        }
+
+        
+        function ShowMessage(msg) {
+            toastr.success(msg);
+        }
+
+        function resetInput() {
+            $('form').trigger("reset");
+            $('form').removeClass("was-validated");
+            $("#jml_pencairan").val("");
+            $("#tgl_pencairan").val("");
+            $("#Bukti").val(null);
+            $("#previewFoto").empty();
+        }
+
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                       
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            console.log("check validity false")
+
+                        }
+                        form.classList.add('was-validated');
+
+                        if (form.checkValidity() === true) {
+
+                            event.preventDefault();
+                            var data = new FormData();
+                            data.append('idSBInt', idSBInt);
+                            data.append('jml_pencairan', $("#jml_pencairan").val());
+                            data.append('tgl_pencairan', $("#tgl_pencairan").val());
+                            jQuery.each(jQuery('#Bukti')[0].files, function (i, file) {
+                                data.append('bukti', file);
+                            });
+                           
+
+                            
+                            console.log("check validity true" + data)
+
+                            $.ajax({
+                                processData: false,
+                                contentType: false,
+                                cache: false,
+                                enctype: "multipart/form-data",
+                                type: 'POST',
+                                data: data,
+                                url: '/SimkaAdmin/PostPencairanYSR',
+                                success: function (data) {
+                                    if (data.success) {
+                                        toastr.success(data.message)
+                                        dataTable.ajax.reload()
+                                        resetInput()
+                                        $("#modalSumberBiaya").modal("hide")
+
+                                    } else {
+                                        toastr.error(data.message)
+                                    }
+                                }, error: function () {
+                                    toastr.error("Terdapat kesalahan")
+                                }
+
+                            });
+
+                        }
+
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+
+
+
+}

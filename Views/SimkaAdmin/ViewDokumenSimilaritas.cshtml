@@ -1,0 +1,71 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Dokumen Similaritas</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var id;
+
+        $(document).ready(function () {
+            //$("button").click(function () {
+            //    $("p").hide();
+            //});
+            var id = $('#id').val();
+            var jenis_tabel = $('#jenis_tabel').val();
+
+
+            @*var url = '@Url.Action("GetDokumenProsiding", "SimkaAdmin", new { id_publikasi = "__param__" })';
+            url = url.replace("__param__", id_publikasi);
+
+
+            $('#pdfView').append("<a href=" + url + ">ViewReceipt</a>");*@
+
+            $.ajax({
+                type: 'get',
+                url: '/SimkaAdmin/GetDokumenSimilaritas?id=' + id + "&jenis_tabel=" + jenis_tabel,
+                dataType:"json",
+                success: function (data) {
+
+                    var fileUrl = "data:application/pdf ;base64," + data + "";
+                    fetch(fileUrl)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            var blobUrl = URL.createObjectURL(blob);
+
+                            $('#pdfView').append("<iframe src='" + blobUrl + "' style='width:100%; height:100%;  position: absolute; top: 0; left: 0; padding:0; margin:0; border-width:0px !important'></iframe>");
+
+                        });
+
+
+                    //$('#pdfView').append("<p>INI BERHASIL</p>");
+
+                },
+                error: function (data) {
+                    console.log(data)
+                    console.log("ini error")
+
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+    @if (Model.id != null)
+    {
+        <input type="hidden" id="id" value=@Model.id />
+    }
+    @if (Model.jenis_tabel != null)
+    {
+        <input type="hidden" id="jenis_tabel" value=@Model.jenis_tabel />
+    }
+    <div id="pdfView" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; padding: 0; margin: 0;">
+
+    </div>
+
+</body>
+</html>
+
+

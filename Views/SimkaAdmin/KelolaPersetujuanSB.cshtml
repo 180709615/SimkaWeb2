@@ -1,0 +1,252 @@
+﻿
+@{
+
+    Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+}
+<head>
+    <title>Kelola Persetujuan SB - SIMKA UAJY </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />*@
+
+    <style scoped>
+        .table td, .table th{
+            border-top:none !important;
+        }
+    </style>
+</head>
+
+
+<!-- Main content -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kelola Persetujuan Sumber Biaya</h1>
+                </div>
+
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+
+
+        <div class="card cardMargin">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="flex-grow-1">Sumber Biaya Butuh Persetujuan</h5>
+
+            </div>
+            <div class="card-body">
+                <table id="example" class="  table-hover table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                    <thead class="bg-primary"></thead>
+                </table>
+                @*<button class="btn btn-info" onclick="showDetailSB(271)">tesssssss</button>*@
+            </div>
+        </div>
+    </section>
+    <br />
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.2
+    </div>
+    <small>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</small> All rights
+    reserved.
+</footer>
+
+<!-- Control Sidebar -->
+<!-- /.control-sidebar -->
+<div class="modal fade" id="modalSumberBiaya" tabindex="-1" role="dialog">
+    <div class="modal-dialog  " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Sumber Biaya</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    
+                        <table class="table caption-top table-borderless table-responsive" style="width:100%; ">
+                            <tbody>
+                                <tr>
+                                    <th>Karyawan</th>
+                                    <td  id="Nama"></td>
+                                </tr>
+                                <tr>
+                                    <th>Nama Sekolah</th>
+                                    <td  id="NamaSekolah"></td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td id="Prodi"></td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun</th>
+                                    <td  id="tahun"></td>
+                                </tr>
+                                <tr>
+                                    <th>Semester</th>
+                                    <td id="semester"></td>
+                                </tr>
+                                <tr>
+                                    <th>Deskripsi</th>
+                                    <td id="deskripsi"></td>
+                                </tr>
+                                <tr>
+                                    <th>Tanggal Pengajuan</th>
+                                    <td id="tgl_pengajuan"></td>
+                                </tr>
+                                <tr>
+                                    <th>Jumlah Pengajuan</th>
+                                    <td id="jumlah_pengajuan"></td>
+                                </tr>
+                            </tbody>
+                            
+                           
+                        </table>
+                    <hr />
+                        <button class="btn btn-success btn-block shadow " onclick="SetujuiSB()" style="margin-top:3%;">Konfirmasi</button>
+                        <button class="btn btn-danger btn-block shadow " data-dismiss="modal">Kembali</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"
+            crossorigin="anonymous"
+            integrity="sha384-Fnqn3nxp3506LP/7Y3j/25BlWeA3PXTyT1l78LjECcPaKCV12TsZP7yyMxOe/G/k">
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+            crossorigin="anonymous"
+            integrity="sha384-JrXK+k53HACyavUKOsL+NkmSesD2P+73eDMrbTtTk0h4RmOF8hF8apPlkp26JlyH">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.9.0/jquery.serializejson.min.js"></script>
+    <!--toastr-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--sweetalert-->
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>*@
+
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+    <script>
+        var popup, dataTable;
+        var idSBInt;
+        $(document).ready(function () {
+            dataTable = $('#example').DataTable({
+                "responsive": true,
+                "ajax": {
+                    "url": "/SimkaAdmin/LoadDataListPersetujuanSB",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        data: "ID_BIAYA_SL_INT",
+                        title: "ID",
+                        type: "readonly"
+
+                    },
+                    { data: "NAMA", title: "Nama"},
+                    { data: "DESKRIPSI",title: "Deskripsi",},
+                    { data: "TGL_PENGAJUAN", title: "Tanggal Pengajuan", render: function (data) { return moment(data).format('DD-MM-YYYY') } },
+                    { data: "JUMLAH_PENGAJUAN", title: "Jumlah Pengajuan", render: function (data) { return "Rp " + data } },
+                    {
+                        "data": "ID_SUMBER_BIAYA_SL", // diganti sama id
+                        "render": function (data) {
+                            return ` <button class="btn btn-info" onclick="showDetailSB(`+data+`)">Setujui</button>`;
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable": "no data found."
+                }
+            });
+        });
+
+
+
+        function showDetailSB(idSB) {
+            console.log(idSB)
+            $.ajax({
+                type: 'GET',
+                url: '/SimkaAdmin/GetSumberBiayaByIdSB?idSB=' + idSB,
+                contentType: 'application/json',
+                success: function (data) {
+                    idSBInt = data["ID_BIAYA_SL_INT"];
+                    $("#Nama").html(data["NAMA"]);
+                    $("#NamaSekolah").html(data["NAMA_SEKOLAH"]);
+                    $("#Prodi").html(data["PRODI"]);
+
+                    $("#tahun").html(data["TAHUN"]);
+                    $("#semester").html(data["SEMESTER"]);
+                    $("#deskripsi").html(data["DESKRIPSI"]);
+                    $("#tgl_pengajuan").html(moment(data["TGL_PENGAJUAN"]).format('YYYY-MM-DD'));
+                    $("#jumlah_pengajuan").html("Rp "+ data["JUMLAH_PENGAJUAN"]);
+                    //$("#Bukti").val(data["NO_BUKTI"]);
+                    $('#modalSumberBiaya').modal('toggle');
+
+
+
+                },
+
+            });
+        }
+
+        function SetujuiSB() {
+            console.log("ini setujui SB")
+            $.ajax({
+                type: 'GET',
+                url: '/SimkaAdmin/SBDisetujui?idSBInt=' + idSBInt,
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message)
+                        console.log(data.message)
+                        dataTable.ajax.reload();
+                        $('#modalSumberBiaya').modal('toggle');
+
+                    }
+                    
+
+
+                }, error: function (data) {
+                    toastr.error(data.message)
+                }
+
+            });
+        }
+        function ShowMessage(msg) {
+            toastr.success(msg);
+        }
+
+
+    </script>
+
+
+
+}

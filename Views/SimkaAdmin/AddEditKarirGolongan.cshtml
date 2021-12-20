@@ -1,0 +1,100 @@
+﻿@model TrKarirGolonganForm
+@{
+    Layout = null;
+}
+
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form onsubmit="return SubmitAddEdit(this)">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTrKarirGolongan" />
+            <input type="hidden" asp-for="IdRefGolonganLama" />
+            <div class="form-group">
+                <label asp-for="NoSk" class="control-label"></label>
+                <input type="text" asp-for="NoSk" class="form-control"/>
+                <span asp-validation-for="NoSk" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="" class="control-label">Pilih Karyawan / Dosen</label>
+                <select asp-for="Npp" class="form-control"
+                        asp-items="@(new SelectList(Model.karyawan,"Npp","Nama"))">
+                    <option value="">-</option>
+                </select>
+                <span asp-validation-for="Npp" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label for="" class="control-label">Golongan Baru</label>
+                <select asp-for="IdRefGolonganBaru" class="form-control"
+                        asp-items="@(new SelectList(Model.golongan,"IdRefGolongan","Deskripsi"))">
+                    <option value="">-</option>
+                </select>
+                <span asp-validation-for="IdRefGolonganBaru" class="text-danger"></span>
+
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="TglBerikut" class="control-label">Tanggal Berikut</label>
+                <input type="date" asp-for="TglBerikut" class="form-control" />
+                <span asp-validation-for="TglBerikut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tmt" class="control-label">Tamat</label>
+                <input type="date" asp-for="Tmt" class="form-control" />
+                <span asp-validation-for="Tmt" class="text-danger"></span>
+            </div>
+
+            <div class="form-group ">
+                <label asp-for="Nilai" class="control-label"></label>
+                <input type="number" asp-for="Nilai" class="form-control" />
+                <span asp-validation-for="Nilai" class="text-danger"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="NilaiA" class="control-label"></label>
+                <input type="number" asp-for="NilaiA" class="form-control" />
+                <span asp-validation-for="NilaiA" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NilaiB" class="control-label"></label>
+                <input type="number" asp-for="NilaiB" class="form-control" />
+                <span asp-validation-for="NilaiB" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NilaiC" class="control-label"></label>
+                <input type="number" asp-for="NilaiC" class="form-control" />
+                <span asp-validation-for="NilaiC" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NilaiD" class="control-label"></label>
+                <input type="number" asp-for="NilaiD" class="form-control" />
+                <span asp-validation-for="NilaiD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MasaKerjaGol" class="control-label"></label>
+                <input type="number" asp-for="MasaKerjaGol" class="form-control" />
+                <span asp-validation-for="MasaKerjaGol" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="JenisLokalNas" class="control-label"> Jenis</label>
+                <select asp-for="JenisLokalNas" class="form-control">
+                    <option value="">- Select -</option>
+                    <option value="Lokal">Lokal</option>
+                    <option value="Nasional">Nasional</option>
+
+                </select>
+                <span asp-validation-for="JenisLokalNas" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

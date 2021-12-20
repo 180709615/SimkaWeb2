@@ -1,0 +1,565 @@
+﻿@model APIConsume.Models.TblStudiLanjutForm
+
+@{
+    ViewData["Title"] = "AddEditStudiLanjut";
+    Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+}
+
+
+
+<head>
+    <title>Add Edit Studi Lanjut - SIMKA UAJY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+
+   
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h3>Add Edit Studi Lanjut</h3>
+                    </div>
+
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid"> 
+                <hr />
+                <br />
+                @*<h3 class="card-title">Add or Edit Studi Lanjut</h3>*@
+
+                <form method="post" asp-action="AddEditStudiLanjut" enctype="multipart/form-data" id="formStudiLanjut">
+
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                    <input asp-for="IdStudiLanjut" type="hidden" class="form-control" />
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="IdStudiLanjut" class="control-label">ID</label>
+
+                        </div>
+
+                        <div class="col-sm-5">
+                            <input asp-for="IdStudiLanjut" readonly class="form-control" />
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="Npp" class="control-label">NPP</label>
+
+                        </div>
+
+                        <div class="col-sm-5">
+                            <input asp-for="Npp" class="form-control" />
+                            <span asp-validation-for="Npp" class="text-danger"></span>
+                            <span class="text-danger">@TempData["NPPError"]</span>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="IdRefJenjang" class="control-label">Jenjang</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <select asp-for="IdRefJenjang" class="form-select" id="inputJabAkademik">
+                                <option value="">-All-</option>
+
+                                @foreach (var item in Model.listJenjang)
+                                {
+                                    <option value="@item.IdRefJenjang">@item.Deskripsi</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="NamaSekolah" class="control-label">Nama Sekolah</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="NamaSekolah" class="form-control" />
+                            <span asp-validation-for="NamaSekolah" class="text-danger"></span>
+                            @*<div class="invalid-feedback">
+                                Field tidak boleh kosong!
+                            </div>*@
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="KotaSekolah" class="control-label">Kota Sekolah</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="KotaSekolah" class="form-control" />
+                            <span asp-validation-for="KotaSekolah" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="NegaraSekolah" class="control-label">Negara Sekolah</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="NegaraSekolah" class="form-control" />
+                            <span asp-validation-for="NegaraSekolah" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="TglMulai" class="control-label">Tanggal Mulai</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="TglMulai" type="date" class="form-control" />
+                            <span asp-validation-for="TglMulai" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="TglLulus" class="control-label">Tanggal Lulus</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="TglLulus" type="date" class="form-control" />
+                            <span asp-validation-for="TglLulus" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="TglPenempatanKmbli" class="control-label">Tanggal Penempatan Kembali</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="TglPenempatanKmbli" type="date" class="form-control" />
+                            <span asp-validation-for="TglPenempatanKmbli" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="Fakultas" class="control-label">Fakultas</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="Fakultas" class="form-control" />
+                            <span asp-validation-for="Fakultas" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="Prodi" class="control-label">Prodi</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="Prodi" class="form-control" />
+                            <span asp-validation-for="Prodi" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="DlmNegriLuarNegri" class="control-label">Dalam / Luar Negeri</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <select asp-for="DlmNegriLuarNegri" class="form-control">
+                                <option value="D">Dalam Negeri</option>
+                                <option value="L">Luar Negeri</option>
+
+                            </select>
+                            <span asp-validation-for="DlmNegriLuarNegri" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="NoSkTugasBljr" class="control-label">No SK Tugas</label>
+
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="NoSkTugasBljr" class="form-control" />
+                            <span asp-validation-for="NoSkTugasBljr" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="TargetLulus" class="control-label">Target Lulus</label>
+
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="number" asp-for="TargetLulus" class="form-control" />
+                            <span asp-validation-for="TargetLulus" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="IdRefSs" class="control-label">Status Studi</label>
+
+                        </div>
+                        <div class="col-sm-5">
+                            <select asp-for="IdRefSs" class="form-control" asp-items="@(new SelectList(Model.listStatusStudi,"IdRefSs","Deskripsi"))">
+                            </select>
+                            <span asp-validation-for="IdRefSs" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="SK" class="control-label">File SK</label>
+
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="SK" type="file" class="form-control" />
+                            <div id="previewFoto">
+                                @if (Model != null)
+                                {
+                                    @if (Model.SKm != null)
+                                    {
+                                        <img src="data:image/jpeg;base64,@System.Convert.ToBase64String(Model.SKm) ">
+                                    }
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label asp-for="SkPenempatanKmbl" class="control-label">File SK Penempatan Kembali</label>
+
+                        </div>
+                        <div class="col-sm-5">
+                            <input asp-for="SkPenempatanKmbl" type="file" class="form-control" />
+                            <div id="previewFoto2">
+                                @if (Model != null)
+                                {
+                                    @if (Model.SkPenempatanKmblm != null)
+                                    {
+                                        <img src="data:image/jpeg;base64,@System.Convert.ToBase64String(Model.SkPenempatanKmblm) ">
+                                    }
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @*<div class="card" style="width:65% !important">
+                        <div class="card-header bg-light">
+                            <div class="d-flex align-items-center">
+                                <span class=" flex-grow-1 " style="font-size:1.1rem">Sumber Biaya</span>
+                                <button type="button" onclick="tambahSumberBiaya('','')" style="margin-right:1%" class="btn btn-success">
+                                    <i class="fa fa-plus " style="font-size:10px"></i>
+                                    Tambah
+                                </button>
+                                <button type="button" onclick="hapusSumberBiaya()" style="margin-left:1%" class="btn btn-danger">
+                                    <i class="fa fa-minus " style="font-size:10px"></i>
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" id="bodySumberBiaya">
+                            <input asp-for="hiddenIdSumberBiayaSL" type="hidden" />
+                            <input asp-for="hiddenSumberBiaya" type="hidden" />
+                            <input asp-for="hiddenSumberBiayaKe" type="hidden" />
+                        </div>
+
+                    </div>*@
+
+
+
+
+
+                    <button type="submit" @*onclick="PostStudiLanjut()"*@ value="Simpan" class="btn btn-primary">Simpan</button>
+
+
+
+                </form>
+
+
+
+
+            </div>
+            @Html.Raw(TempData["alert"])
+            @Html.Raw(TempData["href"])
+            @Html.Raw(TempData["swal"])
+
+
+        </section>
+    </div>
+
+
+
+    
+
+
+    @section Scripts{
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <!--sweetalert-->
+        @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>*@
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+        @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
+        @*<script src="~/jquery.min.js"></script>*@
+        @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>*@
+
+        <script>
+            var idSL;
+            var countSB = 0;
+
+            $(document).ready(function () {
+
+                var hiddenSumberBiaya, hiddenSumberBiayaKe;
+                hiddenSumberBiaya = $("#hiddenSumberBiaya").val();
+                hiddenSumberBiayaKe = $("#hiddenSumberBiayaKe").val();
+                
+
+                if (hiddenSumberBiaya != null && hiddenSumberBiaya != undefined && hiddenSumberBiaya != "") {
+                    arraySB = hiddenSumberBiaya.split(",");
+                    arraySBKe = hiddenSumberBiayaKe.split(",");
+                    for (var i = 0; i < arraySB.length; i++) {
+                        tambahSumberBiaya(arraySB[i], arraySBKe[i])
+                    }
+                }
+                
+
+            });
+            function previewFoto() {
+
+                var preview = document.querySelector('#previewFoto');
+
+                if (this.files) {
+                    [].forEach.call(this.files, readAndPreview);
+                }
+
+                function readAndPreview(file) {
+
+
+                    // Make sure `file.name` matches our extensions criteria
+                    if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                        document.getElementById("SK").value = "";
+                        $("#previewFoto").empty();
+                        return alert(file.name + " is not an image");
+                    } // else...
+                    if (file.size > 512000) {
+                        document.getElementById("SK").value = "";
+                        $("#previewFoto").empty();
+                        return alert(file.name + " Lebih dari 500Kb");
+                    } // else...
+                    var reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+                        var image = new Image();
+                        image.height = 200;
+                        image.title = file.name;
+                        image.src = this.result;
+                        $("#previewFoto").empty();
+                        preview.append(image);
+
+                    });
+
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            document.querySelector('#SK').addEventListener("change", previewFoto);
+
+            function previewFoto2() {
+
+                var preview = document.querySelector('#previewFoto2');
+
+                if (this.files) {
+                    [].forEach.call(this.files, readAndPreview);
+                }
+
+                function readAndPreview(file) {
+
+
+                    // Make sure `file.name` matches our extensions criteria
+                    if (!/\.(jpe?g)$/i.test(file.name)) {
+                        document.getElementById("SkPenempatanKmbl").value = "";
+                        $("#previewFoto2").empty();
+                        return alert(file.name + " is not an image");
+                    }
+                    if (file.size > 512000) {
+                        document.getElementById("SkPenempatanKmbl").value = "";
+                        $("#previewFoto2").empty();
+                        return alert(file.name + " Lebih dari 500Kb");
+                    } // else...
+                    var reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+                        var image = new Image();
+                        image.height = 200;
+                        image.title = file.name;
+                        image.src = this.result;
+                        $("#previewFoto2").empty();
+                        preview.append(image);
+
+                    });
+
+                    reader.readAsDataURL(file);
+                }
+            }
+
+
+            document.querySelector('#SkPenempatanKmbl').addEventListener("change", previewFoto2);
+
+            //$("#formStudiLanjut").submit(function (e) {
+            //    e.preventDefault();
+     
+            //    PostStudiLanjut();
+            //    return false; //I put it here as a fallback
+            //});
+
+            //function PostStudiLanjut(form) {
+            //    console.log("ini post studi lanjut")
+            //    //var tempSumberBiaya = [];
+            //    //var tempSumberBiayaKe = [];
+            //    //for (var i = 0; i < countSB; i++) {
+            //    //    tempSumberBiaya[i] = $("#SumberBiaya" + (i + 1)).val();
+            //    //    tempSumberBiayaKe[i] = $("#SumberBiayaKe" + (i + 1)).val();
+
+            //    //}
+            //    //$("#hiddenSumberBiaya").val(tempSumberBiaya)
+            //    //$("#hiddenSumberBiayaKe").val(tempSumberBiayaKe)
+            //    //console.log($("#hiddenSumberBiaya").val())
+
+            //    if ($("#formStudiLanjut")[0].checkValidity() === true) {
+            //        Swal.fire({
+            //            title: 'Apakah data yang Anda isi sudah benar?',
+            //            showCancelButton: true,
+            //            confirmButtonText: 'Save',
+            //            denyButtonText: `Don't save`,
+            //        }).then((result) => {
+            //            if (result.isConfirmed) {
+                           
+
+            //                $("#formStudiLanjut")[0].submit();
+            //            }
+                       
+            //        });
+            //    }
+
+            //    return false;
+            //}
+
+            function tambahSumberBiaya(value1, value2) {
+                countSB++;
+                var html =
+                    "<div class='d-flex' id='inputSB" + countSB + "'>" +
+                    "<h6 style='margin-right: 4%'>" + countSB + "</h6>" +
+                    "<div class='form-row flex-fill'>" +
+                    "<div class='form-group col-md-6'>" +
+                    "<label for='SumberBiaya" + countSB + "'>Sumber Biaya</label>" +
+                    "<select id='SumberBiaya" + countSB + "' class='form-select' required ></select>" +
+                    `<div class="invalid-feedback">
+                                                    Tidak boleh kosong.
+                                                 </div>`+
+                    "</div>" +
+                    "<div class='form-group col-md-6'>" +
+                    "<label for='SumberBiayaKe" + countSB + "'>Sumber Biaya Ke</label>" +
+                    "<select id='SumberBiayaKe" + countSB + "' class='form-select' required></select>" +
+                    `<div class="invalid-feedback">
+                                                    Tidak boleh kosong.
+                                                </div>`+
+                    "</div>" +
+                    "</div>" +
+                 
+                    "</div>";
+           
+                console.log(countSB)
+                $('#bodySumberBiaya').append(html);
+
+
+                generateSelectSB('SumberBiaya' + countSB, 'SumberBiayaKe' + countSB, value1, value2)
+
+
+            }
+
+            function hapusSumberBiaya() {
+
+                if (countSB > 0) {
+                    var input = '#inputSB' + countSB;
+                    console.log(input)
+                    $(input).remove();
+                    countSB--;
+
+                }
+                console.log(countSB)
+
+
+            }
+
+            function generateSelectSB(id1, id2, valueSumberBiaya, valueSumberBiayaKe) {
+                $('#' + id1).empty();
+                $('#' + id2).empty();
+                $.ajax({
+                    type: 'GET',
+                    url: '/SimkaAdmin/getRefSumberBiaya',
+
+                    contentType: 'application/json',
+                    success: function (data) {
+                        for (let i = 0; i < data.length; i++) {
+                            var index = data[i];
+                            $('#' + id1).append("<option value='" + index['idSumberBiaya'] + "'>" + index['deskripsi'] + "</option>")
+                            $('#' + id2).append("<option value='" + index['idSumberBiaya'] + "'>" + index['deskripsi'] + "</option>")
+
+                        }
+
+                        if (valueSumberBiaya != undefined || valueSumberBiaya != "") { // Kalau terisi berarti posisi edit form bukan Add
+                            $("#SumberBiaya" + countSB).val(valueSumberBiaya).change();
+                        }
+                        if (valueSumberBiayaKe != null || valueSumberBiayaKe != undefined || valueSumberBiayaKe != "") {
+                            $("#SumberBiayaKe" + countSB).val(valueSumberBiayaKe).change();
+                        }
+                    },
+
+                });
+            }
+        </script>
+        @*<script>
+            (function () {
+                'use strict';
+                window.addEventListener('load', function () {
+                    var forms = document.getElementsByClassName('needs-validation');
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+        </script>*@
+    }
+
+
+
+</body>

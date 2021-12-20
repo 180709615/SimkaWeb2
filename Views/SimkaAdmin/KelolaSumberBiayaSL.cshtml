@@ -1,0 +1,817 @@
+﻿
+@{ ViewData["Title"] = "KelolaRekanan";
+    Layout = "~/Views/Shared/_LayoutDynamic.cshtml"; }
+
+<head>
+    <title>Kelola Sumber Biaya SL - SIMKA UAJY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />*@
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <style scoped>
+        .previewFoto2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+
+<!-- Main content -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Kelola Sumber Biaya </h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    </ol>
+                </div>
+            </div>
+            @*<hr />*@
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+
+        <div style="width:100%; margin:0" class="tab-pane">
+            <div class="row">
+                <div class="col-md-10">
+                    @*<a class=" text-light btn btn-success" style="margin-bottom:10px"
+                        onclick="gotoAddEdit(0)"><i class="fa fa-plus"></i> Tambah Data Studi Lanjut </a>*@
+                </div>
+            </div>
+            @if (TempData["SuccessMessage"] != null && TempData["SuccessMessage"] != "")
+            {
+                <div class="alert alert-success alert-dismissible cardMargin">
+
+                    <div class="d-flex align-content-center ">
+                        <i class="fa fa-check-circle fa-lg align-self-center" style="margin-bottom:-0.5%; margin-right:1%; font-size:18px"></i>
+                        <h5> Pemberitahuan </h5>
+
+                    </div>
+
+
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x </button>
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null && TempData["ErrorMessage"] != "")
+            {
+                <div class="alert alert-danger alert-dismissible cardMargin">
+                    <div class="d-flex align-content-center ">
+                        <i class="fa fa-exclamation-triangle fa-lg align-self-center" style="margin-bottom:-0.5%; margin-right:1%; font-size:18px"></i>
+                        <h5> Pemberitahuan </h5>
+
+                    </div>
+
+
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x </button>
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+            <div class="card cardMargin">
+                <div class="card-header">
+                    <h5>Pencarian</h5>
+                </div>
+                <div class="card-body">
+                    @*<h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>*@
+                    <div class="form-group row">
+                        <label for="inputNPP" class="col-sm-2 col-form-label">NPP</label>
+                        <div class="col-sm-4">
+                            @if (TempData["NPP"] != null && TempData["NPP"] != "")
+                            {
+                                <input class="form-control form-control-sm" id="inputNPP" placeholder="00.000.001" value="@TempData["NPP"]">
+
+                            }
+                            else
+                            {
+                                <input class="form-control form-control-sm" id="inputNPP" placeholder="00.000.001">
+
+                            }
+
+                        </div>
+                        <div class="col-sm-2">
+                            <button style="padding:0.3rem 2rem;" class="btn  btn-primary" onclick="getDataStudiLanjutByCriteria()">Cari</button>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+            <div class="card cardMargin">
+                <div class="card-header">
+                    <h5>Data Studi Lanjut</h5>
+                </div>
+                <div class="card-body">
+                    <table id="TabelStudiLanjut" class="  table-hover table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <thead class="bg-primary"></thead>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.2
+    </div>
+    <small>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</small> All rights
+    reserved.
+</footer>
+
+<!-- Control Sidebar -->
+<!-- /.control-sidebar -->
+
+<div class="modal fade" id="modalSumberBiaya" tabindex="-1" role="dialog">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sumber Biaya Studi Lanjut</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <button class="btn btn-success btn-block shadow " onclick="showCardSumberBiaya()" id="btnTambahSB" style="margin-bottom:3%;">Tambah Sumber Biaya</button>
+
+
+                    <div class="card card-primary shadow " id="cardAddEditSumberBiaya" style="min-height:0; display:none">
+                       
+                        <form id="formSumberBiaya" class="needs-validation" novalidate>
+                            <div class="card-header">
+                                <h5 class="card-title">Form Sumber Biaya</h5>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <input id="idSB" type="hidden" />
+                                    @*<input id="idSL" type="hidden" />*@
+                                    <input id="idSBInternal" type="hidden" />
+
+                                    <div class="d-flex align-content-center">
+                                        <div class="col-3 align-self-center">
+                                            <label class="control-label">Pilih Sumber Biaya</label>
+                                        </div>
+                                        <div class="col-4">
+                                            <select class="form-select" id="sumberBiaya">
+                                                <option value="">-All-</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div id="appendForm" style="margin-top:2%; ">
+
+                                        @*<input type="file" class="form-control-file" id="Bukti" required onchange="previewFoto3()" />
+                                        <div id="previewFoto2"></div>*@
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                            <div class="card-footer d-flex ">
+
+                                @*<button class="btn btn-primary" type="button" onclick="resetInput()"></button>*@
+                                <button id="btnSimpan" type="submit" value="Simpan" disabled class="btn btn-primary align-self-end ml-auto">Simpan</button>
+
+                            </div>
+
+                            
+                        </form>
+                    </div>
+
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    Data Sumber Biaya
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            @*class="  table-hover table table-striped table-bordered dt-responsive nowrap"*@
+                            <table id="TabelSumberBiaya" width="100%" class="table table-hover table-striped  table-bordered" cellspacing="0">
+                                <thead class="bg-primary"></thead>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--sweetalert-->
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>*@
+
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+
+
+
+    <script>
+        var popup, dataTable;
+
+        var dataTableStudiLanjut, dataTableSumberBiaya;
+        var npp2 = "", idSL = "", idSB = "", inputSumberBiaya = "", inputSumberBiayaKe = "";
+
+        var htmlBiayaInternal = `<div id="biayaInternal" >
+                                    <div class="card">
+                                        <div class="card-header">
+                                            Biaya Internal
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <div class="col-6">
+                                                    <label class="control-label">Tahun</label>
+                                                    <input type="number" class="form-control" id="tahun" required />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="control-label">Semester</label>
+                                                    <select class="form-select" id="semester">
+                                                        <option value="1" selected>1</option>
+                                                        <option value="2">2</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Deskripsi</label>
+                                                <textarea id="deskripsi" class="form-control" rows="2" required></textarea>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-6">
+                                                    <label class="control-label">Tanggal Pengajuan</label>
+                                                    <input type="date" class="form-control" id="tgl_pengajuan" required />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="control-label">Jumlah Pengajuan</label>
+                                                    <div class="input-group mb-2 mr-sm-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Rp</div>
+                                                        </div>
+                                                        <input type="number" class="form-control" id="jumlah_pengajuan" placeholder="100000" required>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>`;
+
+        var htmlBiayaEksternal = `<div id="biayaEksternal" >
+                                    <div class="card">
+                                        <div class="card-header">
+                                            Biaya Eksternal
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <div class="col-6">
+                                                    <label class="control-label">Jumlah Pencairan</label>
+                                                    <input type="number" class="form-control" id="jumlah_dicairkan" required />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="control-label">Tanggal Transfer</label>
+                                                    <input type="date" class="form-control" id="tgl_transfer" required />
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Bukti</label>
+                                                <input type="file" class="form-control-file" id="Bukti" required onchange="previewFoto3()" />
+                                                <div class="invalid-feedback">
+                                                    Field tidak boleh kosong!
+                                                </div>
+                                                <div id="previewFoto2"></div>
+                                                
+
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>`;
+
+        $(document).ready(function () {
+            npp2 = $("#inputNPP").val()
+
+            console.log("npp2 =" + npp2)
+
+            dataTableStudiLanjut = $('#TabelStudiLanjut').DataTable({
+                "dom": "t",
+                "responsive": true,
+                "ajax": {
+                    "url": "/SimkaAdmin/LoadDataStudiLanjutbyNPP",
+                    "type": "POST",
+                    "datatype": "json",
+                    "data": function (d) {
+                        d.npp = npp2
+                    },
+
+                },
+               
+                "columns": [
+                    {
+                        data: "ID_STUDI_LANJUT",
+                        title: "ID",
+                        name: "ID",
+                        type: "readonly"
+
+                    },
+                    {
+                        data: "NAMA",
+                        title: "Nama",
+                        type: "readonly"
+                    },
+                    { data: "JENJANG", title: "Jenjang" },
+                    //{ data: "NAMA_SEKOLAH", title: "Nama Sekolah" },
+                    //{ data: "PRODI", title: "Prodi" },
+                    { data: "STATUS_STUDI", title: "Status Studi" },
+                    { data: "DalamAtauLuarNegeri", title: "Dalam / Luar Negeri" },
+
+
+                    {
+                        title: "Sumber Biaya",
+                        "data": "ID_STUDI_LANJUT", // diganti sama id
+                        "render": function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=showTabelSumberBiaya(" + data + ")><i class='fa fa-money'></i> Sumber Biaya</a>";
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable": "no data found."
+                }
+            });
+
+            dataTableSumberBiaya = $('#TabelSumberBiaya').DataTable({
+                "dom": "tip",
+                //"responsive": true,
+                "ajax": {
+                    "url": "/SimkaAdmin/LoadDataSumberBiayaBySL",
+                    "type": "POST",
+                    "datatype": "json",
+                    "data": function (d) {
+                        d.idSL = idSL
+                    },
+
+                },
+                "order": [[2, "asc"]],
+                "columns": [
+                    {
+                        data: "is_internal",
+                        title: "Jenis",
+                        render: function (data) {
+                            if (data == true) {
+                                return "Internal"
+                            } else {
+                                return "Eksternal"
+                            }
+                        }
+
+                    },
+                    {
+                        data: "sb",
+                        title: "Sumber Biaya",
+                        type: "readonly"
+                    },
+                    { data: "sumber_biaya_ke", title: "Sumber Biaya Ke" },
+                    { data: "tgl_approval_fakultas", visible:false, title: "Tgl Approval", render: function (data) { return moment(data).format("DD-MM-YYYY"); } },
+
+                    {
+                        title: "Status",
+                        "data": "jumlah_dicairkan", 
+                        "render": function (data, type, row) {
+                            if (row["is_internal"]) {
+                                if (data != 0)
+                                    return  "<p class='text-success'>Sudah dicairkan</p>"
+                                else if (row["tgl_approval_fakultas"] == "0001-01-01T00:00:00") {
+                                    return "<p class='text-warning'>Belum disetujui </p>"
+                                } else if (data == 0) {
+                                    return "<p class='text-danger'>Belum dicairkan</p>"
+                                }
+                            } else {
+                                return ""
+                            }
+                            
+                           
+                        }
+                    },
+                    {
+                        title: "Aksi",
+
+                        "data": "id_sumber_biaya_sl", 
+                        "render": function (data,type,row) {
+                            if (row["is_internal"] &&  row["tgl_approval_fakultas"] != "0001-01-01T00:00:00")
+                                return `<button class='btn btn-default btn-sm' onclick=UbahSumberBiaya(` + data + `) disabled><i class='fa fa-pencil'></i> Edit</button>`;
+                            else
+                                return `<button class='btn btn-default btn-sm' onclick=UbahSumberBiaya(` + data + `)><i class='fa fa-pencil'></i> Edit</button>`;
+
+                                       
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable": "no data found."
+                }
+            });
+
+
+            $.ajax({
+                type: 'GET',
+                url: '/SimkaAdmin/getRefSumberBiaya',
+
+                contentType: 'application/json',
+                success: function (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        var index = data[i];
+                        $('#sumberBiaya').append("<option value='" + index['idSumberBiaya'] + "'>" + index['deskripsi'] + "</option>")
+
+                    }
+
+                },
+
+            });
+
+
+        });
+
+        $("#sumberBiaya").change(function () {
+            console.log("sumberBiaya Change " + $("#sumberBiaya").val())
+            if ($("#sumberBiaya").val() == "") {
+                $("#btnSimpan").prop('disabled', true)
+            }
+            else {
+                $("#btnSimpan").prop('disabled', false)
+
+            }
+            if ($("#sumberBiaya").val() == "" || $("#sumberBiaya").val() == null) {
+                $("#appendForm").empty();
+            } else if ($("#sumberBiaya").val() == 1) {
+                $("#appendForm").empty();
+                $("#appendForm").html(htmlBiayaInternal);
+
+            } else {
+
+                $("#appendForm").empty();
+                $("#appendForm").html(htmlBiayaEksternal);
+               
+                    $("#Bukti").on('change', previewFoto3)
+                
+            }
+        });
+        $("#modalSumberBiaya").on('hide.bs.modal', function () {
+            resetInput();
+        });
+
+        function UbahSumberBiaya(idSB) {
+            $.ajax({
+                type: 'GET',
+                url: '/SimkaAdmin/GetSumberBiayaByIdSB?idSB=' + idSB,
+                contentType: 'application/json',
+                success: function (data) {
+
+                    $("#idSB").val(data["ID_SUMBER_BIAYA_SL"])
+                    $("#idSBInternal").val(data["ID_BIAYA_SL_INT"]);
+                    $("#sumberBiaya").val(data["ID_SUMBER_BIAYA"]).change();
+                    $("#tahun").val(data["TAHUN"]);
+                    $("#semester").val(data["SEMESTER"]);
+                    $("#deskripsi").val(data["DESKRIPSI"]);
+                    $("#tgl_pengajuan").val(moment(data["TGL_PENGAJUAN"]).format('YYYY-MM-DD'));
+                    $("#jumlah_pengajuan").val(data["JUMLAH_PENGAJUAN"]);
+                    $("#jumlah_dicairkan").val(data["JUMLAH_DICAIRKAN"]);
+                    $("#tgl_transfer").val(moment(data["TGL_TRANSFER"]).format('YYYY-MM-DD'));
+                    //$("#Bukti").val(data["NO_BUKTI"]);
+
+                    $("#previewFoto2").append(`<img style="width: 100%;height: 100%; object-fit:fill;" src="data:image/jpg;base64,` + data["NO_BUKTI"] +`"/>`)
+                        
+                    $("#cardAddEditSumberBiaya").slideDown("slow");
+
+                },
+
+            });
+        }
+
+
+
+
+        function Delete(id) {
+            Swal.fire({
+                title: "Are you sure want to Delete?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/SimkaAdmin/DeleteSumberBiaya/' + id,
+                        success: function (data) {
+                            if (data.success) {
+                                ShowMessage(data.message);
+                                dataTableSumberBiaya.ajax.reload();
+                            }
+                        }, error: function (data) {
+                            toastr.error("Delete failed");
+
+                        }
+                    });
+                    Swal.close();
+                }
+            })
+
+
+        }
+
+        function getDataStudiLanjutByCriteria() {
+            npp2 = $("#inputNPP").val()
+
+            console.log("npp2 =" + npp2)
+
+            dataTableStudiLanjut.ajax.reload(function () {
+                if (dataTableStudiLanjut.rows().count() > 0) {
+                    $('#btnTambahSB').each(function () {
+                        $(this).prop("disabled", false);
+                    });
+                } else {
+                    $('#btnTambahSB').each(function () {
+                        $(this).prop("disabled", true);
+                    });
+                }
+            }, false)
+            console.log("recordstotal" + dataTableStudiLanjut.page.info().recordsTotal)
+            //if (dataTableStudiLanjut.page.info().recordsTotal  != 0) {
+            //    $('#btnTambahSB').each(function () {
+
+            //        $(this).prop("disabled", false);
+
+            //    });
+            //}
+
+        }
+
+        function generateSelectSB(id1, id2, valueSumberBiaya, valueSumberBiayaKe) {
+            $('#' + id1).empty();
+            $('#' + id2).empty();
+            $.ajax({
+                type: 'GET',
+                url: '/SimkaAdmin/getRefSumberBiaya',
+
+                contentType: 'application/json',
+                success: function (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        var index = data[i];
+                        $('#' + id1).append("<option value='" + index['idSumberBiaya'] + "'>" + index['deskripsi'] + "</option>")
+                        $('#' + id2).append("<option value='" + index['idSumberBiaya'] + "'>" + index['deskripsi'] + "</option>")
+
+                    }
+
+                    if (valueSumberBiaya != undefined || valueSumberBiaya != "") { // Kalau terisi berarti posisi edit form bukan Add
+                        $("#SumberBiaya" + countSB).val(valueSumberBiaya).change();
+                    }
+                    if (valueSumberBiayaKe != null || valueSumberBiayaKe != undefined || valueSumberBiayaKe != "") {
+                        $("#SumberBiayaKe" + countSB).val(valueSumberBiayaKe).change();
+                    }
+                },
+
+            });
+        }
+
+        function showCardSumberBiaya() {
+            if ($("#cardAddEditSumberBiaya").is(":hidden"))
+                $("#cardAddEditSumberBiaya").slideDown("slow");
+            else
+                $("#cardAddEditSumberBiaya").slideUp("slow");
+
+        }
+        function showTabelSumberBiaya(id) {
+            idSL = id;
+            console.log("SL = " + id)
+            dataTableSumberBiaya.ajax.reload()
+            $('#modalSumberBiaya').modal('toggle');
+
+
+
+        }
+
+        function ShowMessage(msg) {
+            toastr.success(msg);
+        }
+
+        function gotoAddEdit(idSB) {
+            window.location.href = "AddEditSumberBiaya?idSB=" + idSB + "&idSL=" + idSL + "&npp=" + npp2;
+        }
+
+        function PostSumberBiaya() {
+            idSB = $("#idSB").val();
+
+            inputSumberBiaya = $("#inputSumberBiaya").val();
+            inputSumberBiayaKe = $("#inputSumberBiayaKe").val();
+            console.log(inputSumberBiaya + inputSumberBiayaKe)
+
+        }
+        function resetInput() {
+            $('form').trigger("reset");
+            $('form').removeClass("was-validated");
+            $("#idSB").val("").change();
+            $("#idSBInternal").val("");
+            $("#sumberBiaya").val("");
+            $("#tahun").val("");
+            $("#semester").val("");
+            $("#deskripsi").val("");
+            $("#tgl_pengajuan").val("");
+            $("#jumlah_pengajuan").val("");
+            $("#jumlah_dicairkan").val("");
+            $("#tgl_transfer").val("");
+            $("#Bukti").val(null);
+            $("#appendForm").empty();
+
+            $("#cardAddEditSumberBiaya").slideUp("slow");
+
+
+        }
+
+
+
+
+        var loadFile = function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('previewFoto');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        };
+
+        function previewFoto3() {
+            console.log("ini preview foto")
+            var preview = document.querySelector('#previewFoto2');
+
+            if (this.files) {
+                [].forEach.call(this.files, readAndPreview);
+            }
+
+            function readAndPreview(file) {
+
+
+                // Make sure `file.name` matches our extensions criteria
+                if (!/\.(jpe?g)$/i.test(file.name)) {
+                    document.getElementById("Bukti").value = "";
+                    $("#previewFoto2").empty();
+                    return alert(file.name + " is not an image");
+                }
+                if (file.size > 512000) {
+                    document.getElementById("Bukti").value = "";
+                    $("#previewFoto2").empty();
+                    return alert(file.name + " Lebih dari 500Kb");
+                } // else...
+                var reader = new FileReader();
+
+                reader.addEventListener("load", function () {
+                    var image = new Image();
+                    image.style.height = "100%";
+                    image.style.width ="100%";
+                    image.title = file.name;
+                    image.src = this.result;
+                    $("#previewFoto2").empty();
+                    preview.append(image);
+
+                });
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        
+        
+
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            console.log("check validity false")
+
+                        }
+                        form.classList.add('was-validated');
+
+                        if (form.checkValidity() === true) {
+
+                            event.preventDefault();
+                            var data = new FormData();
+                            data.append('idSL', idSL);
+                            data.append('idSB', $("#idSB").val());
+                            data.append('idSBInternal', $("#idSBInternal").val());
+                            data.append('sumberBiaya', $("#sumberBiaya").val());
+
+                            if ($("#sumberBiaya").val() == 1) {
+                                data.append('tahun', $("#tahun").val());
+                                data.append('semester', $("#semester").val());
+                                data.append('deskripsi', $("#deskripsi").val());
+                                data.append('tgl_pengajuan', $("#tgl_pengajuan").val());
+                                data.append('jumlah_pengajuan', $("#jumlah_pengajuan").val());
+
+
+                            } else {
+                                jQuery.each(jQuery('#Bukti')[0].files, function (i, file) {
+                                    data.append('Bukti', file);
+                                });
+                                data.append('jumlah_dicairkan', $("#jumlah_dicairkan").val());
+                                data.append('tgl_transfer', $("#tgl_transfer").val());
+
+                            }
+                            console.log("check validity true" + data)
+
+                            $.ajax({
+                                processData: false,
+                                contentType: false,
+                                cache: false,
+                                enctype: "multipart/form-data",
+                                type: 'POST',
+                                data: data,
+                                url: '/SimkaAdmin/PostSumberBiayaInternal',
+                                success: function (data) {
+                                    if (data.success) {
+                                        toastr.success(data.message)
+                                        dataTableSumberBiaya.ajax.reload()
+                                        resetInput()
+
+                                    } else {
+                                        toastr.error(data.message)
+                                    }
+                                }, error: function () {
+                                    toastr.error("Terdapat kesalahan")
+                                }
+
+                            });
+
+                        }
+
+                    }, false);
+                });
+            }, false);
+        })();
+
+    </script>
+    <script>
+
+    </script>
+
+
+
+}

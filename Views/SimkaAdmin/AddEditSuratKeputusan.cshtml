@@ -1,0 +1,482 @@
+﻿@model HstSkForm
+@{
+    Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+}
+
+
+
+<head>
+    <title>Add Edit Surat Keputusan </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+
+</head>
+
+
+<!-- Main content -->
+<!-- Content Wrapper. Contains page content -->
+<div>
+    <!-- Content Header (Page header) -->
+    <!--<section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Tambah Surat Keputusan</h1>
+                    <div class="row">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>--><!-- /.container-fluid -->
+    <!--</section>-->
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="col-md-12">
+                
+            </div>
+        </div>
+
+        
+            
+       
+    </section>
+    <!-- /.content -->
+</div>
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h3>Add Edit Surat Keputusan</h3>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+
+
+
+            <hr />
+            <br />
+            @*<h3 class="card-title">Add or Edit Studi Lanjut</h3>*@
+
+            <form method="post" asp-action="AddEditSuratKeputusan" enctype="multipart/form-data" id="formsimka">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                <div class="form-group">
+                    <label asp-for="NoSk" class="control-label">No. SK</label>
+                    @if (Model.NoSk == null || Model.NoSk == "")
+                    {
+                        <input asp-for="NoSk" class="form-control" /> }
+                    else
+                    {
+                        <input asp-for="NoSk" class="form-control" readonly />}
+                    <span asp-validation-for="NoSk" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LevelSk" class="control-label">Level SK</label>
+                    <input asp-for="LevelSk" class="form-control" />
+                    <span asp-validation-for="LevelSk" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NoSemester" class="control-label">No Semester</label>
+                    <input asp-for="NoSemester" class="form-control" />
+                    <span asp-validation-for="NoSemester" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DeskripsiSk" class="control-label">Deskripsi SK</label>
+                    <input asp-for="DeskripsiSk" class="form-control" />
+                    <span asp-validation-for="DeskripsiSk" class="text-danger"></span>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="TglSk" class=" control-label">Tanggal SK</label>
+                        <input type="date" asp-for="TglSk" class="form-control" placeholder="">
+                        <span asp-validation-for="TglSk" class="text-danger"></span>
+
+                    </div>
+                    <div class="col-4">
+                        <label asp-for="TglAwal" class="control-label">Tanggal Awal</label>
+                        <input type="date" asp-for="TglAwal" class="form-control" placeholder="">
+                        <span asp-validation-for="TglAwal" class="text-danger"></span>
+
+                    </div>
+                    <div class="col-4">
+                        <label asp-for="TglAkhir" class="control-label">Tanggal Akhir</label>
+                        <input type="date" asp-for="TglAkhir" class="form-control" placeholder="">
+                        <span asp-validation-for="TglAkhir" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="IdTahunAkademik" class="control-label"> Pilih Tahun Akademik</label>
+                    <select class="form-control" asp-for="IdTahunAkademik">
+                        <option value="0">- Select -</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="" class="control-label">File SK</label>
+                    <input asp-for="FileSkform" type="file" class="form-control">
+                    <div id="previewFoto">
+                        @if (Model != null)
+                        {
+                            @if (Model.FileSk != null)
+                            {
+                                <img src="data:image/jpeg;base64,@System.Convert.ToBase64String(Model.FileSk) " width="300" height="300" style="margin-top:10px">}}
+
+                    </div>
+                </div>
+
+                <div class="card ">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="flex-grow-1">Data NPP SK</h5>
+                        <a id="tombol" class=" text-light btn btn-success"
+                           onclick="ShowPopup('@Url.Action("AddEditListSK","SimkaAdmin")')"><i class="fa fa-plus"></i> Tambah List NPP  SK </a>
+                    </div>
+
+                    <div class="card-body" style="overflow-x:auto">
+                        <div style="min-width:900px">
+                            <table id="example" class="  table-hover table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                                <thead class="bg-primary"></thead>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" id="btnSave" value="Save" class="btn btn-primary">Save</button>
+                    @*<button type="button" value="Kembali" class="btn btn-danger" onclick="history.back(-1)" >Kembali</button>*@
+                </div>
+
+            </form>
+
+        </div>
+        @Html.Raw(TempData["alert"])
+        @Html.Raw(TempData["href"])
+        @Html.Raw(TempData["swal"])
+
+
+    </section>
+</div>
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.2
+    </div>
+    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+    reserved.
+</footer>
+
+<!-- Control Sidebar -->
+<!-- /.control-sidebar -->
+
+
+
+
+
+@section Scripts{
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.9.0/jquery.serializejson.min.js"></script>
+    <!--toastr-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--sweetalert-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+    <script>
+        var popup, dataTable;
+
+        $(document).ready(function () {
+            if (document.getElementById("NoSk").value != "")
+                $("#NoSk").prop("readonly", true);
+        //end bikin npp readonly saat edit
+            $.ajax({
+                datatype: "text",
+                type: 'get',
+                url: '/SimkaAdmin/LoadDataTahunAkademik',//your url of handler
+                data: {
+                   
+                },
+                success: function (response) {
+                    var len = response.length;
+                   
+                    $("#IdTahunAkademik").empty();
+                    for (var i = 0; i < len; i++) {
+                        var id = response[i]['idTahunAkademik'];
+                        var name = response[i]['tahunAkademik'];
+                        
+                        $("#IdTahunAkademik").append("<option value='" + id + "'>" + name + "</option>");
+                    }
+
+                },
+                error: function (jqxhr, textStatus, errorThrown) {
+                    console.log("jqXHR: ", jqxhr);
+                    console.log("textStatus: ", textStatus);
+                    console.log("errorThrown: ", errorThrown);
+                }
+
+
+
+            });
+            var data = $("#NoSk").val();
+
+            dataTable = $('#example').DataTable({
+                "responsive": true,
+                "ajax": {
+                    "url": "/SimkaAdmin/LoadDataListSK?nosk=" + data + "",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        data: "npp",
+                        title: "NPP",
+
+
+                    },
+                     {
+                        data: "nama",
+                        title: "nama",
+                        type: "readonly"
+                    },
+                    {
+                        data: "peran",
+                        title: "Peran",
+                        type: "readonly"
+                    },
+                    {
+                        title: "Aksi",
+                        "data": "npp", // diganti sama id
+                        "render": function (data) {
+                            return "<a class=' text-light btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(\"" + data + "\")><i class='fa fa-trash'></i> Delete</a>";
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable": "no data found."
+                }
+            });
+
+        });
+
+        $("#btnSave").click(function (e) {
+           e.preventDefault();
+            Swal.fire({
+                title: 'Apakah data yang Anda isi sudah benar?',
+                text: "No SK tidak dapat dirubah setelah disimpan",
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                denyButtonText: `Tidak`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  
+                    $("form").submit()
+                } else {
+                    return false;
+                }
+
+            });
+            
+        });
+
+        function post() {
+            $("#formSimka")[0].preventDefault();
+            
+            
+
+        }
+        function ShowPopup(url) {
+            if ($('#NoSk').val() == "")
+                alert("Harap isi nomor SK");
+            else {
+
+
+                $("#NoSk").prop("readonly", true);
+                var formDiv = $('<div/>');
+                var data = $('#NoSk').val();
+                $.get(url.concat('?nosk=', data))
+                    .done(function (response) {
+                        formDiv.html(response);
+                        popup = formDiv.dialog({
+                            autoOpen: true,
+                            modal: true,
+                            resizeable: false,
+                            width: 600,
+                            height: 400,
+                            title: 'Add or Edit Data',
+                            close: function () {
+                                popup.dialog('destroy').remove();
+                            }
+                        });
+                    });
+            }
+        
+        }
+
+
+        function SubmitAddEditListSK(form) {
+            var nosk = $("#NoSk").val();
+            var url = "/SimkaAdmin/LoadDataListSK?nosk=" + nosk + "";
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                var data = $(form).serializeJSON();
+                data = JSON.stringify(data);
+                $.ajax({
+                    type: 'POST',
+                    url: '/SimkaAdmin/PostListSK',
+                    data: data,
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data.success) {
+                            popup.dialog('close');
+
+                            ShowMessage(data.message);
+                            dataTable.ajax.url(url).load();
+                            
+                        }
+                            
+                    }
+                });
+
+            }
+            return false;
+        }
+
+        function SubmitAddEdit(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid) {
+                var form = $('#formsimka')[0];
+                var data = new FormData(form);
+                var data = new FormData(document.getElementById("formsimka"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/SimkaAdmin/PostSuratKeputusan',
+                    data: data,
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data.success) {
+                            alert("Simpan berhasil");
+                            window.location.href = "/SimkaAdmin/KelolaSuratKeputusan";
+                           
+                        }
+                    },
+                    error: function (data) {
+                        alert("Telah terjadi kesalahan dengan kode : " + data.status + ", Pastikan semua isian data sudah diisi");
+                    }
+                });
+
+            }
+            return false;
+        }
+
+        function Delete(id) {
+            var no = $('#NoSk').val();
+            swal({
+                title: "Apakah Anda yakin untuk menghapus?",
+                text: "Data ini akan terhapus selamanya",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "HAPUS",
+                closeOnConfirm: true
+            }, function () {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/SimkaAdmin/DeleteListSK' + '?' + $.param({ "nosk": no, "npp": id }),
+                                      
+                    success: function (data) {
+                        if (data.success) {
+                            ShowMessage(data.message);
+                            dataTable.ajax.reload();
+                           
+                        }
+                    }
+                });
+            });
+
+
+        }
+
+
+        function ShowMessage(msg) {
+            toastr.success(msg);
+        }
+        function previewFoto() {
+
+            var preview = document.querySelector('#previewFoto');
+
+            if (this.files) {
+                [].forEach.call(this.files, readAndPreview);
+            }
+
+            function readAndPreview(file) {
+
+
+                // Make sure `file.name` matches our extensions criteria
+                if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                    document.getElementById("file-foto").value = "";
+                    $("#previewFoto").empty();
+                    return alert(file.name + " is not an image");
+                } // else...
+
+                var reader = new FileReader();
+
+                reader.addEventListener("load", function () {
+                    var image = new Image();
+                    image.height = 200;
+                    image.title = file.name;
+                    image.src = this.result;
+                    $("#previewFoto").empty();
+                    preview.append(image);
+
+                });
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.querySelector('#FileSkform').addEventListener("change", previewFoto);
+
+
+    </script>
+
+
+}
+
+

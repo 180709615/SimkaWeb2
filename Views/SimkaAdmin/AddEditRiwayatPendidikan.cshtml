@@ -1,11 +1,10 @@
 ﻿@model TrRiwayatPendidikanForm
 
 
-@{
-
-    Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
-}
-
+@{ Layout = "~/Views/Shared/_LayoutDynamic.cshtml"; }
+<head>
+    <title>Add Edit Riwayat Pendidikan</title>
+</head>
 
 
 <div class="content-wrapper">
@@ -15,7 +14,7 @@
                 <div class="col-sm-6">
                     <h3>Add Edit Riwayat Pendidikan</h3>
                 </div>
-               
+
             </div>
         </div><!-- /.container-fluid -->
     </section>
@@ -156,7 +155,15 @@
             </form>
         </div>
     </section>
+
 </div>
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.2
+    </div>
+    <small>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</small> All rights
+    reserved.
+</footer>
 @section Scripts{
     <script>
         function previewFoto() {

@@ -193,19 +193,22 @@
     // Script ini digunakan untuk mengubah menu link yang sedang diakses menjadi warna biru(aktif)
 </script>
 <script>
-    $(document).ready(function () {
 
+    $(document).ready(function () {
+   
         $.ajax({
-            url: '/MenuDynamic/getSidebarMenu',
-            method: 'get',
-            dataType: 'json',
-            success: function (data) {
-                $("#menu").append(data);
+        url: '/MenuDynamic/getSidebarMenu',
+        method: 'get',
+        dataType: 'json',
+        success: function(data) {
+            $("#menu").append(data);
             }
         });
-
-
     });
+    
+
+
+    
     $(function () {
         $('#sidebar-form').on('submit', function (e) {
             e.preventDefault();

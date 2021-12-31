@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace APIConsume.Controllers
 {
     [System.Runtime.InteropServices.Guid("6D594843-F805-4AB9-AFB7-2A9CD3F5887C")]
+    [Authorize]
     public class SimkaDosenController : Controller
     {
         private readonly SIATMAX_SISTERContext _context;
@@ -836,11 +837,6 @@ namespace APIConsume.Controllers
                                                 nama_kelompok_bidang = detail.kelompok_bidang
                                         };
                                             
-                                            
-
-                                            //if (_DATA_SISTERcontext.TrPenelitian_DATA_SISTER.Any(a => a.id_penelitian_pengabdian == detail.id)) 
-                                            //    masterList.Add(_DATA_SISTERcontext.TrPenelitian_DATA_SISTER.AsNoTracking().FirstOrDefault(a => a.id_penelitian_pengabdian == detail.id)); // untuk dosen yang punya id_penelitian yg sudah tersimpan di database,
-                                            
                                             compareList.Add(entrydata);
 
                                             var SinkronAnggotaResult = await SinkronAnggotaSister(detail.anggota, detail.id); // Sinkronisasi untuk data penulis
@@ -863,22 +859,7 @@ namespace APIConsume.Controllers
                                             }
 
                                         }
-                                        //else
-                                        //{
-                                        //    TrPenelitian_DATA_SISTER entrydata = new TrPenelitian_DATA_SISTER();
-                                        //    entrydata.id_penelitian_pengabdian = itemPenelitian.id;
-                                        //    entrydata.judul_penelitian_pengabdian = itemPenelitian.judul;
-                                        //    entrydata.tahun_pelaksanaan = itemPenelitian.tahun_pelaksanaan;
-
-                                        //    //if (_DATA_SISTERcontext.TrPenelitian_DATA_SISTER.Any(a => a.id_penelitian_pengabdian == itemPenelitian.id)  ) // cek apakah ada data di tabel yang                                                                                               // kalau returnya true berarti harus dinegasi kan                                                                                   
-                                        //    //                                                                               // karena list ini bakal dimasukkin ke masterlist juga jadi nanti bisa ke dobel
-                                        //    //{
-                                        //    //    masterList.Add(_DATA_SISTERcontext.TrPenelitian_DATA_SISTER.AsNoTracking().FirstOrDefault(a => a.id_penelitian_pengabdian == itemPenelitian.id)); // untuk dosen yang punya id_penelitian yg sudah tersimpan di database,
-                                        //    //                                                                                                          // jadi jatuhnya cuma mengupdate row, nambahin dosen ke NPP2 dst
-                                        //    //}
-                                            
-                                        //        compareList.Add(entrydata);
-                                        //}
+                                      
 
 
                                     }
@@ -2850,19 +2831,6 @@ namespace APIConsume.Controllers
                             return output;
                         }
                     }
-
-                    //_DATA_SISTERcontext.TblAnggota_DATA_SISTER.AddRange(toBeAddedAnggota);
-                    //_DATA_SISTERcontext.TblAnggota_DATA_SISTER.RemoveRange(toBeDeletedAnggota);
-                    //int counterAnggota = 0;
-                    //foreach (var item in toBeUpdatedAnggota)
-                    //{
-                    //    counterAnggota++;
-                    //    var itemToUpdate = _DATA_SISTERcontext.TblAnggota_DATA_SISTER
-                    //        .FirstOrDefault(a => a.id_penelitian_pengabdian == item.id_penelitian_pengabdian && a.id_sdm == item.id_sdm);
-
-                    //    itemToUpdate = item;
-                    //}
-
 
                 }
                 output.status = true;

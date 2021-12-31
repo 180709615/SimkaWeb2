@@ -6,6 +6,14 @@
 
 <html>
 <head>
+    <script type="text/javascript">
+        window.onload = function () { Clear(); }
+        function Clear() {
+            var Backlen = history.length;
+            if (Backlen > 0) history.go(-Backlen);
+            console.log("tes")
+        }
+    </script>
     <title>
         Sistem Informasi Kepegawaian Universitas Atma Jaya Yogyakarta
     </title>

@@ -21,8 +21,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace APIConsume.Controllers
 {
-
-
+    [Authorize]
     public class SimkaAdminController : Controller
     {
         private readonly SIATMAX_SISTERContext _context;
@@ -366,145 +365,13 @@ namespace APIConsume.Controllers
         {
             var balikan = new karyaa()
             {
-                karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
+                karyawan = _context.MstKaryawan.OrderBy(a=>a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
             };
 
             return View(balikan);
         }
 
-        public IActionResult ViewDokumenProsiding(string jenis_tabel, string id)
-        {
-            dynamic obj = new ExpandoObject();
-            if (id != null)
-            {
-                obj.id = id;
-                obj.jenis_tabel = jenis_tabel;
-
-                return View(obj);
-            }
-            return View();
-        }
-
-        public IActionResult GetDokumenProsiding(string jenis_tabel, string id)
-        {
-
-            if (jenis_tabel == "Publikasi")
-            {
-                TrPublikasi_DATA_SISTER obj = _DATA_SISTERcontext.TrPublikasi_DATA_SISTER.SingleOrDefault(a => a.id_riwayat_publikasi_paten == id);
-
-                return Json(Convert.ToBase64String(obj.FILE_PROSIDING_ARTIKEL));
-
-            }
-
-
-            //Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            //   Response.Headers.Add("Content-Disposition", "inline");
-            //Response.Headers.Add("content-length", obj.FILE_PROSIDING_ARTIKEL.Length.ToString());
-
-            //return File(obj.FILE_PROSIDING_ARTIKEL, "application/pdf", "FileProsiding.pdf");
-            return RedirectToAction("Index", "Home");
-
-        }
-
-        public IActionResult ViewDokumenSimilaritas(string jenis_tabel, string id)
-        {
-            dynamic obj = new ExpandoObject();
-            if (id != null)
-            {
-                obj.id = id;
-                obj.jenis_tabel = jenis_tabel;
-
-                return View(obj);
-            }
-            return View();
-        }
-
-        public IActionResult GetDokumenSimilaritas(string jenis_tabel, string id)
-        {
-
-            if (jenis_tabel == "Publikasi")
-            {
-                TrPublikasi_DATA_SISTER obj = _DATA_SISTERcontext.TrPublikasi_DATA_SISTER.SingleOrDefault(a => a.id_riwayat_publikasi_paten == id);
-
-                return Json(Convert.ToBase64String(obj.FILE_CEK_SIMILARITAS));
-
-            }
-
-
-            //Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            //   Response.Headers.Add("Content-Disposition", "inline");
-            //Response.Headers.Add("content-length", obj.FILE_PROSIDING_ARTIKEL.Length.ToString());
-
-            //return File(obj.FILE_PROSIDING_ARTIKEL, "application/pdf", "FileProsiding.pdf");
-            return RedirectToAction("Index", "Home");
-
-        }
-        public IActionResult ViewDokumenPAK(string jenis_tabel, string id)
-        {
-            dynamic obj = new ExpandoObject();
-            if (id != null)
-            {
-                obj.id = id;
-                obj.jenis_tabel = jenis_tabel;
-
-                return View(obj);
-            }
-            return View();
-        }
-
-        public IActionResult GetDokumenPAK(string jenis_tabel, string id)
-        {
-
-            if (jenis_tabel == "Publikasi")
-            {
-                TrPublikasi_DATA_SISTER obj = _DATA_SISTERcontext.TrPublikasi_DATA_SISTER.SingleOrDefault(a => a.id_riwayat_publikasi_paten == id);
-
-                return Json(Convert.ToBase64String(obj.FILE_PEER_REVIEW_PAK));
-
-            }
-
-
-            //Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            //   Response.Headers.Add("Content-Disposition", "inline");
-            //Response.Headers.Add("content-length", obj.FILE_PROSIDING_ARTIKEL.Length.ToString());
-
-            //return File(obj.FILE_PROSIDING_ARTIKEL, "application/pdf", "FileProsiding.pdf");
-            return RedirectToAction("Index", "Home");
-
-        }
-        public IActionResult ViewDokumenKorespondensi(string jenis_tabel, string id)
-        {
-            dynamic obj = new ExpandoObject();
-            if (id != null)
-            {
-                obj.id = id;
-                obj.jenis_tabel = jenis_tabel;
-
-                return View(obj);
-            }
-            return View();
-        }
-
-        public IActionResult GetDokumenKorespondensi(string jenis_tabel, string id)
-        {
-
-            if (jenis_tabel == "Publikasi")
-            {
-                TrPublikasi_DATA_SISTER obj = _DATA_SISTERcontext.TrPublikasi_DATA_SISTER.SingleOrDefault(a => a.id_riwayat_publikasi_paten == id);
-
-                return Json(Convert.ToBase64String(obj.FILE_PEER_KORESPONDENSI_REVIEWER));
-
-            }
-
-
-            //Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            //   Response.Headers.Add("Content-Disposition", "inline");
-            //Response.Headers.Add("content-length", obj.FILE_PROSIDING_ARTIKEL.Length.ToString());
-
-            //return File(obj.FILE_PROSIDING_ARTIKEL, "application/pdf", "FileProsiding.pdf");
-            return RedirectToAction("Index", "Home");
-
-        }
+        
         public IActionResult LoadDataKaryawan()
         {
             try
@@ -3511,12 +3378,10 @@ namespace APIConsume.Controllers
             
 
         }
-
+        [Authorize(Roles ="Admin,KSDM")]
         [HttpPost]
         public async Task<IActionResult> AddEditSuratKeputusan(HstSkForm data)
-
         {
-            
                 try
                 {
                     String id = data.NoSk;
@@ -3559,39 +3424,24 @@ namespace APIConsume.Controllers
 
                     if (!golonganada)
                     {
-                        // refJenisAppraisal.IdRefJnsAppraisal = _context.RefJenisAppraisal.Max(p => p.IdRefJnsAppraisal) + 1;
-                        //code ini buat mengambil id baru dari database
-
                         _context.HstSk.Add(input);
-
                         await _context.SaveChangesAsync();
-
                         TempData["SuccessMessage"] = "Tambah Data Surat Keputusan Berhasil";
                     }
                     else
                     {
                         _context.Update(input);
-
                         await _context.SaveChangesAsync();
-
                         TempData["SuccessMessage"] = "Tambah Data Surat Keputusan Berhasil";
                     }
-
                     return RedirectToAction("KelolaSuratKeputusan","SimkaAdmin");
-
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = ex.InnerException.Message;
-
                     return RedirectToAction("KelolaSuratKeputusan", "SimkaAdmin");
                 }
-          
-
-
-
         }
-
 
         [HttpPost]
         public async Task<IActionResult> PostSuratKeputusan(HstSkForm data)
@@ -3923,8 +3773,6 @@ namespace APIConsume.Controllers
                         IsVerifiedKsdm = rp.IsVerifiedKsdm,
                         JenisFileIjazah = rp.JenisFileIjazah,
                         JenisFileTranskrip = rp.JenisFileTranskrip,
-
-
                     };
 
                     if (rp.ScanIjazahForm != null && rp.ScanIjazahForm.Length > 0)
@@ -4663,8 +4511,6 @@ namespace APIConsume.Controllers
                 {
                     data.IdRefJbtnAkademikSblm = karyawandb.IdRefJbtnAkademik;
                 }
-
-
                 if (karirfungsional.IdKarir == 0)
                 {
                     // mstrekanan.IdMstRekanan = _context.MstRekanan.Max(p => p.IdMstRekanan) + 1;
@@ -5354,10 +5200,6 @@ namespace APIConsume.Controllers
 
 
                     bool studiLanjutAda = _context.TblStudiLanjut.AsNoTracking().Any(a => a.IdStudiLanjut == studiLanjut.IdStudiLanjut);
-
-
-
-
                     var datadb = _context.TblStudiLanjut.AsNoTracking().FirstOrDefault(a => a.IdStudiLanjut == studiLanjut.IdStudiLanjut);
                     var dataSumberBiayadb = _context.TblSumberBiayaSl.FirstOrDefault(a => a.IdStudiLanjut == studiLanjut.IdStudiLanjut);
                     TblStudiLanjut data = new TblStudiLanjut()
@@ -5414,7 +5256,6 @@ namespace APIConsume.Controllers
                     else if (datadb != null)
                         data.SkPenempatanKmbl = datadb.SkPenempatanKmbl;
                     else data.SkPenempatanKmbl = null;
-
                     // ----------------- Pengecekan-------------------
                     var cekNPP = _context.MstKaryawan.AsNoTracking().Any(a => a.Npp == studiLanjut.Npp);
                     if (!ModelState.IsValid)
@@ -5428,18 +5269,12 @@ namespace APIConsume.Controllers
                         return View(studiLanjut);
 
                     }
-
-
-
                     // ------------- Entri Data ----------------
                     if (data.IdStudiLanjut == 0)
                     {
                         //  mstrekanan.IdRefPengembangan = _context.RefPengembangan.Max(p => p.IdRefPengembangan) + 1;
                         _context.TblStudiLanjut.Add(data);
-
                         await _context.SaveChangesAsync();
-
-
                         TempData["SuccessMessage"] = "Tambah Data Studi Lanjut Berhasil";
 
 
@@ -5447,9 +5282,7 @@ namespace APIConsume.Controllers
                     else
                     {
                         _context.Update(data);
-
                         await _context.SaveChangesAsync();
-
                         TempData["SuccessMessage"] = "Ubah Data Studi Lanjut Berhasil";
 
                     }
@@ -5586,7 +5419,6 @@ namespace APIConsume.Controllers
                         TglTransfer = tgl_transfer,
 
                     };
-
                     if (Bukti != null && Bukti.Length > 0)
                     {
                         byte[] p1 = null;
@@ -5601,10 +5433,8 @@ namespace APIConsume.Controllers
                     }
 
                     bool SBInternalAda = _context.TblBiayaSlInternal.Any(a => a.IdBiayaSlInt == idSBInternal);
-
                     if (!SBInternalAda)
                     {
-
                         _context.TblBiayaSlInternal.Add(data);
                         await _context.SaveChangesAsync();
                         return Json(new
@@ -5612,7 +5442,6 @@ namespace APIConsume.Controllers
                             success = true,
                             message = "Tambah Data Sumber Biaya Success",
                         });
-
                     }
                     else
                     {

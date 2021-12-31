@@ -399,7 +399,8 @@
 
 
                     // Make sure `file.name` matches our extensions criteria
-                    if (!/\.(jpe?g)$/i.test(file.name)) {
+                    /*if (!/\.(jpe?g)$/i.test(file.name)) {*/
+                    if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
                         document.getElementById("SkPenempatanKmbl").value = "";
                         $("#previewFoto2").empty();
                         return alert(file.name + " is not an image");

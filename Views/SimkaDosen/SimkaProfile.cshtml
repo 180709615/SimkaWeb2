@@ -766,9 +766,7 @@
             dataTablePublikasiSISTER = $("#tabelpublikasi").DataTable({
                 "paging": false,
                 "ordering": false,
-
                 "processing": true, // for show progress bar
-
                 "filter": false, // this is for disable filter (search box)
                 "orderMulti": false, // for disable multiple column at once
                 "ajax": {
@@ -780,27 +778,12 @@
                     "emptyTable": "Tidak Ada Data Pada Sister"
                 },
                 "columnDefs":
-                    [{
-                        "targets": [0],
-                        "visible": true,
-                        "searchable": true
-                    },
-                    {
-                        "targets": [3],
-                        "width": "200px",
-                        
-                    },
-                   
+                    [
+                        { "targets": [0], "visible": true, "searchable": true },
+                        { "targets": [3], "width": "200px", }
                     ],
-
-
                 "columns": [
-                    {
-                        "data": null, "sortable": false,
-                        render: function (data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
-                        }
-                    },
+                    { "data": null, "sortable": false, render: function (data, type, row, meta) { return meta.row + meta.settings._iDisplayStart + 1;}},
                     { "data": "judul", "autoWidth": true },
                     { "data": "kategori_kegiatan", "autoWidth": true },
                     { "data": "tanggal", width:"350px" },
@@ -811,18 +794,8 @@
                         "data": "id_publikasi",
                         width: "250px",
                         render: function (data) {
-                            ////if (data != null) {
-                            ////    return "<button class='btn btn-default btn-sm'  onclick=GetArtikelPublikasi('" + data +"')>Unduh Artikel</button> "
-                            ////   // return "<a href='/SimkaDosen/unduhDokumen/"+data+"' target='_blank'>View Document </a>"
-                            ////} else {
-                            ////    return "<button class='btn btn-default btn-sm' disabled onclick=GetArtikelPublikasi('" + data + "')></i>Unduh Artikel</button> "
-                            ////}
-                            
-                            ////return "<p>aaaa</p>"
-                            return "<button class='btn btn-primary btn-sm' onclick=GetDokumenSister('Publikasi','" + data + "') data-toggle='modal' data-target='#modalDokumenSister'> Dokumen Sister </button> "
-
+                            return "<button class='btn btn-primary btn-sm' onclick=GetDokumenSister('Publikasi','" + data + "') data-toggle='modal' data-target='#modalDokumenSister'> Dokumen Sister </button> ";
                         },
-
                     },
                     {
                         "data": "id_publikasi",
@@ -831,11 +804,7 @@
                             
                             return "<button class='btn btn-primary btn-sm' onclick=GetDokumenPendukung('Publikasi','" + data + "') data-toggle='modal' data-target='#myModal'> Dokumen Pendukung </button> "
                         }
-
                     }
-
-
-                    //
                 ]
 
             });
@@ -1013,7 +982,6 @@
         function changeSelect() {
             semester = $(".selectSemester").val();
 
-            console.log("ini changeSelect")
 
             dataTablePengajaranSISTER.ajax.reload();
         }
@@ -1591,7 +1559,9 @@
                         "<label>Link URL</label>" +
                         "<div class='d-flex mb-3'>" +
                         "<div class='flex-grow-1'>" +
-                        "<input type='text' id='link" + jenis_file + jenis_tabel + "' class='form-control' readonly value='https://localhost:44393/SimkaAdmin/ViewDokumen"+jenis_file+"?id=" + id + "&jenis_tabel=" + jenis_tabel + "'>" +
+                        //"<input type='text' id='link" + jenis_file + jenis_tabel + "' class='form-control' readonly value='" + window.location.origin + "/SimkaAdmin/ViewDokumen" + jenis_file + "?id=" + id + "&jenis_tabel=" + jenis_tabel + "'>" +
+                        "<input type='text' id='link" + jenis_file + jenis_tabel + "' class='form-control' readonly value='https://simka2-dev.uajy.ac.id/ViewDokumen/ViewDokumen" + jenis_file + "?id=" + id + "&jenis_tabel=" + jenis_tabel + "'>" +
+
                         "</div>" +
                         "<div class=' pl-3'>" +
 

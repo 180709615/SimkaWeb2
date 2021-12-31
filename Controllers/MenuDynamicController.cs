@@ -25,11 +25,9 @@ namespace APIConsume.Controllers
             var npp = HttpContext.Session.GetString("NPP");
             DBOutput data = (new SidebarMenuDAO()).getSidebarMenu(npp);
             List<SidebarMenu> listMenu = new List<SidebarMenu>();
-
-
             List<SidebarMenu> menuTree = GetMenuTree(data.data, 0);
             menuTree.RemoveAll(a => a.ListMenu.Count == 0);
-                var append = "";
+            var append = "";
             foreach (var menus in menuTree)
             {
                 if (menus.parentid == 0)
@@ -40,18 +38,15 @@ namespace APIConsume.Controllers
                     {
                         foreach (var submenu in menus.ListMenu)
                         {
-                            append += "<li class='nav-item'><a href='https://localhost:44393/" + submenu.menulocation+ "' class='nav-link' style='padding-left:0;' ><i class='far fa-circle nav-icon left'  style='font-size: 13px; '></i><p style:'padding-left:1%'>" + submenu.menuname + "</p></a></li>";
+                            //append += "<li class='nav-item'><a href='https://localhost:44393/" + submenu.menulocation + "' class='nav-link' style='padding-left:0;' ><i class='far fa-circle nav-icon left'  style='font-size: 13px; '></i><p style:'padding-left:1%'>" + submenu.menuname + "</p></a></li>";
+                            append += "<li class='nav-item'><a href='https://simka2-dev.uajy.ac.id/" + submenu.menulocation + "' class='nav-link' style='padding-left:0;' ><i class='far fa-circle nav-icon left'  style='font-size: 13px; '></i><p style:'padding-left:1%'>" + submenu.menuname + "</p></a></li>";
                         }
                     }
                     append += "</ul></li>";
                 }
-
-
             }
             return Json(append);
-
         }
-
         private List<SidebarMenu> GetMenuTree(List<SidebarMenu> list, int? parent)
         {
             return list.Where(x => x.parentid == parent).Select(x => new SidebarMenu
@@ -65,6 +60,7 @@ namespace APIConsume.Controllers
 
             }).ToList();
         }
+
 
     }
 }

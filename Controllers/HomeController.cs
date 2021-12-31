@@ -248,24 +248,23 @@ namespace APIControllers.Controllers
             else
             {
                 var mstKaryawan = _context.MstKaryawan.FirstOrDefault(a => a.Npp == username);
-                if(mstKaryawan != null) // Data Karyawan tidak ditemukan
+                if(mstKaryawan != null) // Data Karyawan ditemukan
                 {
                     if (mstKaryawan.PASSWORD_RIPEM == getHash(password))
                     {
                         strrole = "role1";
+                        HttpContext.Session.SetString("NPP", username);
+                        HttpContext.Session.SetString("Nama", mstKaryawan.NamaLengkapGelar);
 
                         isAuthenticated = true;
                         identity = new ClaimsIdentity(new[] {
                                     new Claim(ClaimTypes.Name, username),
                                     new Claim("username", username),
-                                    new Claim("role", strrole)
+                                    new Claim("role", strrole),
+                                    //new Claim("menu",getSidebarMenu())
                                 }, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                        HttpContext.Session.SetString("NPP", username);
-                        HttpContext.Session.SetString("Nama", mstKaryawan.NamaLengkapGelar);
-
                         var getRole = (new LoginDAO()).GetUserRole(username);
-                        foreach (var role in getRole)
+                        foreach (var role in getRole) // Memasukkan list role kedalam claim
                         {
                             identity.AddClaim(new Claim(ClaimTypes.Role, role.Deskripsi));
                         }
@@ -309,6 +308,9 @@ namespace APIControllers.Controllers
             //bersihan sessionn
             return RedirectToAction("Index", "Home");
         }
+
+        
+
         [Authorize]
         public IActionResult Dashboard()
         {
@@ -730,79 +732,7 @@ namespace APIControllers.Controllers
             return str;
         }
        
-        public async Task<IActionResult> ResetPasswordView (string uuid)
-        {
-            if(uuid != null)
-            {
-                var dataDosen = _context.MstKaryawan.FirstOrDefault(a => a.UUID_LUPA_PWD == uuid);
-
-                if (dataDosen != null)
-                {
-                    TempData["isLinkValid"] = true;
-                    HttpContext.Session.SetString("NPPResetPassword", dataDosen.Npp);
-                    return View();
-                }
-                else
-                {
-                    TempData["isLinkValid"] = false;
-                    TempData["Message"] = "Link tidak valid";
-                    TempData["alert"] = "<script>alert('Link tidak valid');window.location.replace('/Home')</script>";
-
-                    return View();
-
-                    //return RedirectToAction("Index", "Home");
-                }
-
-
-            }
-            else
-            {
-                TempData["isLinkValid"] = false;
-                TempData["Message"] = "Link tidak valid.";
-                TempData["alert"] = "<script>alert('Link tidak valid');location.href='/Home'</script>";
-                return View();
-                //return RedirectToAction("Index", "Home");
-            }
-        }
-
-        public async Task<IActionResult> ResetPassword (string passwordBaru)
-        {
-            
-            var npp = HttpContext.Session.GetString("NPPResetPassword");
-            var data = _context.MstKaryawan.FirstOrDefault(a => a.Npp == npp);
-            if(data != null)
-            {
-                try
-                {
-                    var result = (new MstKaryawanDAO()).UbahPassword(npp, passwordBaru, getHash(passwordBaru));
-                    var update = (new MstKaryawanDAO()).UbahUUID_Reset_Pswd(npp, null);
-
-                    return Json(new
-                    {
-                        success = true,
-                        message = "Password berhasil diperbarui"
-                    });
-                }
-                catch(Exception ex)
-                {
-                    return Json(new
-                    {
-                        success = false,
-                        message = ex.Message
-                    });
-                }
-            }
-            else
-            {
-                return Json(new
-                {
-                    success=false,
-                    message = "Data dosen tidak ditemukan"
-                });
-            }
-
-        }
-
+        
         public async Task<IActionResult> LupaPassword(string npp)
         {
             if (npp != null)
@@ -811,8 +741,12 @@ namespace APIControllers.Controllers
 
                 if (dataDosen != null)
                 {
+                    var sampleUsername = "180709615@students.uajy.ac.id";
+                    var samplePassword = "Deemust130600";
+                    sampleUsername = "dkmasprayoga2@gmail.com";
+                    samplePassword = "dimasgamasdigam2000";
                     var uuid = Guid.NewGuid().ToString();
-                    var informasilogin = "  <br><br><br> TESTING SIMKA 2 DEV <br><br>" +
+                    var informasilogin = "  <br><br><br> SIMKA 2 DEV <br><br>" +
                                     "Waktu Dan Tanggal:  " + DateTime.Now +
                                     
                                     "<br> Silahkan klik link di bawah ini untuk memperbarui password Anda " +
@@ -821,6 +755,7 @@ namespace APIControllers.Controllers
                                     "<a href='http://ksi.uajy.ac.id/helpdesk/open.php' target='_blank'> http://ksi.uajy.ac.id/helpdesk</a>" +
                                     "<br>Terimakasih ";
 
+                    using var smtp = new SmtpClient();
                     try
                     {
                         //Update uuid npp tersebut biar nanti bisa di get data npp nya
@@ -835,7 +770,7 @@ namespace APIControllers.Controllers
 
 
                         var email = new MimeMessage();
-                        email.From.Add(MailboxAddress.Parse("180709615@students.uajy.ac.id"));
+                        email.From.Add(MailboxAddress.Parse("dkmasprayoga2@gmail.com"));
                         //email.To.Add(MailboxAddress.Parse("180709615@students.uajy.ac.id"));
                         email.To.Add(MailboxAddress.Parse("dimasprayoga2@gmail.com"));
 
@@ -845,23 +780,21 @@ namespace APIControllers.Controllers
                         bodyBuilder.HtmlBody = informasilogin;
                         email.Body = bodyBuilder.ToMessageBody();
 
+
+                        var smtpProvider =""; // Menentukan Provider SMTP
+                        //if (sampleUsername.Contains("gmail"))
+                        //    smtpProvider = "smtp.gmail.com";
+                        //else
+                            smtpProvider = "smtp.gmail.com";
+
+
                         // send email
-                        using var smtp = new SmtpClient();
+
                         smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
-                        smtp.Connect("SMTP.Office365.com", 587, SecureSocketOptions.StartTls);
-                        smtp.Authenticate("180709615@students.uajy.ac.id", "Deemust130600");
-                        smtp.Send(email);
-                        smtp.Disconnect(true);
+                        smtp.Connect(smtpProvider, 587, SecureSocketOptions.StartTls);
+                        smtp.Authenticate(sampleUsername,samplePassword);
+                        await smtp.SendAsync(email);
 
-                        string emailDosen = dataDosen.Email;                       
-                        string pattern = @"(?<=[\w]{2})[\w-\._\+%]*(?=[\w]{1}@)";
-                        string hideEmail = Regex.Replace(emailDosen, pattern, m => new string('*', m.Length));
-
-                        TempData["Message"] = "Silahkan cek email Anda ";
-                        TempData["success"] = true;
-                        TempData["alertLupaPassword"] = "<script>alert('Silahkan cek email Anda " + hideEmail + "');window.location.replace('/Home')</script>";
-
-                        return await Task.FromResult(View());
                     }
                     catch (System.Exception e)
                     {
@@ -872,6 +805,22 @@ namespace APIControllers.Controllers
                         TempData["success"] = false;
                         return await Task.FromResult(View());
                     }
+                    finally
+                    {
+                        smtp.Disconnect(true);
+                        smtp.Dispose();
+                    }
+
+
+                    string emailDosen = dataDosen.Email;
+                    string pattern = @"(?<=[\w]{2})[\w-\._\+%]*(?=[\w]{1}@)";
+                    string hideEmail = Regex.Replace(emailDosen, pattern, m => new string('*', m.Length));
+
+                    TempData["Message"] = "Silahkan cek email Anda ";
+                    TempData["success"] = true;
+                    TempData["alertLupaPassword"] = "<script>alert('Silahkan cek email Anda " + hideEmail + "');window.location.replace('/Home')</script>";
+
+                    return await Task.FromResult(View());
 
 
                 }
@@ -909,8 +858,8 @@ namespace APIControllers.Controllers
                 else
                 {
                     TempData["isLinkValid"] = false;
-                    TempData["Message"] = "Data karyawan tidak ditemukan";
-                    TempData["alert"] = "<script>alert('Data Karyawan tidak ditemukan');window.location.replace('/Home')</script>";
+                    TempData["Message"] = "Link tidak valid.";
+                    TempData["alert"] = "<script>alert('Link tidak valid.');window.location.replace('/Home')</script>";
 
                     return View();
 

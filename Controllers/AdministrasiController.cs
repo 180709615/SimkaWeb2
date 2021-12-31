@@ -148,7 +148,7 @@ namespace SimkaUAJY.Controllers
                             var result = (new MstKaryawanDAO()).UbahPassword(npp, model.passwordBaru, getHash(model.passwordBaru));                          
                             TempData["SuccessMessage"] = "Ubah Password Berhasil";                            
 
-                            return RedirectToAction("SimkaProfile");
+                            return RedirectToAction("SimkaProfile","SimkaDosen");
 
                         }
                         catch (Exception ex)

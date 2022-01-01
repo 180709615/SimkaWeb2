@@ -94,7 +94,7 @@ namespace APIConsume.DAO
 									SET									
 									[nama] = @nama
 
-									WHERE [id_penelitian_pengabdian]=@id_penelitian_pengabdian AND [id] = @id";
+									WHERE [id_penelitian_pengabdian]=@id_penelitian AND [id] = @id";
 
 					var param = new { no = mitra.no, id_penelitian = mitra.id_penelitian_pengabdian, id = mitra.id, nama = mitra.nama };
 					output.data = conn.Execute(query, param);
@@ -125,7 +125,7 @@ namespace APIConsume.DAO
 			{
 				try
 				{
-					string query = @"DELETE FROM [dbo].[MITRA_LITABMAS] WHERE [id_penelitian_pengabdian] = @id_penelitian_pengabdian AND [id] = @id";
+					string query = @"DELETE FROM [dbo].[MITRA_LITABMAS] WHERE [id_penelitian_pengabdian] = @id_penelitian AND [id] = @id";
 
 					var param = new { id_penelitian = mitra.id_penelitian_pengabdian, id = mitra.id };
 					output.data = conn.Query<TblMitra_Litabmas_DATA_SISTER>(query, param).ToList();

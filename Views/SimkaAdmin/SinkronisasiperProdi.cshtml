@@ -8,7 +8,28 @@
     <title>Sinkronisasi SISTER per Prodi - SIMKA UAJY</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <style>
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 16px solid #3498db;
+      width: 90px;
+      height: 90px;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+    }
 
+    /* Safari */
+    @@-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @@keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+}
+    </style>
 </head>
 
 <body>
@@ -426,7 +447,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     { "data": "mata_kuliah", "name": "nama_mata_kuliah", "autoWidth": true },
                     { "data": "semester", "name": "nama_jenis_evaluasi", "autoWidth": true },
@@ -472,7 +494,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     { "data": "judul", "name": "nama_mata_kuliah", "autoWidth": true },
                     { "data": "jenis_publikasi", "name": "nama_jenis_evaluasi", "autoWidth": true },
@@ -525,7 +548,9 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width:100,
+
                     },
                     { "data": "judul_penelitian_pengabdian", "name": "nama_mata_kuliah", "autoWidth": true },
 
@@ -570,7 +595,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     { "data": "judul_penelitian_pengabdian", "name": "nama_mata_kuliah", "autoWidth": true },
 
@@ -613,7 +639,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     //{ "data": "mata_kuliah", "name": "nama_mata_kuliah", "autoWidth": true },
                     //{ "data": "semester", "name": "nama_jenis_evaluasi", "autoWidth": true },
@@ -667,7 +694,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     //{ "data": "mata_kuliah", "name": "nama_mata_kuliah", "autoWidth": true },
                     //{ "data": "semester", "name": "nama_jenis_evaluasi", "autoWidth": true },
@@ -744,7 +772,8 @@
             var namaProdi, listNpp;
             console.log(id_unitPenelitian)
             swal.fire({
-                icon: 'info',
+                //icon: 'info',
+                iconHtml:'<div class="loader"></div>',
                 html: '<h5>Loading...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
@@ -860,7 +889,8 @@
             var namaProdi, listNpp;
             console.log(id_unitPengabdian)
             swal.fire({
-                icon: 'info',
+                //icon: 'info',
+                iconHtml: '<div class="loader"></div>',
                 html: '<h5>Loading...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
@@ -924,11 +954,15 @@
                         promises.push(dataTablePengabdianSISTER.ajax.reload());
                         Promise.all(promises)
                             .then(value => {
-                                console.log("Sinkronisasi by NPP Selesai")
-                                swal.fire({
-                                    icon: 'success',
-                                    html: '<h5>Sinkronisasi Berhasil</h5>'
-                                });
+                                setTimeout(function () {
+                                    console.log("Sinkronisasi by NPP Selesai")
+
+                                    swal.fire({
+                                        icon: 'success',
+                                        html: '<h5>Sinkronisasi Berhasil</h5>'
+                                    });
+                                }, listNpp.length * 2000)
+
                                 dataTablePengabdianSISTER.ajax.reload();
                             })
 
@@ -969,7 +1003,8 @@
             var namaProdi, listNpp;
             console.log(id_unitPublikasi)
             swal.fire({
-                icon: 'info',
+                //icon: 'info',
+                iconHtml: '<div class="loader"></div>',
                 html: '<h5>Loading...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
@@ -1033,11 +1068,15 @@
 
                         Promise.all(promises)
                             .then(value => {
-                                console.log("Sinkronisasi by NPP Selesai")
-                                swal.fire({
-                                    icon: 'success',
-                                    html: '<h5>Sinkronisasi Berhasil</h5>'
-                                });
+                                setTimeout(function () {
+                                    console.log("Sinkronisasi by NPP Selesai")
+
+                                    swal.fire({
+                                        icon: 'success',
+                                        html: '<h5>Sinkronisasi Berhasil</h5>'
+                                    });
+                                }, listNpp.length * 2000)
+
                                 dataTablePublikasiSISTER.ajax.reload();
                             })
 
@@ -1078,7 +1117,8 @@
             var namaProdi, listNpp;
             console.log(id_unitPengajaran)
             swal.fire({
-                icon: 'info',
+                //icon: 'info',
+                iconHtml: '<div class="loader"></div>',
                 html: '<h5>Loading...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
@@ -1145,11 +1185,15 @@
 
                         Promise.all(promises)
                             .then(value => {
-                                console.log("Sinkronisasi by NPP Selesai")
-                                swal.fire({
-                                    icon: 'success',
-                                    html: '<h5>Sinkronisasi Berhasil</h5>'
-                                });
+                                setTimeout(function () {
+                                    console.log("Sinkronisasi by NPP Selesai")
+
+                                    swal.fire({
+                                        icon: 'success',
+                                        html: '<h5>Sinkronisasi Berhasil</h5>'
+                                    });
+                                }, listNpp.length * 2000)
+
                                 dataTablePengajaranSISTER.ajax.reload();
                             })
 

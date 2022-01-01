@@ -670,7 +670,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     { "data": "mata_kuliah", "name": "nama_mata_kuliah", "autoWidth": true },
                     { "data": "semester", "name": "nama_jenis_evaluasi", "autoWidth": true },
@@ -711,7 +712,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     { "data": "judul", "autoWidth": true },
                     { "data": "kategori_kegiatan", "autoWidth": true },
@@ -782,7 +784,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     { "data": "judul_penelitian_pengabdian", "name": "nama_mata_kuliah", "autoWidth": true },
 
@@ -824,7 +827,8 @@
                         "data": null, "sortable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        width: 100,
                     },
                     { "data": "judul_penelitian_pengabdian", "name": "nama_mata_kuliah", "autoWidth": true },
 
@@ -924,7 +928,8 @@
 
         function SinkronPengabdianSISTER() {
             swal.fire({
-                icon: 'info',
+                //icon: 'info',
+                iconHtml: '<div class="loader"></div>',
                 html: '<h5>Loading...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
@@ -975,7 +980,8 @@
 
         function SinkronPenelitianSISTER() {
             swal.fire({
-                icon: 'info',
+                //icon: 'info',
+                iconHtml: '<div class="loader"></div>',
                 html: '<h5>Loading...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
@@ -1034,7 +1040,7 @@
                 nama_semester += " Pendek"
 
             swal.fire({
-                icon: 'info',
+                iconHtml: '<div class="loader"></div>',
                 title: "Loading...",
                 text: "Sedang Sinkronisasi Pengajaran Semester " + nama_semester,
                 showCancelButton: false,
@@ -1042,6 +1048,7 @@
                 allowOutsideClick: false
 
             });
+            
             console.log("btn Pengajaran sister clicked")
             $.ajax({
                 type: 'get',
@@ -1087,7 +1094,8 @@
 
         function SinkronPublikasiSISTER() {
             swal.fire({
-                icon: 'info',
+                //icon: 'info',
+                iconHtml: '<div class="loader"></div>',
                 html: '<h5>Loading...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,

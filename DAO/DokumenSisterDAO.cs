@@ -203,7 +203,7 @@ namespace APIConsume.DAO
 				{
 
 					string query = @"DELETE FROM[dbo].[DOKUMEN]
-									WHERE [id_publikasi_atau_penelitian] = @id_riwayat_publikasi_paten AND [id_dokumen]=@id_dokumen";
+									WHERE [id_publikasi_atau_penelitian] = @id_publikasi_atau_penelitian AND [id_dokumen]=@id_dokumen";
 
 					var param = new
 					{

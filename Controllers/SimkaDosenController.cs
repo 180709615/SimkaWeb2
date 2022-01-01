@@ -916,6 +916,7 @@ namespace APIConsume.Controllers
         public async Task<IActionResult> SinkronDataPengabdianProdiSISTERbyNPP(string npp)
 
         {
+            var index = 0;
             if (String.IsNullOrEmpty(npp))
             {
                 npp = HttpContext.Session.GetString("NPP");
@@ -972,6 +973,7 @@ namespace APIConsume.Controllers
 
                                     foreach (Penelitian itemPenelitian in ajar)
                                     {
+                                        index++;
                                         await Task.Delay(200);
 
                                         url = baseUrl + "/pengabdian/" + itemPenelitian.id;
@@ -1261,12 +1263,12 @@ namespace APIConsume.Controllers
 
                                             if (SinkronPenulisResult.status == false)
                                             {
-                                                return Json(new { success = false,nama = namaDosen, message = SinkronPenulisResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronPenulisResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                             if (SinkronDokumenResult.status == false)
                                             {
-                                                return Json(new { success = false, nama = namaDosen, message = SinkronDokumenResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronDokumenResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                         }
@@ -1367,7 +1369,7 @@ namespace APIConsume.Controllers
                         }
                         else
                         {
-                            return Json(new { success = false, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan." });
+                            return Json(new { success = false, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan.", npp = npp });
                         }
 
 
@@ -1557,7 +1559,7 @@ namespace APIConsume.Controllers
                             }
                             else
                             {
-                                return Json(new { success = false, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan." });
+                                return Json(new { success = false, npp = npp, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan." });
                             }
 
 

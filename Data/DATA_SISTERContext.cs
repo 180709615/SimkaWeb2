@@ -491,8 +491,7 @@ namespace APIConsume.Models
                 .HasMaxLength(150);
 
                 entity.Property(e => e.nama_dokumen)
-                    .HasColumnName("nama_dokumen")
-                    .HasMaxLength(250);
+                    .HasColumnName("nama_dokumen");
 
 
                 entity.Property(e => e.nama_file)

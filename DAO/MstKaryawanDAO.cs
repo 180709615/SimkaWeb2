@@ -195,10 +195,79 @@ namespace APIConsume.DAO
 				try
 				{
 
-					string query = @" SELECT mstKaryawan.NAMA, idUnit.NAMA_UNIT, mstIdUnit.NAMA_UNIT AS PENEMPATAN, fungsional.DESKRIPSI AS FUNGSIONAL, idUnitAkademik.NAMA_UNIT_AKADEMIK, mstKaryawan.NPP FROM  [simka].[MST_KARYAWAN] AS mstKaryawan INNER JOIN[simka].[REF_FUNGSIONAL] AS fungsional ON mstKaryawan.ID_REF_FUNGSIONAL = fungsional.ID_REF_FUNGSIONAL LEFT OUTER JOIN
+					string query = @" SELECT mstKaryawan.NAMA, idUnit.NAMA_UNIT, mstIdUnit.NAMA_UNIT AS PENEMPATAN, fungsional.DESKRIPSI AS FUNGSIONAL, idUnitAkademik.NAMA_UNIT_AKADEMIK, mstKaryawan.NPP FROM  [simka].[MST_KARYAWAN] AS mstKaryawan LEFT JOIN[simka].[REF_FUNGSIONAL] AS fungsional ON mstKaryawan.ID_REF_FUNGSIONAL = fungsional.ID_REF_FUNGSIONAL LEFT OUTER JOIN
 									[siatma].[MST_UNIT_AKADEMIK] AS idUnitAkademik ON mstKaryawan.ID_UNIT_AKADEMIK = idUnitAkademik.ID_UNIT LEFT OUTER JOIN [siatmax].[MST_UNIT] AS mstIdUnit ON mstKaryawan.MST_ID_UNIT = mstIdUnit.ID_UNIT LEFT OUTER JOIN [siatmax].[MST_UNIT] AS idUnit ON mstKaryawan.ID_UNIT = idUnit.ID_UNIT"+kondisi;
 					var param = new { idJabatanAkademik = idJabatanAkademik, idFungsional= idFungsional, idUnit= idUnit, idSubUnit=idSubUnit, PendidikanTerakhir= PendidikanTerakhir, statusKepegawaian= statusKepegawaian,   npp = npp, nama = nama };
 					output.data = conn.Query<object>(query,param).ToList();
+
+					output.status = true;
+
+					return output;
+				}
+				catch (Exception ex)
+				{
+					output.status = false;
+					output.pesan = ex.Message;
+					output.data = new List<string>();
+					return output;
+				}
+				finally
+				{
+					conn.Dispose();
+				}
+			}
+		}
+		public async Task<DBOutput> GetID_DOSEN_SISTERbyIdUnit(int idUnit)
+		{
+			DBOutput output = new DBOutput();
+
+			using (SqlConnection conn = new SqlConnection(Connection.ConnectionStringg))
+			{
+				try
+				{
+					//string query = @"SELECT *
+					//                FROM     PUBLIKASI INNER JOIN PENULIS ON PUBLIKASI.id_riwayat_publikasi_paten = PENULIS.id_riwayat_publikasi_paten
+					//                WHERE(PENULIS.id_sdm = @id_dosen)            ";
+					string query = @"SELECT ID_DOSEN_SISTER
+									FROM     simka.MST_KARYAWAN
+									WHERE  (ID_UNIT_AKADEMIK = @idUnit)";
+					var param = new { idUnit = idUnit};
+					output.data = conn.Query<string>(query, param).ToList();
+
+					output.status = true;
+
+					return output;
+				}
+				catch (Exception ex)
+				{
+					output.status = false;
+					output.pesan = ex.Message;
+					output.data = new List<string>();
+					return output;
+				}
+				finally
+				{
+					conn.Dispose();
+				}
+			}
+		}
+
+		public async Task<DBOutput> GetNPPbyIdUnit(int idUnit)
+		{
+			DBOutput output = new DBOutput();
+
+			using (SqlConnection conn = new SqlConnection(Connection.ConnectionStringg))
+			{
+				try
+				{
+					//string query = @"SELECT *
+					//                FROM     PUBLIKASI INNER JOIN PENULIS ON PUBLIKASI.id_riwayat_publikasi_paten = PENULIS.id_riwayat_publikasi_paten
+					//                WHERE(PENULIS.id_sdm = @id_dosen)            ";
+					string query = @"SELECT NPP
+									FROM     simka.MST_KARYAWAN
+									WHERE  (ID_UNIT_AKADEMIK = @idUnit)";
+					var param = new { idUnit = idUnit };
+					output.data = conn.Query<string>(query, param).ToList();
 
 					output.status = true;
 

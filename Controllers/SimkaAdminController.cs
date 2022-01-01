@@ -200,7 +200,7 @@ namespace APIConsume.Controllers
 
                 var balikan = new karyaa()
                 {
-                    karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
+                    karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
                 };
                 return View(balikan);
             
@@ -218,7 +218,7 @@ namespace APIConsume.Controllers
             {
                 var balikan = new karyaa()
                 {
-                    karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
+                    karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
                 };
 
                 return View(balikan);
@@ -232,7 +232,7 @@ namespace APIConsume.Controllers
 
                 var balikan = new karyaa()
                 {
-                    karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
+                    karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).ToList(),
                 };
 
                 return View(balikan);
@@ -1661,7 +1661,7 @@ namespace APIConsume.Controllers
 
                 {
                     // mengambil  daftar jenis appraisal untuk dipopualte dalam select
-                    kepala = _context.MstKaryawan.Select(p => new kepala { Npp = p.Npp, Nama = p.Nama }).ToList(),
+                    kepala = _context.MstKaryawan.OrderBy(a=>a.Nama).Select(p => new kepala { Npp = p.Npp, Nama = p.Nama }).ToList(),
                     IdUnit = id
 
 
@@ -4314,7 +4314,7 @@ namespace APIConsume.Controllers
                 {
                     var balikan = new TrMutasiForm()
                     {
-                        karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                        karyawan = _context.MstKaryawan.OrderBy(a=>a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                         unit = _context.MstUnit.Select(x => new MstUnit
                         {
                             IdUnit = x.IdUnit,
@@ -4329,7 +4329,7 @@ namespace APIConsume.Controllers
                     var mutasi = _context.TrMutasi.Where(x => x.IdTrMutasi.Equals(id)).FirstOrDefault();
                     var balikan = new TrMutasiForm()
                     {
-                        karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                        karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                         unit = _context.MstUnit.Select(x => new MstUnit
                         {
                             IdUnit = x.IdUnit,
@@ -4434,7 +4434,7 @@ namespace APIConsume.Controllers
                 {
                     var balikan = new TrKarirFungsionalForm()
                     {
-                        karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                        karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                         akademik = _context.RefJabatanAkademik.Select(x => new RefJabatanAkademik { IdRefJbtnAkademik = x.IdRefJbtnAkademik,
                             Deskripsi = x.Deskripsi }).ToList(),
                     };
@@ -4446,7 +4446,7 @@ namespace APIConsume.Controllers
                     var karirfungsional = _context.TrKarirFungsional.Where(x => x.IdKarir.Equals(id)).FirstOrDefault();
                     var balikan = new TrKarirFungsionalForm()
                     {
-                        karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                        karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                         akademik = _context.RefJabatanAkademik.Select(x => new RefJabatanAkademik
                         {
                             IdRefJbtnAkademik = x.IdRefJbtnAkademik,
@@ -4595,7 +4595,7 @@ namespace APIConsume.Controllers
             {
                 return View(new TrPengembanganForm()
                 {
-                    karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList()
+                    karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList()
                 });
 
             }
@@ -4605,7 +4605,7 @@ namespace APIConsume.Controllers
 
                 var balikan = new TrPengembanganForm()
                 {
-                    karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                    karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                     IdTrPengembangan = pengembangan.IdTrPengembangan,
                     FilePengembangan = pengembangan.FilePengembangan,
                     Judul = pengembangan.Judul,
@@ -4757,7 +4757,7 @@ namespace APIConsume.Controllers
                 {
                     var balikan = new TrKarirGolonganForm()
                     {
-                        karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                        karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                         golongan = _context.RefGolongan.Select(x => new RefGolongan
                         {
                             IdRefGolongan = x.IdRefGolongan,
@@ -4773,7 +4773,7 @@ namespace APIConsume.Controllers
 
                     var balikan = new TrKarirGolonganForm()
                     {
-                        karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                        karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                         golongan = _context.RefGolongan.Select(x => new RefGolongan
                         {
                             IdRefGolongan = x.IdRefGolongan,
@@ -4941,7 +4941,7 @@ namespace APIConsume.Controllers
 
                     var balikan = new TrKarirStrukturalForm()
                     {
-                        karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
+                        karyawan = _context.MstKaryawan.OrderBy(a => a.NamaLengkapGelar).Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.NamaLengkapGelar }).ToList(),
                         unit = _context.MstUnit.Select(x => new MstUnit
                         {
                             IdUnit = x.IdUnit,

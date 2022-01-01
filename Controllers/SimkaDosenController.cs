@@ -563,157 +563,119 @@ namespace APIConsume.Controllers
         public async Task<IActionResult> LoadDataPenelitianProdi(int id_unit, string npp)
         {
             string idDosen = null;
-            var listNPP = _context.MstKaryawan.AsNoTracking().Where(a => a.IdUnitAkademik == id_unit).ToList();
-
+            //var listNPP = _context.MstKaryawan.Where(a => a.IdUnitAkademik == id_unit).ToList();
+            var listdata = await new MstKaryawanDAO().GetID_DOSEN_SISTERbyIdUnit(id_unit);
             List<string> listID_DOSEN = new List<string>();
 
-            foreach (var item in listNPP)
+            foreach (var item in listdata.data)
             {
-                if (!String.IsNullOrEmpty(item.ID_DOSEN_SISTER))
+                if (!String.IsNullOrEmpty(item))
                 {
-                    listID_DOSEN.Add(item.ID_DOSEN_SISTER);
+                    listID_DOSEN.Add(item);
 
                 }
             }
 
-            if (HttpContext.Session.GetString("NPP") != null)
-            {
-                if (npp == null)
-                    npp = HttpContext.Session.GetString("NPP");
-
-                //var data = _DATA_SISTERcontext.TrPenelitian_DATA_SISTER.ToList();
-                var data = (from penelitian in _DATA_SISTERcontext.TrPenelitian_DATA_SISTER
-                            join anggota in _DATA_SISTERcontext.TblAnggota_DATA_SISTER on penelitian.id_penelitian_pengabdian equals anggota.id_penelitian_pengabdian
-                            where listID_DOSEN.Contains(anggota.id_sdm)
-                            select penelitian
+            var data = (from penelitian in _DATA_SISTERcontext.TrPenelitian_DATA_SISTER
+                        join anggota in _DATA_SISTERcontext.TblAnggota_DATA_SISTER on penelitian.id_penelitian_pengabdian equals anggota.id_penelitian_pengabdian
+                        where listID_DOSEN.Contains(anggota.id_sdm)
+                        select new TrPenelitian_DATA_SISTER
+                        {
+                            judul_penelitian_pengabdian = penelitian.judul_penelitian_pengabdian,
+                            durasi_kegiatan = penelitian.durasi_kegiatan,
+                            jenis_skim = penelitian.jenis_skim,
+                            tahun_pelaksanaan = penelitian.tahun_pelaksanaan
+                        }
                         ).Distinct().ToList();
-                return Json(new
-                {
-                    data
-                });
-            }
-            else
+            return Json(new
             {
-                TempData["Message"] = "Sesi Berakhir.";
+                data
+            });
 
-                return RedirectToAction("Index", "Home");
-            }
+            
         }
 
         public async Task<IActionResult> LoadDataPengabdianProdi(int id_unit, string npp)
         {
-            string idDosen = null;
-            var listNPP = _context.MstKaryawan.AsNoTracking().Where(a => a.IdUnitAkademik == id_unit).ToList();
-
+            
+            var listdata = await new MstKaryawanDAO().GetID_DOSEN_SISTERbyIdUnit(id_unit);
             List<string> listID_DOSEN = new List<string>();
 
-            foreach (var item in listNPP)
+            foreach (var item in listdata.data)
             {
-                if (!String.IsNullOrEmpty(item.ID_DOSEN_SISTER))
+                if (!String.IsNullOrEmpty(item))
                 {
-                    listID_DOSEN.Add(item.ID_DOSEN_SISTER);
+                    listID_DOSEN.Add(item);
 
                 }
             }
 
-            if (HttpContext.Session.GetString("NPP") != null)
+            var data = (from pengabdian in _DATA_SISTERcontext.TrPengabdian_DATA_SISTER
+                        join anggota in _DATA_SISTERcontext.TblAnggota_DATA_SISTER on pengabdian.id_penelitian_pengabdian equals anggota.id_penelitian_pengabdian
+                        where listID_DOSEN.Contains(anggota.id_sdm)
+                        select new TrPengabdian_DATA_SISTER {
+                            judul_penelitian_pengabdian = pengabdian.judul_penelitian_pengabdian,
+                            durasi_kegiatan = pengabdian.durasi_kegiatan,
+                            jenis_skim = pengabdian.jenis_skim,
+                            tahun_pelaksanaan = pengabdian.tahun_pelaksanaan
+                        }
+                         ).Distinct().ToList();
+            return Json(new
             {
-                if (npp == null)
-                    npp = HttpContext.Session.GetString("NPP");
-
-                //var data = _DATA_SISTERcontext.TrPenelitian_DATA_SISTER.ToList();
-                var data = (from pengabdian in _DATA_SISTERcontext.TrPengabdian_DATA_SISTER
-                            join anggota in _DATA_SISTERcontext.TblAnggota_DATA_SISTER on pengabdian.id_penelitian_pengabdian equals anggota.id_penelitian_pengabdian
-                            where listID_DOSEN.Contains(anggota.id_sdm)
-                            select pengabdian
-                        ).Distinct().ToList();
-                return Json(new
-                {
-                    data
-                });
-            }
-            else
-            {
-                TempData["Message"] = "Sesi Berakhir.";
-
-                return RedirectToAction("Index", "Home");
-            }
+                data
+            });
         }
 
         public async Task<IActionResult> LoadDataPengajaranAsyncProdi(string id_semester,int id_unit,string npp)
         {
-            string idDosen = null;
+            
+            var listdata = await new MstKaryawanDAO().GetNPPbyIdUnit(id_unit);
+            List<string> listNPP = new List<string>();
 
-            var listNPP = _context.MstKaryawan.AsNoTracking().Where(a => a.IdUnitAkademik == id_unit).ToList();
-
-            List<string> listNPP2 = new List<string>();
-            foreach(var item in listNPP)
+            foreach (var item in listdata.data)
             {
-                listNPP2.Add(item.Npp);
-            }
-
-            if (HttpContext.Session.GetString("NPP") != null)
-            {
-                if (npp == null)
-                    npp = HttpContext.Session.GetString("NPP");
-
-                
-
-                var data = _DATA_SISTERcontext.TrPengajaran_DATA_SISTER.Where(a => a.id_semester == id_semester && listNPP2.Any(b=> b == a.NPP)).ToList();
-                //var data = from _DATA_SISTERcontext.TrPengajaran_DATA_SISTER
-                //    where listNPP2
-
-                return Json(new
+                if (!String.IsNullOrEmpty(item))
                 {
-                    data
-                });
-            }
-            else
-            {
-                TempData["Message"] = "Sesi Berakhir.";
-
-                return RedirectToAction("Index", "Home");
-            }
-        }
-        public async Task<IActionResult> LoadDataPublikasiProdi(int id_unit, string npp)
-        {
-            string idDosen = null;
-            var listNPP = _context.MstKaryawan.AsNoTracking().Where(a => a.IdUnitAkademik == id_unit).ToList();
-
-            List<string> listID_DOSEN = new List<string>();
-
-            foreach (var item in listNPP)
-            {
-                if (!String.IsNullOrEmpty(item.ID_DOSEN_SISTER))
-                {
-                    listID_DOSEN.Add(item.ID_DOSEN_SISTER);
+                    listNPP.Add(item);
 
                 }
             }
 
-            if (HttpContext.Session.GetString("NPP") != null)
+            var data = _DATA_SISTERcontext.TrPengajaran_DATA_SISTER.Where(a => a.id_semester == id_semester && listNPP.Contains(a.NPP)).ToList();
+            return Json(new
             {
-                if (npp == null)
-                    npp = HttpContext.Session.GetString("NPP");
+                data
+            });
+        }
+        public async Task<IActionResult> LoadDataPublikasiProdi(int id_unit, string npp)
+        {
+            
+            var listdata = await new MstKaryawanDAO().GetID_DOSEN_SISTERbyIdUnit(id_unit);
+            List<string> listID_DOSEN = new List<string>();
 
-                //var data = _DATA_SISTERcontext.TrPenelitian_DATA_SISTER.ToList();
-                var data = (from publikasi in _DATA_SISTERcontext.TrPublikasi_DATA_SISTER
-                            join penulis in _DATA_SISTERcontext.TblPenulis_DATA_SISTER on publikasi.id_riwayat_publikasi_paten equals penulis.id_riwayat_publikasi_paten
-                            where listID_DOSEN.Contains(penulis.id_sdm)
-                            //select new Publikasi { judul = publikasi.judul, jenis_publikasi = publikasi.jenis_publikasi, publikasi.tanggal.ToString } 
-                            select publikasi
-                        ).Distinct().ToList();
-                return Json(new
+            foreach (var item in listdata.data)
+            {
+                if (!String.IsNullOrEmpty(item))
                 {
-                    data
-                });
-            }
-            else
-            {
-                TempData["Message"] = "Sesi Berakhir.";
+                    listID_DOSEN.Add(item);
 
-                return RedirectToAction("Index", "Home");
+                }
             }
+
+            var data = (from publikasi in _DATA_SISTERcontext.TrPublikasi_DATA_SISTER
+                        join penulis in _DATA_SISTERcontext.TblPenulis_DATA_SISTER on publikasi.id_riwayat_publikasi_paten equals penulis.id_riwayat_publikasi_paten
+                        where listID_DOSEN.Contains(penulis.id_sdm)
+                        //select new Publikasi { judul = publikasi.judul, jenis_publikasi = publikasi.jenis_publikasi, publikasi.tanggal.ToString } 
+                        select new TrPublikasi_DATA_SISTER { 
+                            judul = publikasi.judul,
+                            jenis_publikasi = publikasi.jenis_publikasi,
+                            tanggal = publikasi.tanggal
+                        }
+                        ).Distinct().ToList();
+            return Json(new
+            {
+                data
+            });
         }
 
 

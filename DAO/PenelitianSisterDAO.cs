@@ -19,7 +19,7 @@ namespace APIConsume.DAO
                     //                FROM     PUBLIKASI INNER JOIN PENULIS ON PUBLIKASI.id_riwayat_publikasi_paten = PENULIS.id_riwayat_publikasi_paten
                     //                WHERE(PENULIS.id_sdm = @id_dosen)            ";
                     
-                    string query = @"SELECT TOP(200) PENELITIAN.judul_penelitian_pengabdian as judul_penelitian_pengabdian , PENELITIAN.jenis_skim as jenis_skim, 
+                    string query = @"SELECT  PENELITIAN.judul_penelitian_pengabdian as judul_penelitian_pengabdian , PENELITIAN.jenis_skim as jenis_skim, 
                                     PENELITIAN.tahun_kegiatan as tahun_kegiatan,PENELITIAN.durasi_kegiatan as durasi_kegiatan  , 
                                     ANGGOTA.peran AS peran, 
                                                       ANGGOTA.id_sdm

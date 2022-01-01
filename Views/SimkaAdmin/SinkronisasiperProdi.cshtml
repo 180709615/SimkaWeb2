@@ -84,7 +84,9 @@
 
                                     <div class="pl-3">
                                         <button disabled class=" text-light btn btn-success" style="margin-left:20px"
-                                           onclick="SinkronPengajaranPerulanganSISTER()"><i class="fa fa-refresh" ></i> Sinkronisasi </button>
+                                                onclick="SinkronPengajaranPerulanganSISTER()">
+                                            <i class="fa fa-refresh"></i> Sinkronisasi
+                                        </button>
                                     </div>
 
                                 </div>
@@ -362,6 +364,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
     <script>
 
     </script>
@@ -393,7 +397,7 @@
                 "ordering": false,
                 "paging": true,
                 "processing": true, // for show progress bar
- // for show progress bar
+                // for show progress bar
 
                 "filter": false, // this is for disable filter (search box)
                 "orderMulti": false, // for disable multiple column at once
@@ -472,7 +476,12 @@
                     },
                     { "data": "judul", "name": "nama_mata_kuliah", "autoWidth": true },
                     { "data": "jenis_publikasi", "name": "nama_jenis_evaluasi", "autoWidth": true },
-                    { "data": "tanggal", "name": "nama_kelas_kuliah", "autoWidth": true },
+                    {
+                        "data": "tanggal", "name": "nama_kelas_kuliah", "autoWidth": true,
+                        render: function (data) {
+                            return moment(data).format('DD-MM-YYYY');
+                        }
+                    },
 
 
 
@@ -486,7 +495,7 @@
                 "ordering": false,
                 "paging": true,
                 "processing": true, // for show progress bar
- // for show progress bar
+                // for show progress bar
 
                 "filter": false, // this is for disable filter (search box)
                 "orderMulti": false, // for disable multiple column at once
@@ -808,7 +817,8 @@
                                     swal.fire({
                                         icon: 'success',
                                         html: '<h5>Sinkronisasi Berhasil</h5>'
-                                    }); },listNpp.length *2000)
+                                    });
+                                }, listNpp.length * 2000)
 
                                 dataTablePenelitianSISTER.ajax.reload();
                             })
@@ -878,13 +888,13 @@
                             var request =
                                 setTimeout(function () {
                                     $.ajax({
-                                    type: 'get',
-                                    url: "/SimkaDosen/SinkronDataPengabdianProdiSISTERbyNPP",
-                                    data: {
-                                        "npp": value.npp
-                                    },
+                                        type: 'get',
+                                        url: "/SimkaDosen/SinkronDataPengabdianProdiSISTERbyNPP",
+                                        data: {
+                                            "npp": value.npp
+                                        },
 
-                                    datatype: 'json',
+                                        datatype: 'json',
                                         success: function (data) {
                                             if (data.success) {
                                                 console.log(data.nama + " berhasil")
@@ -898,11 +908,11 @@
                                                 console.log(data.nama + " gagal \n Error :" + data.message)
                                             }
                                         },
-                                    error: function (data) {
+                                        error: function (data) {
 
-                                        return (data.nama + " error")
+                                            return (data.nama + " error")
 
-                                    }
+                                        }
                                     });
                                 }, index * 2000);
 
@@ -986,7 +996,7 @@
                         $(listNpp).each(function (index, value) {
                             var request =
                                 setTimeout(function () {
-                                   $.ajax({
+                                    $.ajax({
                                         type: 'get',
                                         url: "/SimkaDosen/SinkronDataPublikasiProdiSISTERbyNPP",
                                         data: {
@@ -994,19 +1004,19 @@
                                         },
 
                                         datatype: 'json',
-                                       success: function (data) {
-                                           if (data.success) {
-                                               console.log(data.nama + " berhasil")
+                                        success: function (data) {
+                                            if (data.success) {
+                                                console.log(data.nama + " berhasil")
 
-                                           } else if (data.error) {
+                                            } else if (data.error) {
 
-                                               console.log(data.nama + " " + data.npp + " gagal \n Error :" + data.message)
+                                                console.log(data.nama + " " + data.npp + " gagal \n Error :" + data.message)
 
 
-                                           } else {
-                                               console.log(data.nama + " gagal \n Error :" + data.message)
-                                           }
-                                       },
+                                            } else {
+                                                console.log(data.nama + " gagal \n Error :" + data.message)
+                                            }
+                                        },
                                         error: function (data) {
 
                                             return (data.nama + " error")
@@ -1063,7 +1073,7 @@
 
         }
 
-         function SinkronPengajaranPerulanganSISTER() {
+        function SinkronPengajaranPerulanganSISTER() {
 
             var namaProdi, listNpp;
             console.log(id_unitPengajaran)
@@ -1086,15 +1096,15 @@
                 },
 
                 datatype: 'json',
-                success:  function (data) {
+                success: function (data) {
                     if (data.success) {
 
                         var promises = [];
                         listNpp = data.data;
                         console.log(listNpp);
-                         $(listNpp).each(   function (index, value) {
+                        $(listNpp).each(function (index, value) {
                             var request =
-                                 setTimeout(function () {
+                                setTimeout(function () {
                                     $.ajax({
                                         type: 'get',
                                         url: "/SimkaDosen/SinkronDataPengajaranProdiSISTERbyNPP",
@@ -1108,9 +1118,9 @@
                                             if (data.success) {
                                                 console.log(data.nama + " berhasil")
 
-                                            } else if(data.error){
+                                            } else if (data.error) {
 
-                                                console.log(data.nama + " "+data.npp+" gagal \n Error :" + data.message)
+                                                console.log(data.nama + " " + data.npp + " gagal \n Error :" + data.message)
 
 
                                             } else {
@@ -1129,7 +1139,7 @@
 
                             var tes = console.log(index);
 
-                           promises.push(request);
+                            promises.push(request);
                         });
                         promises.push(dataTablePengajaranSISTER.ajax.reload());
 
@@ -1551,13 +1561,13 @@
                 datatype: 'json',
                 success: function (data) {
 
-                        console.log(data)
-                        toastr.success("test email Berhasil");
-                        dataTablePengabdianSISTER.ajax.reload();
-                        swal.fire({
-                            icon: 'success',
-                            html: '<h5>test email Berhasil</h5>'
-                        });
+                    console.log(data)
+                    toastr.success("test email Berhasil");
+                    dataTablePengabdianSISTER.ajax.reload();
+                    swal.fire({
+                        icon: 'success',
+                        html: '<h5>test email Berhasil</h5>'
+                    });
 
                 },
                 error: function (data) {

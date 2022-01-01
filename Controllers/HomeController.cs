@@ -267,6 +267,7 @@ namespace APIControllers.Controllers
                         foreach (var role in getRole) // Memasukkan list role kedalam claim
                         {
                             identity.AddClaim(new Claim(ClaimTypes.Role, role.Deskripsi));
+                            identity.AddClaim(new Claim("Roles", role.Deskripsi));
                         }
                     }
                     else

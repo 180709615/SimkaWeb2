@@ -1343,7 +1343,7 @@
                     window.open(fileURL);
                 },
                 error: function (data) {
-                    console.log(data)
+                    //console.log(data)
 
                 }
             });
@@ -1411,8 +1411,8 @@
         {
             $('#id').val(id);
             var url;
-            console.log("ini get dokumen Pendukung")
-            console.log("id"+ id)
+            //console.log("ini get dokumen Pendukung")
+            //console.log("id"+ id)
             if (jenis == "Publikasi")
                 url = "/SimkaDosen/GetDokumenPendukung?jenis_tabel=Publikasi&id="
             $.ajax({
@@ -1452,7 +1452,7 @@
 
                    
 
-                    console.log(data);
+                //    console.log(data);
                 },
                 error: function (data) {
                     console.log("get dokumen pendukung error")

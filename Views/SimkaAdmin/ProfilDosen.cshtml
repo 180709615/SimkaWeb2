@@ -17,7 +17,38 @@
     <title>Profil @HttpContextAccessor.HttpContext.Session.GetString("Nama") - SIMKA UAJY</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 90px;
+            height: 90px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+        }
 
+        /* Safari */
+        @@-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Content Wrapper. Contains page content -->
@@ -615,7 +646,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalDokumenSister" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg mw-100 w-75" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dokumen Sister</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
 
+                    <div id="accordion">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
 
@@ -725,27 +776,16 @@
                         "data": "id_publikasi",
                         width: "250px",
                         render: function (data) {
-                            ////if (data != null) {
-                            ////    return "<button class='btn btn-default btn-sm'  onclick=GetArtikelPublikasi('" + data +"')>Unduh Artikel</button> "
-                            ////   // return "<a href='/SimkaDosen/unduhDokumen/"+data+"' target='_blank'>View Document </a>"
-                            ////} else {
-                            ////    return "<button class='btn btn-default btn-sm' disabled onclick=GetArtikelPublikasi('" + data + "')></i>Unduh Artikel</button> "
-                            ////}
-
-                            ////return "<p>aaaa</p>"
-                            return "<button class='btn btn-primary btn-sm' onclick=GetDokumenSister('publikasi','" + data + "') data-toggle='modal' data-target='#modalDokumenSister'> Dokumen Sister </button> "
-
+                            return "<button class='btn btn-primary btn-sm' onclick=GetDokumenSister('Publikasi','" + data + "') data-toggle='modal' data-target='#modalDokumenSister'> Dokumen Sister </button> ";
                         },
-
                     },
                     {
                         "data": "id_publikasi",
                         width: "250px",
                         render: function (data) {
 
-                            return "<button class='btn btn-primary btn-sm' onclick=GetDokumenPendukungPublikasi('" + data + "') data-toggle='modal' data-target='#myModal'> Dokumen Pendukung </button> "
+                            return "<button class='btn btn-primary btn-sm' onclick=GetDokumenPendukung('Publikasi','" + data + "') data-toggle='modal' data-target='#myModal'> Dokumen Pendukung </button> "
                         }
-
                     }
 
 
@@ -921,7 +961,7 @@
         function changeSelect() {
             semester = $(".selectSemester").val();
 
-            console.log("ini changeSelect")
+            //console.log("ini changeSelect")
 
             dataTablePengajaranSISTER.ajax.reload();
         }
@@ -1218,6 +1258,268 @@
             })
 
 
+        }
+        function GetDokumenSister(jenis, id) {
+            $('#accordion').empty();
+
+            $('#accordion').html("Loading...");
+            if (jenis == "Publikasi")
+                url = "/SimkaDosen/GetArtikelPublikasi/";
+
+            $.ajax({
+                type: "get",
+                url: url + id,
+                datatype: "json",
+                success: function (result) {
+                    $('#accordion').empty();
+
+                    var header;
+                    var content;
+                    $(result).each(function (index, value) {
+
+                        var fileUrl = "data:application/pdf ;base64," + value["file_byte"];
+                        fetch(fileUrl)
+                            .then(response => response.blob())
+                            .then(blob => {
+                                var blobUrl = URL.createObjectURL(blob);
+
+                                $('#accordion').append(
+                                    "<div class='card'>" +
+                                    "<div class='card-header' id='heading" + index + "'>" +
+                                    "<h5 class='mb-0'>" +
+                                    //"<button class='btn btn-link' data-toggle='collapse' data-target='#collapse"+index+"' aria-expanded='true' aria-controls='collapse"+index+"'>" +
+                                    "<p>" + value["nama_file"] + "</p>" +
+                                    //"</button>" +
+                                    "</h5>" +
+                                    "</div>" +
+                                    "<div id='collapse" + index + "' class='collapse show' aria-labelledby='heading" + index + "' data-parent='#accordion'>" +
+                                    "<div class='card-body'>" +
+                                    "<iframe src='" + blobUrl + "' style='width:100%; height:400px;border-width:0px !important'></iframe>" +
+
+                                    "</div>" +
+                                    "</div>" +
+                                    "</div>"
+                                    /*"<p>tes</p>"+*/
+
+                                );
+
+                            });
+
+
+
+
+                    });
+                    return html;
+                },
+                error: function (result) {
+                    return "<p>error</p>";
+                }
+            });
+        }
+        function GetDokumenPendukung(jenis, id) {
+            $('#id').val(id);
+            var url;
+            //console.log("ini get dokumen Pendukung")
+            //console.log("id" + id)
+            if (jenis == "Publikasi")
+                url = "/SimkaDosen/GetDokumenPendukung?jenis_tabel=Publikasi&id="
+            $.ajax({
+                type: "GET",
+                url: url + id,
+                dataType: "json",
+                success: function (data) {
+                    if (data.file_prosiding != null) {
+                        appendPreview(data.file_prosiding, 'Prosiding', jenis, id)
+
+                    } else {
+                        $('#previewProsiding').html("<span>File belum diupload</span>");
+                    }
+
+                    if (data.file_cek_similaritas != null) {
+
+                        appendPreview(data.file_cek_similaritas, 'Similaritas', jenis, id)
+
+                    } else {
+                        $('#previewSimilaritas').html("<span>File belum diupload</span>");
+                    }
+
+                    if (data.file_peer_review_pak != null) {
+
+                        appendPreview(data.file_peer_review_pak, 'PAK', jenis, id)
+                    } else {
+                        $('#previewPAK').html("<span>File belum diupload</span>");
+                    }
+
+                    if (data.file_peer_korespondensi != null) {
+
+                        appendPreview(data.file_peer_korespondensi, 'Korespondensi', jenis, id)
+
+                    } else {
+                        $('#previewKorespondensi').html("<span>File belum diupload</span>");
+                    }
+
+
+
+                   /* console.log(data);*/
+                },
+                error: function (data) {
+                    console.log("get dokumen pendukung error")
+                }
+            });
+        }
+
+        function PostDokumenPendukung() {
+            console.log("post dokumen Pendukung")
+            var data = new FormData();
+            jQuery.each(jQuery('#file_prosiding')[0].files, function (i, file) {
+                data.append('file_prosiding', file);
+            });
+            jQuery.each(jQuery('#file_cek_similaritas')[0].files, function (i, file) {
+                data.append('file_cek_similaritas', file);
+            });
+            jQuery.each(jQuery('#file_PAK')[0].files, function (i, file) {
+                data.append('file_PAK', file);
+            });
+            jQuery.each(jQuery('#file_korespondensi')[0].files, function (i, file) {
+                data.append('file_korespondensi', file);
+            });
+
+            data.append("id", $('#id').val());
+            swal.fire({
+                icon: 'info',
+                html: '<h5>Loading...</h5>',
+                showCancelButton: false,
+                showConfirmButton: false,
+                allowOutsideClick: false
+
+            });
+
+            $.ajax({
+                processData: false,
+                contentType: false,
+                cache: false,
+                type: "POST",
+                url: "/SimkaDosen/PostDokumenPendukung",
+                dataType: "json",
+                data: data,
+                enctype: "multipart/form-data",
+                success: function (data) {
+                    if (data.success) {
+                        swal.fire({
+                            icon: 'success',
+                            //title: 'Upload Dokumen Berhasil',
+                            text: data.message
+                        });
+
+                    } else {
+                        console.log(data.message)
+                        swal.fire({
+                            icon: 'warning',
+                            //title: 'Upload Dokumen Berhasil',
+                            text: data.message
+                        });
+
+                    }
+
+                    $('#myModal').modal('hide');
+
+                },
+                error: function (data) {
+                    console.log("post dokumen pendukung error")
+                    swal.fire({
+                        icon: 'warning',
+                        //title: 'Upload Dokumen Berhasil',
+                        text: data.message
+                    });
+                    $('#myModal').modal('hide');
+
+
+                },
+                done: function (data) {
+                    $('#myModal').modal('hide');
+
+
+
+                }
+            });
+
+        }
+        function getFileNameWithExt(event, id) {
+
+            if (!event || !event.target || !event.target.files || event.target.files.length === 0) {
+                return;
+            }
+
+            const name = event.target.files[0].name;
+            const lastDot = name.lastIndexOf('.');
+
+            const fileName = name.substring(0, lastDot);
+            const ext = name.substring(lastDot + 1);
+
+            $("#" + id).text(fileName + "." + ext)
+
+        }
+        // Reset Form Upload Dokumen
+        $("#myModal").on('show.bs.modal', function () {
+            $('#previewProsiding').html("<span>Loading...</span>");
+            $('#previewSimilaritas').html("<span>Loading...</span>");
+            $('#previewPAK').html("<span>Loading...</span>");
+            $('#previewKorespondensi').html("<span>Loading...</span>");
+            $('#labelProsiding').text("Choose File...");
+            $('#labelSimilaritas').text("Choose File...");
+            $('#labelPAK').text("Choose File...");
+            $('#labelKorespondensi').text("Choose File...");
+
+
+
+        });
+
+
+
+        function copyToClipboard(input, btn) {
+            /* Get the text field */
+            console.log("ini text to copy")
+            var copyText = document.getElementById(input);
+
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            /* Copy the text inside the text field */
+            navigator.clipboard.writeText(copyText.value);
+
+            /* Alert the copied text */
+            document.getElementById(btn).innerHTML = 'Copied';
+            setTimeout(function () {
+                document.getElementById(btn).innerHTML = 'Copy';
+
+            }, 2000);
+        }
+
+        function appendPreview(data, jenis_file, jenis_tabel, id) {
+            var fileUrl = "data:application/pdf ;base64," + data;
+            fetch(fileUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    var blobUrl = URL.createObjectURL(blob);
+
+                    $('#preview' + jenis_file).html(
+                        "<label>Link URL</label>" +
+                        "<div class='d-flex mb-3'>" +
+                        "<div class='flex-grow-1'>" +
+                        //"<input type='text' id='link" + jenis_file + jenis_tabel + "' class='form-control' readonly value='" + window.location.origin + "/SimkaAdmin/ViewDokumen" + jenis_file + "?id=" + id + "&jenis_tabel=" + jenis_tabel + "'>" +
+                        "<input type='text' id='link" + jenis_file + jenis_tabel + "' class='form-control' readonly value='https://simka2-dev.uajy.ac.id/ViewDokumen/ViewDokumen" + jenis_file + "?id=" + id + "&jenis_tabel=" + jenis_tabel + "'>" +
+
+                        "</div>" +
+                        "<div class=' pl-3'>" +
+
+                        "<button class='btn btn-success' style='width:100px' id='btn" + jenis_file + jenis_tabel + "' type='button' onclick=copyToClipboard('link" + jenis_file + jenis_tabel + "','btn" + jenis_file + jenis_tabel + "')>Copy</button>" +
+                        "</div>" +
+                        "</div>" +
+
+                        "<iframe src='" + blobUrl + "' style='width:100%; height:400px;border-width:0px !important'></iframe>"
+                    );
+                });
         }
     </script>
 }

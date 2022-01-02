@@ -38,8 +38,8 @@ namespace APIConsume.Controllers
                     {
                         foreach (var submenu in menus.ListMenu)
                         {
-                            append += "<li class='nav-item'><a href='https://localhost:44393/" + submenu.menulocation + "' class='nav-link' style='padding-left:0;' ><i class='far fa-circle nav-icon left'  style='font-size: 13px; '></i><p style:'padding-left:1%'>" + submenu.menuname + "</p></a></li>";
-                            //append += "<li class='nav-item'><a href='https://simka2-dev.uajy.ac.id/" + submenu.menulocation + "' class='nav-link' style='padding-left:0;' ><i class='far fa-circle nav-icon left'  style='font-size: 13px; '></i><p style:'padding-left:1%'>" + submenu.menuname + "</p></a></li>";
+                            //append += "<li class='nav-item'><a href='https://localhost:44393/" + submenu.menulocation + "' class='nav-link' style='padding-left:0;' ><i class='far fa-circle nav-icon left'  style='font-size: 13px; '></i><p style:'padding-left:1%'>" + submenu.menuname + "</p></a></li>";
+                            append += "<li class='nav-item'><a href='https://simka2-dev.uajy.ac.id/" + submenu.menulocation + "' class='nav-link' style='padding-left:0;' ><i class='far fa-circle nav-icon left'  style='font-size: 13px; '></i><p style:'padding-left:1%'>" + submenu.menuname + "</p></a></li>";
                         }
                     }
                     append += "</ul></li>";

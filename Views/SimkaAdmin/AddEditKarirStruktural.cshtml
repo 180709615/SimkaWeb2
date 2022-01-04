@@ -11,7 +11,16 @@
 
             <div class="form-group">
                 <label asp-for="NoSk" class="control-label">No SK</label>
-                <input type="text" asp-for="NoSk" class="form-control" />
+
+                @if (Model.NoSk != null)
+                {
+                    <input type="text" asp-for="NoSk" class="form-control" readonly />
+                }
+                else
+                {
+                    <input type="text" asp-for="NoSk" class="form-control"/>
+                }
+
                 <span asp-validation-for="NoSk" class="text-danger"></span>
             </div>
 

@@ -21,16 +21,16 @@
                 <input asp-for="NoAsuransiBaru" class="form-control" />
                 <span asp-validation-for="NoAsuransiBaru" class="text-danger"></span>
             </div>
-            <div class="form-group col-md-5">
+            <div class="form-group">
                 <label asp-for="TglBergabung" class="control-label"> Tanggal Bergabung</label>
                 <input type="date" asp-for="TglBergabung" class="form-control" placeholder="dd/mm/yyyy">
                 <span asp-validation-for="TglBergabung" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"> Status</label>
-                <select asp-for="Status">
-                    <option selected value=Aktif>Aktif</option>
-                    <option value=Nonaktif>Tidak Aktif</option>
+                <select asp-for="Status"  class="form-control">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Nonaktif">Tidak Aktif</option>
 
                 </select>
             </div>

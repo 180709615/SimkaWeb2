@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "AddEditStudiLanjut";
     Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+
+    var tempTglMulai = Model.TglMulai != null ? Model.TglMulai.ToString("yyyy-MM-dd") : null;
+    var tempTglLulus = Model.TglLulus != null ? Model.TglLulus.ToString("yyyy-MM-dd") : null;
+    var tempTglPenempatanKmbli = Model.TglPenempatanKmbli != null ? Model.TglPenempatanKmbli.ToString("yyyy-MM-dd") : null;
 }
 
 
@@ -43,7 +47,7 @@
 
 
                     <input asp-for="IdStudiLanjut" type="hidden" class="form-control" />
-                    <div class="form-group row">
+                    @*<div class="form-group row">
                         <div class="col-sm-3">
                             <label asp-for="IdStudiLanjut" class="control-label">ID</label>
 
@@ -55,7 +59,7 @@
 
 
                         </div>
-                    </div>
+                    </div>*@
 
                     <div class="form-group row">
                         <div class="col-sm-3">
@@ -64,7 +68,7 @@
                         </div>
 
                         <div class="col-sm-5">
-                            <input asp-for="Npp" class="form-control" />
+                            <input asp-for="Npp" class="form-control" value="@Model.Npp"/>
                             <span asp-validation-for="Npp" class="text-danger"></span>
                             <span class="text-danger">@TempData["NPPError"]</span>
 
@@ -76,13 +80,9 @@
                             <label asp-for="IdRefJenjang" class="control-label">Jenjang</label>
                         </div>
                         <div class="col-sm-5">
-                            <select asp-for="IdRefJenjang" class="form-select" id="inputJabAkademik">
+                            <select asp-for="IdRefJenjang" class="form-select" id="inputJabAkademik" asp-items="@(new SelectList(Model.listJenjang, "IdRefJenjang", "Deskripsi"))">
                                 <option value="">-All-</option>
-
-                                @foreach (var item in Model.listJenjang)
-                                {
-                                    <option value="@item.IdRefJenjang">@item.Deskripsi</option>
-                                }
+                                
                             </select>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                             <label asp-for="NamaSekolah" class="control-label">Nama Sekolah</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="NamaSekolah" class="form-control" />
+                            <input asp-for="NamaSekolah" class="form-control" value="@Model.NamaSekolah"/>
                             <span asp-validation-for="NamaSekolah" class="text-danger"></span>
                             @*<div class="invalid-feedback">
                                 Field tidak boleh kosong!
@@ -107,7 +107,7 @@
                             <label asp-for="KotaSekolah" class="control-label">Kota Sekolah</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="KotaSekolah" class="form-control" />
+                            <input asp-for="KotaSekolah" class="form-control" value="@Model.KotaSekolah"/>
                             <span asp-validation-for="KotaSekolah" class="text-danger"></span>
                         </div>
 
@@ -118,7 +118,7 @@
                             <label asp-for="NegaraSekolah" class="control-label">Negara Sekolah</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="NegaraSekolah" class="form-control" />
+                            <input asp-for="NegaraSekolah" class="form-control" value="@Model.NegaraSekolah" />
                             <span asp-validation-for="NegaraSekolah" class="text-danger"></span>
                         </div>
 
@@ -129,7 +129,7 @@
                             <label asp-for="TglMulai" class="control-label">Tanggal Mulai</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="TglMulai" type="date" class="form-control" />
+                            <input asp-for="TglMulai" type="date" class="form-control" value="@tempTglMulai"/>
                             <span asp-validation-for="TglMulai" class="text-danger"></span>
                         </div>
 
@@ -139,7 +139,7 @@
                             <label asp-for="TglLulus" class="control-label">Tanggal Lulus</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="TglLulus" type="date" class="form-control" />
+                            <input asp-for="TglLulus" type="date" class="form-control" value="@tempTglLulus"/>
                             <span asp-validation-for="TglLulus" class="text-danger"></span>
                         </div>
 
@@ -149,7 +149,7 @@
                             <label asp-for="TglPenempatanKmbli" class="control-label">Tanggal Penempatan Kembali</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="TglPenempatanKmbli" type="date" class="form-control" />
+                            <input asp-for="TglPenempatanKmbli" type="date" class="form-control" value="@tempTglPenempatanKmbli"/>
                             <span asp-validation-for="TglPenempatanKmbli" class="text-danger"></span>
                         </div>
 
@@ -159,7 +159,7 @@
                             <label asp-for="Fakultas" class="control-label">Fakultas</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="Fakultas" class="form-control" />
+                            <input asp-for="Fakultas" class="form-control" value="@Model.Fakultas"/>
                             <span asp-validation-for="Fakultas" class="text-danger"></span>
                         </div>
 
@@ -169,7 +169,7 @@
                             <label asp-for="Prodi" class="control-label">Prodi</label>
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="Prodi" class="form-control" />
+                            <input asp-for="Prodi" class="form-control" value="@Model.Prodi" />
                             <span asp-validation-for="Prodi" class="text-danger"></span>
                         </div>
 
@@ -181,8 +181,26 @@
                         </div>
                         <div class="col-sm-5">
                             <select asp-for="DlmNegriLuarNegri" class="form-control">
-                                <option value="D">Dalam Negeri</option>
-                                <option value="L">Luar Negeri</option>
+                                @if (Model.DlmNegriLuarNegri != null)
+                                {
+                                    @if (Model.DlmNegriLuarNegri == "D")
+                                    {
+                                        <option value="D" selected>Dalam Negeri</option>
+                                        <option value="L">Luar Negeri</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="D">Dalam Negeri</option>
+                                        <option value="L" selected>Luar Negeri</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="D">Dalam Negeri</option>
+                                    <option value="L" >Luar Negeri</option>
+                                }
+
+
 
                             </select>
                             <span asp-validation-for="DlmNegriLuarNegri" class="text-danger"></span>
@@ -195,7 +213,7 @@
 
                         </div>
                         <div class="col-sm-5">
-                            <input asp-for="NoSkTugasBljr" class="form-control" />
+                            <input asp-for="NoSkTugasBljr" class="form-control" value="@Model.NoSkTugasBljr" />
                             <span asp-validation-for="NoSkTugasBljr" class="text-danger"></span>
                         </div>
 
@@ -206,7 +224,7 @@
 
                         </div>
                         <div class="col-sm-5">
-                            <input type="number" asp-for="TargetLulus" class="form-control" />
+                            <input type="number" asp-for="TargetLulus" class="form-control" value="@Model.TargetLulus"/>
                             <span asp-validation-for="TargetLulus" class="text-danger"></span>
                         </div>
 

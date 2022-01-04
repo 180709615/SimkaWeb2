@@ -24,9 +24,9 @@ namespace APIConsume.Models
         public string NegaraSekolah { get; set; }
         [Required(ErrorMessage = "Field tidak boleh kosong")]
 
-        public DateTime? TglMulai { get; set; }
-        public DateTime? TglLulus { get; set; }
-        public DateTime? TglPenempatanKmbli { get; set; }
+        public DateTime TglMulai { get; set; }
+        public DateTime TglLulus { get; set; }
+        public DateTime TglPenempatanKmbli { get; set; }
         [Required(ErrorMessage = "Field tidak boleh kosong")]
 
         public string Fakultas { get; set; }

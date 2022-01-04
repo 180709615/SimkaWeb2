@@ -11,10 +11,11 @@
             <input type="hidden" asp-for="IdRefJbtnAkademik" />
             <div class="form-group">
                 <label asp-for="IdRefFungsional" class="control-label"> Jabatan Fungsional</label>
-                <select asp-for="IdRefFungsional"
+                <select asp-for="IdRefFungsional" class="form-control"
                         asp-items="@(new SelectList(Model.Fungsi,"IdRefFungsional","Deskripsi"))">
                     <option>Please select one</option>
                 </select>
+                <span asp-validation-for="IdRefFungsional" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Deskripsi" class="control-label"></label>

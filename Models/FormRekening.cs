@@ -6,7 +6,7 @@ namespace APIConsume.Models
 {
     public partial class FormRekening
     {
-        [Required]
+      
         public string NoRekening { get; set; }
         [Required]
         public string NoRekeningBaru { get; set; }

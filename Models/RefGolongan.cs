@@ -13,7 +13,7 @@ namespace APIConsume.Models
             TblPersonilPengabdian = new HashSet<TblPersonilPengabdian>();
             MstTarifPayrolls = new  HashSet<MstTarifPayroll>();
         }
-      
+        [Required]
         public string IdRefGolongan { get; set; }
         [Required]
         public string Deskripsi { get; set; }

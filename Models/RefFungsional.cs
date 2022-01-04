@@ -19,6 +19,7 @@ namespace APIConsume.Models
         public int IdRefFungsional { get; set; }
         [Required]
         public string Deskripsi { get; set; }
+        [Required]
         public int? UsiaPensiun { get; set; }
 
         public ICollection<MstKaryawan> MstKaryawan { get; set; }

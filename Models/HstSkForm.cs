@@ -11,10 +11,10 @@ namespace APIConsume.Models
         [Required]
         public string NoSk { get; set; }
         public int? NoSemester { get; set; }
-        public DateTime? TglSk { get; set; }
+        public DateTime TglSk { get; set; }
         public string DeskripsiSk { get; set; }
-        public DateTime? TglAwal { get; set; }
-        public DateTime? TglAkhir { get; set; }
+        public DateTime TglAwal { get; set; }
+        public DateTime TglAkhir { get; set; }
         public byte[] FileSk { get; set; }
         public IFormFile FileSkform { get; set; }
         public int? IdTahunAkademik { get; set; }
@@ -26,5 +26,7 @@ namespace APIConsume.Models
         public ICollection<TrKenaikanPangkat> TrKenaikanPangkat { get; set; }
         public ICollection<TrKgb> TrKgb { get; set; }
         public ICollection<TrPensiun> TrPensiun { get; set; }
+
+        public List<TblTahunAkademik> ListTahunAkademik { get; set; }
     }
 }

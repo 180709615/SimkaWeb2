@@ -32,7 +32,7 @@ namespace APIConsume.DAO
             }
         }
 
-        public List<MstUnit> GetListUnitEntrypass()
+        public List<object> GetListUnitEntrypass()
         {
             using (SqlConnection conn = new SqlConnection(Connection.ConnectionStringg))
             {
@@ -41,7 +41,7 @@ namespace APIConsume.DAO
                     string query = @"SELECT DISTINCT siatmax.MST_UNIT.MST_ID_UNIT, MST_UNIT_1.NAMA_UNIT
 FROM siatmax.MST_UNIT INNER JOIN siatmax.MST_UNIT AS MST_UNIT_1 ON siatmax.MST_UNIT.MST_ID_UNIT = MST_UNIT_1.ID_UNIT AND siatmax.MST_UNIT.MST_ID_UNIT = MST_UNIT_1.ID_UNIT AND siatmax.MST_UNIT.MST_ID_UNIT = MST_UNIT_1.ID_UNIT AND siatmax.MST_UNIT.MST_ID_UNIT = MST_UNIT_1.ID_UNIT
 ORDER BY MST_UNIT_1.NAMA_UNIT";
-                    var data = conn.Query<MstUnit>(query).ToList();
+                    var data = conn.Query<object>(query).ToList();
 
                     return data;
                 }

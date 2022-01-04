@@ -15,11 +15,13 @@ namespace APIConsume.Models
             TrKarirFungsionalIdRefJbtnAkademikSblmNavigation = new HashSet<TrKarirFungsional>();
             MstTarifPayrolls = new HashSet<MstTarifPayroll>(); //tambahan
         }
-        [Required]
+       
         public int IdRefJbtnAkademik { get; set; }
         [Required]
         public string Deskripsi { get; set; }
+        [Required]
         public int? IdRefFungsional { get; set; }
+        [Required]
         public int? UsiaPensiun { get; set; }
 
         public RefFungsional IdRefFungsionalNavigation { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace APIConsume.Models
 {
@@ -13,6 +14,7 @@ namespace APIConsume.Models
         }
 
         public int IdRefStruktural { get; set; }
+        [Required]
         public string Deskripsi { get; set; }
         public int? SetaraSks { get; set; }
         public int? KelasAsuransi { get; set; }

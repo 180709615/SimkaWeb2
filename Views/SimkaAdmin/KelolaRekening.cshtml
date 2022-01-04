@@ -57,6 +57,7 @@
                             <div class="col-4">
                                 <select class="form-control" id="karyawan"
                                         asp-items="@(new SelectList(Model.karyawan,"Npp","Nama"))">
+                                    <option selected value=""></option>
                                 </select>
                             </div>
                         </div>
@@ -175,7 +176,7 @@
 
 
         function ShowPopup(url) {
-            if ($('#karyawan').val() == null)
+            if ($('#karyawan').val() == null || $('#karyawan').val() == "" || $('#karyawan').val() == undefined)
                 alert("Pilih Karyawan Dahulu");
             else {            
             var formDiv = $('<div/>');

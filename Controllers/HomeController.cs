@@ -26,6 +26,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.Dynamic;
 
 namespace APIControllers.Controllers
 {
@@ -236,6 +237,7 @@ namespace APIControllers.Controllers
 
         public async Task<IActionResult> Index(string username, string password)
         {
+            
             TempData["username"] = username;
             ClaimsIdentity identity = null;
             bool isAuthenticated = false;
@@ -751,7 +753,9 @@ namespace APIControllers.Controllers
                                     "Waktu Dan Tanggal:  " + DateTime.Now +
                                     
                                     "<br> Silahkan klik link di bawah ini untuk memperbarui password Anda " +
-                                     "<br><a href='https://localhost:44393/Home/ResetPasswordForm?uuid="+uuid+"' class='btn btn-info' target='_blank'>https://localhost:44393/Home/ResetPasswordForm?uuid="+uuid+" </a>" +
+                                     //"<br><a href='https://localhost:44393/Home/ResetPasswordForm?uuid="+uuid+"' class='btn btn-info' target='_blank'>https://localhost:44393/Home/ResetPasswordForm?uuid="+uuid+" </a>" +
+                                     "<br><a href='https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid +  " </a>" +
+
                                     "<br>Apabila Bapak/ Ibu tidak mengenali aktivitas ini agar segera menghubungi KSI melalui " +
                                     "<a href='http://ksi.uajy.ac.id/helpdesk/open.php' target='_blank'> http://ksi.uajy.ac.id/helpdesk</a>" +
                                     "<br>Terimakasih ";
@@ -904,19 +908,19 @@ namespace APIControllers.Controllers
 
                         TempData["SuccessMessage"] = "Berhasil";
                         TempData["alert"] = "<script>alert('Reset Password Berhasil');window.location.replace('/Home')</script>";
-                        return View();
+                        return View(model);
 
                     }
                     catch (Exception ex)
                     {
                         TempData["alert"] = "<script>alert('"+ex.Message+"');</script>";
-                        return View();
+                        return View(model);
                     }
                 }
 
             }
             //var a = model;
-            return View();
+            return View(model);
         }
 
        

@@ -49,6 +49,7 @@
             }
         }
     </style>
+   
 </head>
 <body>
     <!-- Content Wrapper. Contains page content -->
@@ -563,11 +564,13 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="@Url.Action("PostDokumenPendukungPublikasi","SimkaDosen")" method="POST" enctype="multipart/form-data">
+            @*<form action="@Url.Action("PostDokumenPendukungPublikasi","SimkaDosen")" method="POST" enctype="multipart/form-data">*@
+            <form>
+
                 <div class="modal-body">
                     <div class="container-fluid">
                         @*<label>ID Publikasi</label>*@
-                        <input type="hidden" class="form-control" id="id_publikasi" name="id_publikasi" readonly>
+                        <input type="hidden" class="form-control" id="id" name="id" readonly>
 
                         <div class="row justify-content-between" style="margin-top:1%;">
                             <div class="col-md-4" style="margin-right:1%" ;>
@@ -598,6 +601,7 @@
                                     <label class="custom-file-label" id="labelKorespondensi" for="file_korespondensi">Choose file...</label>
                                     @*pakai <object> kaya di situs kkn bisa*@
                                 </div>
+                                <button type="button" onclick="PostDokumenPendukung()" class="btn btn-primary">Save changes</button>
 
                             </div>
 
@@ -606,7 +610,7 @@
                                     <div class="card-header">
                                         <ul class="nav nav-pills">
                                             <li class="nav-item"><a class="nav-link active" href="#previewProsiding" data-toggle="tab">Prosiding Artikel</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#previewCekSimilaritas" data-toggle="tab">Cek Similaritas</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#previewSimilaritas" data-toggle="tab">Cek Similaritas</a></li>
                                             <li class="nav-item"><a class="nav-link" href="#previewPAK" data-toggle="tab">Review PAK</a></li>
                                             <li class="nav-item"><a class="nav-link" href="#previewKorespondensi" data-toggle="tab">Korespondensi</a></li>
                                         </ul>
@@ -615,8 +619,9 @@
                                         <div class="tab-content">
                                             <div class="active tab-pane" id="previewProsiding">
                                                 Loading...
+
                                             </div>
-                                            <div class=" tab-pane" id="previewCekSimilaritas">
+                                            <div class=" tab-pane" id="previewSimilaritas">
                                                 Loading...
                                             </div>
                                             <div class=" tab-pane" id="previewPAK">
@@ -637,10 +642,10 @@
 
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="PostDokumenPendukung()" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+                @*<div class="modal-footer">
+                        <button type="button" onclick="PostDokumenPendukung()" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>*@
             </form>
 
         </div>

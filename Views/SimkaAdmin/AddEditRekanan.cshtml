@@ -17,7 +17,7 @@
                 <input asp-for="NamaRekanan" class="form-control" />
                 <span asp-validation-for="NamaRekanan" class="text-danger"></span>
                 <label asp-for="Alamat" class="control-label"></label>
-                <input asp-for="Alamat" class="form-control" />
+                <textarea asp-for="Alamat" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Alamat" class="text-danger"></span>
                 <label asp-for="Kota" class="control-label"></label>
                 <input asp-for="Kota" class="form-control" />
@@ -38,10 +38,11 @@
                 <input asp-for="NoHp" type="number" class="form-control" />
                 <span asp-validation-for="NoHp" class="text-danger"></span>
                 <div class="form-group">
-                    <select asp-for="IsAktif">
+                    <label asp-for="IsAktif" class="control-label">Status Rekanan</label>
+                    <select asp-for="IsAktif" class="form-control">
                         <option value=true>Aktif</option>
-                        <option value=false>Not Tidak Aktif</option>
-                  
+                        <option value=false>Tidak Aktif</option>
+
                     </select>
 
                 </div>

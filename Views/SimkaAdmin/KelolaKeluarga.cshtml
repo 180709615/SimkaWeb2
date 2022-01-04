@@ -1,4 +1,4 @@
-﻿@model  karyaa
+﻿@model karyaa
 @{
     ViewData["Title"] = "KelolaRekanan";
     Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
@@ -6,15 +6,15 @@
 
 
 
-    <head>
-        <title>Kelola keluarga- SIMKA UAJY</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-        <!--sweetalert-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+<head>
+    <title>Kelola keluarga- SIMKA UAJY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <!--sweetalert-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
-    </head>
+</head>
 
 
 <!-- Main content -->
@@ -29,7 +29,6 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-
                     </ol>
                 </div>
             </div>
@@ -39,13 +38,13 @@
     <section class="content">
 
         <div style="width:100%; margin:0" class="tab-pane">
-            
-            
-            
+
+
+
             <div class="card cardMargin">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="flex-grow-1">Data Keluarga</h5>
-                    <a class=" text-light btn btn-success" 
+                    <a class=" text-light btn btn-success"
                        onclick="ShowPopup('@Url.Action("AddEditKeluarga","SimkaAdmin")')"><i class="fa fa-plus"></i>Tambah Anggota Keluarga </a>
                 </div>
                 <div class="card-body" style="overflow-x:auto;">
@@ -57,7 +56,7 @@
                             <div class="col-4">
                                 <select class="form-control" id="karyawan"
                                         asp-items="@(new SelectList(Model.karyawan,"Npp","Nama"))" onchange="changeKaryawan()">
-                                    <option value="">-</option>
+                                    <option value="" selected>-</option>
                                 </select>
 
                             </div>
@@ -69,15 +68,15 @@
                                 <div class="col-2" style="padding-left:0px;">
                                     <label for="karyawan">Restitusi</label>
                                 </div>
-                                <div class="col-3" >
+                                <div class="col-3">
                                     <select class="form-control" id="inputRestitusi">
                                         <option value="Restitusi Bujang">Restitusi Bujang</option>
                                         <option value="Restitusi Keluarga">Restitusi Keluarga</option>
                                     </select>
                                 </div>
-                                
 
-                                <div class="col-2" >
+
+                                <div class="col-2">
                                     <button id="btnUbahRestitusi" class=" pop-show btn btn-primary btn-sm" data-trigger="focus" onclick="ubahRestitusiKaryawan()" style="margin-left:1%;">Ubah Restitusi</button>
 
                                 </div>
@@ -88,9 +87,9 @@
                             </table>
                         </div>
                     </div>
-                    
+
+                </div>
             </div>
-        </div>
     </section>
     <!-- /.content -->
 </div>
@@ -130,85 +129,89 @@
 
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
-<script>
-  
-</script>
+    <script>
+
+    </script>
     <script>
         var popup, dataTable;
         var selectedVal = $("#karyawan option:selected").val();
 
-       $("#karyawan").change(function(){      
-                    selectedVal = $("#karyawan option:selected").val();
-                  dataTable = $('#example').DataTable({
-                   "oSearch": { "sSearch": localStorage.getItem("myTextBox") },
-                   "responsive": true,
-                   "destroy": true,
-                   "deferRender": true,
-                   "ajax": {
-                       "url": "/SimkaAdmin/LoadDataKeluarga?npp=" + selectedVal + "",
-                       "type": "GET",
-                       "datatype": "json"
-                   },
-                   "columns": [
-                       {
-                           data: "idKeluarga",
-                           title: "idKeluarga",
-                           name: "idKeluarga",
-                           type: "readonly",
-                           "visible": false,
-                       },
-                       {
-                           data: "nama",
-                           title: "Nama ",
+        $("#karyawan").change(function () {
+            selectedVal = $("#karyawan option:selected").val();
+            dataTable = $('#example').DataTable({
+                "oSearch": { "sSearch": localStorage.getItem("myTextBox") },
+                "responsive": true,
+                "destroy": true,
+                "deferRender": true,
+                "ajax": {
+                    "url": "/SimkaAdmin/LoadDataKeluarga?npp=" + selectedVal + "",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        data: "idKeluarga",
+                        title: "idKeluarga",
+                        name: "idKeluarga",
+                        type: "readonly",
+                        "visible": false,
+                    },
+                    {
+                        data: "nama",
+                        title: "Nama ",
 
-                       },
-                       {
-                           data: "hubungan",
-                           title: "hubungan ",
+                    },
+                    {
+                        data: "hubungan",
+                        title: "hubungan ",
 
-                       },
-                       {
-                           data: "jnsKel",
-                           title: "Jenis Kelamin",
+                    },
+                    {
+                        data: "jnsKel",
+                        title: "Jenis Kelamin",
 
-                       },
-                       {
-                           data: "tempatLahir",
-                           title: "Tempat Lahir",
+                    },
+                    {
+                        data: "tempatLahir",
+                        title: "Tempat Lahir",
 
-                       },
-                       {
-                           data: "tglLahir",
-                           title: "Tanggal Lahir",
+                    },
+                    {
+                        data: "tglLahir",
+                        title: "Tanggal Lahir",
+                        render: function (data) {
+                            return moment(data).format('DD-MM-YYYY');
+                        }
 
-                       },
-                       {
-                           data: "golDarah",
-                           title: "Golongan Darah",
+                    },
+                    {
+                        data: "golDarah",
+                        title: "Golongan Darah",
 
-                       },
+                    },
 
-                       {
-                           title: "Aksi",
-                           "data": "idKeluarga", // diganti sama id
-                           "render": function (data) {
-                               return "<a class='btn btn-default btn-sm' onclick=ShowPopup('/SimkaAdmin/AddEditKeluarga?id=" + data + "')><i class='fa fa-pencil'></i> Detail / Edit</a> ";
+                    {
+                        title: "Aksi",
+                        "data": "idKeluarga", // diganti sama id
+                        "render": function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=ShowPopup('/SimkaAdmin/AddEditKeluarga?id=" + data + "')><i class='fa fa-pencil'></i> Detail / Edit</a> ";
 
-                           }
-                       }
-                   ],
-                   "language": {
-                       "emptyTable": "no data found."
-                   }
-               });
-           
-           
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable": "no data found."
+                }
+            });
+
+
             localStorage.setItem('myTextBox', "");
         });
 
         function changeKaryawan() {
-            
+
             selectedVal = $("#karyawan option:selected").val();
             if (selectedVal != null && selectedVal != "") {
                 $("#divRestitusi").show()
@@ -234,32 +237,26 @@
                 $("#divRestitusi").hide()
 
             }
-            
+
         }
 
         function ubahRestitusiKaryawan() {
             selectedVal = $("#karyawan option:selected").val();
-            var restitusi = $("inputRestitusi").val()
+            var restitusi = $("#inputRestitusi").val();
+            console.log(restitusi,selectedVal)
             $.ajax({
                 type: 'get',
                 // url: 'https://jsonplaceholder.typicode.com/todos/1',
                 url: '/SimkaAdmin/ubahRestitusiKaryawan?npp=' + selectedVal + "&restitusi=" + restitusi,
                 data: function (d) {
-                   
+
                 },
                 datatype: 'json',
                 success: function (data) {
-                    if (data.success) {
-                        if (data.status == "Restitusi Bujang")
-                            $("#inputRestitusi").val("Restitusi Bujang").change();
-                        else
-                            $("#inputRestitusi").val("Restitusi Keluarga").change();
-                    }
-                    
-                    alert(data.message);
+                    $("#inputRestitusi").val(restitusi).change();
+                    alert(data.message)
 
-
-            },
+                },
                 error: function (data) {
 
                     alert(data.message);
@@ -270,9 +267,9 @@
         $("#btnUbahRestitusi").popover({
             html: true,
             placement: "right",
-            trigger: "focus",
+            trigger: "hover",
             content: "Klik untuk memperbarui"
-            
+
         });
 
         $("#inputRestitusi").change(function () {
@@ -280,29 +277,29 @@
         });
 
         function ShowPopup(url) {
-            if ($('#karyawan').val() == null)
+            if ($('#karyawan').val() == null || $('#karyawan').val() == "" || $('#karyawan').val() == undefined)
                 alert("Pilih Karyawan Dahulu");
-            else {            
-            var formDiv = $('<div/>');
-            $.get(url)
-                .done(function (response) {
-                    formDiv.html(response);
-                    popup = formDiv.dialog({
-                        autoOpen: true,
-                        resizeable: false,
-                        width: "auto",
-                        height: 600,
-                        title: 'Add or Edit Data',
-                      
-                        close: function () {
-                            popup.dialog('destroy').remove();
-                            var value = $('.dataTables_filter input').val();
-                            localStorage.setItem('myTextBox', value);                        
-                        }
-                    });
+            else {
+                var formDiv = $('<div/>');
+                $.get(url)
+                    .done(function (response) {
+                        formDiv.html(response);
+                        popup = formDiv.dialog({
+                            autoOpen: true,
+                            resizeable: false,
+                            width: "auto",
+                            height: 600,
+                            title: 'Add or Edit Data',
 
-                });
-        }
+                            close: function () {
+                                popup.dialog('destroy').remove();
+                                var value = $('.dataTables_filter input').val();
+                                localStorage.setItem('myTextBox', value);
+                            }
+                        });
+
+                    });
+            }
         }
         function SubmitAddEdit(form) {
             $.validator.unobtrusive.parse(form);
@@ -314,10 +311,10 @@
                 $.ajax({
                     type: 'POST',
                     url: '/SimkaAdmin/PostKeluarga',
-                    data: data,                     
+                    data: data,
                     enctype: 'multipart/form-data',
                     processData: false,
-                    contentType: false,                  
+                    contentType: false,
                     success: function (data) {
                         if (data.success) {
                             popup.dialog('close');
@@ -334,7 +331,7 @@
             return false;
         }
 
-       
+
         function Delete(id) {
             Swal.fire({
                 title: "Anda yakin ingin menghapus?",

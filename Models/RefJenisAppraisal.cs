@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace APIConsume.Models
 {
@@ -13,6 +14,7 @@ namespace APIConsume.Models
         }
 
         public int IdRefJnsAppraisal { get; set; }
+        [Required]
         public string Deskripsi { get; set; }
 
         public ICollection<RefButirAppraisal> RefButirAppraisal { get; set; }

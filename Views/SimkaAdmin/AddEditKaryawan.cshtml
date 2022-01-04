@@ -1335,7 +1335,7 @@
                                                 <div class="form-group ">
                                                     <label asp-for="Nidn" class="control-label">NIDN</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" asp-for="Nidn" class="form-control" placeholder=" NIDN">
+                                                        <input type="number" asp-for="Nidn" class="form-control" >
                                                         <span asp-validation-for="Nidn" class="text-danger"></span>
                                                     </div>
                                                 </div>
@@ -1981,36 +1981,41 @@
         
         var nidn = document.getElementById('Nidn').value
         if (nidn != null && nidn != undefined && nidn != "") {
-            var btn = document.getElementById('textIdDosenSister');
-            btn.innerHTML = "Loading";
+            if (nidn.length < 10) {
+                alert("NIDN harus 10 digit")
+            } else {
 
-            $.ajax({
-                dataType: "json",
-                type: "get",
-                url: "getID_Dosen_Sister?nidn=" + nidn,
-                success: function (data) {
-                    btn.innerHTML = 'Berhasil';
-                    $("#ID_DOSEN_SISTER").val(data);
-                    console.log(data)
-                    setTimeout(function () {
-                        btn.innerHTML = 'Cari ID Sister';
+                var btn = document.getElementById('textIdDosenSister');
+                btn.innerHTML = "Loading";
 
-                    }, 2000);
-                },
-                error: function (data) {
-                    btn.innerHTML = 'Gagal';
-                    btn.classList.remove("btn-success")
-                    btn.classList.add("btn-danger")
+                $.ajax({
+                    dataType: "json",
+                    type: "get",
+                    url: "getID_Dosen_Sister?nidn=" + nidn,
+                    success: function (data) {
+                        btn.innerHTML = 'Berhasil';
+                        $("#ID_DOSEN_SISTER").val(data);
+                        console.log(data)
+                        setTimeout(function () {
+                            btn.innerHTML = 'Cari ID Sister';
+
+                        }, 2000);
+                    },
+                    error: function (data) {
+                        btn.innerHTML = 'Gagal';
+                        btn.classList.remove("btn-success")
+                        btn.classList.add("btn-danger")
 
 
-                    setTimeout(function () {
-                        btn.classList.remove("btn-danger")
-                        btn.classList.add("btn-success")
-                        btn.innerHTML = 'Cari ID Sister';
+                        setTimeout(function () {
+                            btn.classList.remove("btn-danger")
+                            btn.classList.add("btn-success")
+                            btn.innerHTML = 'Cari ID Sister';
 
-                    }, 2000);
-                }
-            });
+                        }, 2000);
+                    }
+                });
+            }
         }
         else {
             alert("Harap isi NIDN terlebih dahulu")

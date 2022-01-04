@@ -662,8 +662,7 @@ namespace APIConsume.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nidn)
-                    .HasColumnName("NIDN")
-                    .HasColumnType("char(15)");
+                    .HasColumnName("NIDN");
 
                 entity.Property(e => e.Nik)
                     .HasColumnName("NIK")
@@ -671,8 +670,7 @@ namespace APIConsume.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.NipPns)
-                    .HasColumnName("NIP_PNS")
-                    .HasColumnType("char(15)");
+                    .HasColumnName("NIP_PNS");
 
                 entity.Property(e => e.NoBpjs)
                     .HasColumnName("no_bpjs")
@@ -690,8 +688,7 @@ namespace APIConsume.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.NoSertifikatPendidik)
-                    .HasColumnName("NO_SERTIFIKAT_PENDIDIK")
-                    .HasColumnType("char(25)");
+                    .HasColumnName("NO_SERTIFIKAT_PENDIDIK");
 
                 entity.Property(e => e.NoTelponHp)
                     .HasColumnName("NO_TELPON_HP")

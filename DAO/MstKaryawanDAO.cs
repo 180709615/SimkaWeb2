@@ -287,6 +287,37 @@ namespace APIConsume.DAO
 			}
 		}
 
+		public MstKaryawan GetDataKaryawanbyNPP(string npp)
+		{
+			DBOutput output = new DBOutput();
+
+			using (SqlConnection conn = new SqlConnection(Connection.ConnectionStringg))
+			{
+				try
+				{
+					//string query = @"SELECT *
+					//                FROM     PUBLIKASI INNER JOIN PENULIS ON PUBLIKASI.id_riwayat_publikasi_paten = PENULIS.id_riwayat_publikasi_paten
+					//                WHERE(PENULIS.id_sdm = @id_dosen)            ";
+					string query = @"SELECT *
+									FROM     simka.MST_KARYAWAN
+									WHERE  (NPP = @npp)";
+					var param = new { npp = npp };
+					var data = conn.Query<MstKaryawan>(query, param).FirstOrDefault();
+
+					return data;
+				}
+				catch (Exception ex)
+				{
+					throw;
+				}
+				finally
+				{
+					conn.Dispose();
+				}
+			}
+		}
+
+
 	}
 }
 //

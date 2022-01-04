@@ -7,19 +7,29 @@
     <div class="col-md-12">
         <form onsubmit="return SubmitAddEdit (this)">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+             
             <div class="form-group">
-                <input type="hidden" asp-for="IdRefGolongan" />
-                
+                <label asp-for="IdRefGolongan" class="control-label">ID</label>
+                @if (Model.IdRefGolongan != null)
+                {
+                    <input asp-for="IdRefGolongan" class="form-control" readonly/>
+                }
+                else
+                {
+                    <input asp-for="IdRefGolongan" class="form-control" />
+                }            
+                <span asp-validation-for="IdRefGolongan" class="text-danger"></span>
             </div>
-                <div class="form-group">
-                    <label asp-for="Deskripsi" class="control-label"></label>
-                    <input asp-for="Deskripsi" class="form-control" />
-                    <span asp-validation-for="Deskripsi" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="Deskripsi" class="control-label"></label>
+                <input asp-for="Deskripsi" class="form-control" />
+                <span asp-validation-for="Deskripsi" class="text-danger"></span>
 
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
         </form>
     </div>
 </div>

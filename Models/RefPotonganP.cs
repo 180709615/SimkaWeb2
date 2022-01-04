@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace APIConsume.Models
 {
@@ -12,6 +13,7 @@ namespace APIConsume.Models
         }
 
         public int IdRefPotongan { get; set; }
+        [Required]
         public string NamaPotongan { get; set; }
         public decimal? Nominal { get; set; }
         public bool? IsTetap { get; set; }

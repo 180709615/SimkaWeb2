@@ -58,7 +58,7 @@ namespace APIConsume.Models
         public byte[] ScanTranskrip { get; set; }
         public IFormFile ScanIjazahForm { get; set; }
         public IFormFile ScanTranskripForm { get; set; }
-        public DateTime? TglIjazah { get; set; }
+        public DateTime TglIjazah { get; set; }
         public int? IsLast { get; set; }
         public string JenisFileIjazah { get; set; }
         public string JenisFileTranskrip { get; set; }

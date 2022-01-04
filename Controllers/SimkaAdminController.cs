@@ -434,7 +434,8 @@ namespace APIConsume.Controllers
                     prodi = _context.MstUnitAkademik.OrderBy(c => c.NamaUnitAkademik).ToList(),
                     statusAktifitas = _context.RefStatusKepegawaian.Select(p => new RefStatusKepegawaian { StatusAktifitas = p.StatusAktifitas }).Distinct().ToList(), // current status
                     statusIkatanKerja = _context.RefStatusIkatanKerja.ToList(),  // status ikatan kerja
-                    listIdUnitEntrypass = (new MstUnitDAO()).GetListUnitEntrypass(),
+                    //listIdUnitEntrypass = (new MstUnitDAO()).GetListUnitEntrypass(),
+                    listIdUnitEntrypass = _context.MstUnit.Where(a => !a.NamaUnit.StartsWith(prepend)).ToList(),
                     golongan = _context.RefGolongan
                     .Select(c => new RefGolongan
                     {
@@ -450,7 +451,7 @@ namespace APIConsume.Controllers
             else
             {
                 var karyawan = _context.MstKaryawan.Where(x => x.Npp.Equals(npp)).FirstOrDefault();
-
+                //var karyawan = new MstKaryawanDAO().GetDataKaryawanbyNPP(npp);
                 var balikan = new KaryawanForm()
                 {
 
@@ -511,7 +512,7 @@ namespace APIConsume.Controllers
                     MASA_KERJA_GOLONGAN = karyawan.MASA_KERJA_GOLONGAN,
                     STATUS_YADAPEN = karyawan.STATUS_YADAPEN,
                     ID_UNIT_ENTRYPASS = karyawan.ID_UNIT_ENTRYPASS,
-                    Nidn = karyawan.Nidn,
+                    Nidn = karyawan.Nidn != null? karyawan.Nidn.Trim(): karyawan.Nidn,
                     NIDK = karyawan.NIDK,
 
                     EmailInstitusi = karyawan.EmailInstitusi,
@@ -861,8 +862,8 @@ namespace APIConsume.Controllers
                     NamaBank = rekening.NamaBank,
                     NoRekening = rekening.NoRekening,
                     NoRekeningBaru = rekening.NoRekening,
-                    Status = rekening.Status,
-                    StatusRekening = rekening.StatusRekening
+                    Status = rekening.Status.Trim(),
+                    StatusRekening = rekening.StatusRekening.Trim()
 
 
 
@@ -871,10 +872,10 @@ namespace APIConsume.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> PostRekening([FromBody] FormRekening mstrekanan)
+        public async Task<IActionResult> PostRekening([FromBody] FormRekening mstrekening)
         {
 
-            String id = mstrekanan.NoRekening;
+            String id = mstrekening.NoRekening;
             var rekeningada = await _context.MstRekening.AnyAsync(x => x.NoRekening == id);
             if (!ModelState.IsValid)
             {
@@ -882,11 +883,11 @@ namespace APIConsume.Controllers
             }
             var rekening = new MstRekening()
             {
-                NamaBank = mstrekanan.NamaBank,
-                NoRekening = mstrekanan.NoRekeningBaru,
-                Npp = mstrekanan.Npp,
-                Status = mstrekanan.Status,
-                StatusRekening = mstrekanan.StatusRekening
+                NamaBank = mstrekening.NamaBank,
+                NoRekening = mstrekening.NoRekeningBaru,
+                Npp = mstrekening.Npp,
+                Status = mstrekening.Status,
+                StatusRekening = mstrekening.StatusRekening.Trim()
 
             };
             if (!rekeningada)
@@ -972,7 +973,7 @@ namespace APIConsume.Controllers
                     NamaInstitusi = rekening.NamaInstitusi,
                     NoAsuransi = rekening.NoAsuransi,
                     NoAsuransiBaru = rekening.NoAsuransi,
-                    Status = rekening.Status,
+                    Status = rekening.Status.Trim(),
                     TglBergabung = rekening.TglBergabung,
                 };
                 return View(balikan);
@@ -993,7 +994,7 @@ namespace APIConsume.Controllers
                 Npp = rekening.Npp,
                 NamaInstitusi = rekening.NamaInstitusi,
                 NoAsuransi = rekening.NoAsuransiBaru,
-                Status = rekening.Status,
+                Status = rekening.Status.Trim(),
                 TglBergabung = rekening.TglBergabung,
 
             };
@@ -1453,7 +1454,6 @@ namespace APIConsume.Controllers
         }
 
         // DELETE: api/Todo/5
-        [HttpDelete("SimkaAdmin/DeleteRekanan/{id}")]
         public async Task<IActionResult> DeleteRekanan([FromRoute] int id)
         {
             if (HttpContext.Session.GetString("NPP") != null)
@@ -1558,7 +1558,6 @@ namespace APIConsume.Controllers
             }
         }
 
-        [HttpDelete("SimkaAdmin/DeletePengembangan/{id}")]
         public async Task<IActionResult> DeleteRefPengembangan([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -3042,7 +3041,7 @@ namespace APIConsume.Controllers
             }
         }
         // DELETE: api/Todo/5
-        [HttpDelete("SimkaAdmin/DeleteButirAppraisal/{id}")]
+ 
         public async Task<IActionResult> DeleteButirAppraisal([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -3350,7 +3349,7 @@ namespace APIConsume.Controllers
 
                 var balikan = new HstSkForm()
                 {
-
+                    ListTahunAkademik = _context.TblTahunAkademik.ToList()
                 };
                 return View(balikan);
             }
@@ -3360,16 +3359,17 @@ namespace APIConsume.Controllers
 
                 var balikan = new HstSkForm()
                 {
+                    ListTahunAkademik = _context.TblTahunAkademik.ToList(),
                     NoSk = sk.NoSk,
                     DateInserted = sk.DateInserted,
                     DeskripsiSk = sk.DeskripsiSk,
                     FileSk = sk.FileSk,
                     LevelSk = sk.LevelSk,
-                    TglAkhir = sk.TglAkhir,
+                    TglAkhir = (DateTime)(sk.TglAkhir != DateTime.MinValue ? sk.TglAkhir : null),
                     IdTahunAkademik = sk.IdTahunAkademik,
                     NoSemester = sk.NoSemester,
-                    TglAwal = sk.TglAwal,
-                    TglSk = sk.TglSk,
+                    TglAwal = (DateTime)(sk.TglAwal != DateTime.MinValue ? sk.TglAwal : null),
+                    TglSk = (DateTime)(sk.TglSk != DateTime.MinValue ? sk.TglSk : null),
 
                 };
 
@@ -3386,7 +3386,7 @@ namespace APIConsume.Controllers
                 {
                     String id = data.NoSk;
                     var golonganada = await _context.HstSk.AnyAsync(x => x.NoSk == id);
-
+                    data.ListTahunAkademik = _context.TblTahunAkademik.ToList();
                     HstSk skdb = await _context.HstSk.AsNoTracking().FirstOrDefaultAsync(x => x.NoSk == id);
                     //mengambil data dari form
                     data.DateInserted = DateTime.Now;
@@ -3718,7 +3718,8 @@ namespace APIConsume.Controllers
                     NoIjazah = rp.NoIjazah,
                     Npp = rp.Npp,
                     NamaSekolah = rp.NamaSekolah,
-                    TglIjazah = rp.TglIjazah,
+                    TglIjazah = (DateTime)(rp.TglIjazah != DateTime.MinValue ? rp.TglIjazah : null),
+
                     TahunLulus = rp.TahunLulus,
                     TahunMasuk = rp.TahunMasuk,
                     ProgramStudi = rp.ProgramStudi,
@@ -5167,9 +5168,9 @@ namespace APIConsume.Controllers
                         NamaSekolah = studilanjut.NamaSekolah,
                         KotaSekolah = studilanjut.KotaSekolah,
                         NegaraSekolah = studilanjut.NegaraSekolah,
-                        TglMulai = studilanjut.TglMulai,
-                        TglLulus = studilanjut.TglLulus,
-                        TglPenempatanKmbli = studilanjut.TglPenempatanKmbli,
+                        TglMulai = (DateTime)(studilanjut.TglMulai != DateTime.MinValue ? studilanjut.TglMulai : null),
+                        TglLulus = (DateTime)(studilanjut.TglLulus != DateTime.MinValue ? studilanjut.TglLulus : null),
+                        TglPenempatanKmbli = (DateTime)(studilanjut.TglPenempatanKmbli != DateTime.MinValue ? studilanjut.TglPenempatanKmbli : null),
                         Fakultas = studilanjut.Fakultas,
                         Prodi = studilanjut.Prodi,
                         DlmNegriLuarNegri = studilanjut.DlmNegriLuarNegri,

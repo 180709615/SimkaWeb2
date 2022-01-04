@@ -8,50 +8,37 @@
 
     <form onsubmit="return SubmitAddEdit (this) " id="formsimka" >
         <div class="tab-pane" id="keluarga">
-            <div class="card-body card card-primary card-outline ">
-                <div class="form-group row">
-
-                    <div class="col-sm-5">
-                        <input type="text" asp-for="IdKeluarga"   type="hidden" class="form-control">
-                        <span asp-validation-for="IdKeluarga" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-sm-5">
-                    <input readonly="readonly" type="hidden"  asp-for="Npp" class="form-control">
-                    <span asp-validation-for="Npp" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label asp-for="Nama" class="col-sm-2 col-form-label">Nama</label>
-                <div class="col-sm-5">
-                    <input type="text" asp-for="Nama" class="form-control">
-                    <span asp-validation-for="Nama" class="text-danger"></span>
-                </div>
+           
+            <input type="text" asp-for="IdKeluarga"   type="hidden" class="form-control">
+            <input readonly="readonly" type="hidden"  asp-for="Npp" class="form-control">
+            <div class="form-group ">
+                <label asp-for="Nama" class="control-label">Nama</label>
+                <input type="text" asp-for="Nama" class="form-control">
+                <span asp-validation-for="Nama" class="text-danger"></span>
+                
             </div>
             <div class="form-group">
-                <label for="" class="col-sm-2 col-form-label">Hubungan Keluarga</label>
-                <select asp-for="IdRefKeluarga"
+                <label for="" class="control-label">Hubungan Keluarga</label>
+                <select asp-for="IdRefKeluarga" class="form-control"
                         asp-items="@(new SelectList(Model.RefKeluargas,"IdRefKeluarga","Deskripsi"))">
                     <option value='0'>-</option>
                 </select>
                 <span asp-validation-for="IdRefKeluarga" class="text-danger"></span>
             </div>
-            <div class="row">
+            <div class="form-group">
+                <label asp-for="TempatLahir" class="control-label"> Tempat Lahir</label>
+                <input type="text" asp-for="TempatLahir" class="form-control" placeholder="Tempat Lahir">
+                <span asp-validation-for="TempatLahir" class="text-danger"></span>
 
-                <label asp-for="TempatLahir" class="col-sm-2 col-form-label"> Tempat Tanggal Lahir</label>
-                <div class="form-group col-md-5">
-
-                    <input type="text" asp-for="TempatLahir" class="form-control" placeholder="Tempat Lahir">
-                    <span asp-validation-for="TempatLahir" class="text-danger"></span>
-
-                </div>
-                <div class="form-group col-md-5">
-                    <input type="date" asp-for="TglLahir" class="form-control" placeholder="dd/mm/yyyy">
-                    <span asp-validation-for="TglLahir" class="text-danger"></span>
-                </div>
             </div>
-            <div class="form-group row">
-                <label for="JnsKel" class="col-sm-10 col-form-label">Jenis Kelamin</label>
+            <div class="form-group">
+                <label asp-for="TglLahir" class="control-label"></label>
+                <input type="date" asp-for="TglLahir" class="form-control" placeholder="dd/mm/yyyy">
+                <span asp-validation-for="TglLahir" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <label for="JnsKel" class="control-label">Jenis Kelamin</label>
                 <div class="col-sm-10">
                     <input type="radio" asp-for="JnsKel" value="L" id="male">
                     <label for="male">Laki-Laki</label>
@@ -59,8 +46,8 @@
                     <label>Wanita</label>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="GolDarah" class="col-sm-2 col-form-label">Golongan Darah</label>
+            <div class="form-group">
+                <label for="GolDarah" class="control-label">Golongan Darah</label>
                 <div class="col-sm-10">
                     <input type="radio" asp-for="GolDarah" id="goldaro" value="O" checked>
                     <label for="male">O</label>
@@ -76,8 +63,8 @@
                 </div>
 
             </div>
-            <div class="form-group row">
-                <label for="StatusSipil" class="col-sm-10 col-form-label">Status Sipil</label>
+            <div class="form-group ">
+                <label for="StatusSipil" class="control-label">Status Sipil</label>
                 <div class="col-sm-10">
 
                     <input type="radio" asp-for="StatusSipil" id="belumnikah" value="Belum Menikah" checked>
@@ -90,8 +77,8 @@
                     <label>Cerai</label>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="inputName" class="col-sm-10 col-form-label">Masih Tanggungan?</label>
+            <div class="form-group ">
+                <label for="inputName" class="control-label">Masih Tanggungan?</label>
                 <div class="col-sm-10">
                     <input type="radio" asp-for="IsTanggung" id="tanggung1" value="True">
                     <label for="male">Ya</label>
@@ -99,8 +86,8 @@
                     <label>Tidak</label>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="inputName" class="col-sm-10 col-form-label">Tanggungan Yadapen?</label>
+            <div class="form-group ">
+                <label for="inputName" class="control-label">Tanggungan Yadapen?</label>
                 <div class="col-sm-10">
                     <input type="radio" asp-for="IsTanggungYadapen" id="yadapen1" value="True">
                     <label for="male">Ya</label>
@@ -108,8 +95,8 @@
                     <label>Tidak</label>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="" class="col-sm-2 col-form-label">File Foto</label>
+            <div class="form-group">
+                <label for="" class="control-label">File Foto</label>
                 <input asp-for="FileFoto"  type="file">
                 <div id="previewFoto">
                     @if (Model.FileFotom != null)
@@ -118,8 +105,8 @@
                     }
                 </div>
             </div>
-            <div class="row">
-                <label for="" class="col-sm-2 col-form-label">File Surat</label>
+            <div class="form-group">
+                <label for="" class="control-label">File Surat</label>
                 <input asp-for="FileSurat"  type="file">
                 <div id="previewSurat">
                     @if (Model.FileSuratm != null)
@@ -202,7 +189,7 @@
                 if (!/\.(jpe?g)$/i.test(file.name)) {
                     document.getElementById("FileSurat").value = "";
                     $("#previewSurat").empty();
-                    return alert(file.name + " is not an image");
+                    return alert(file.name + " is not an jpg");
                 }
                 if (file.size > 512000) {
                     document.getElementById("FileSurat").value = "";

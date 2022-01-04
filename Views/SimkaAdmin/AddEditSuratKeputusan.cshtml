@@ -1,6 +1,10 @@
 ﻿@model HstSkForm
 @{
     Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
+    var tahunAkademik = Model.IdTahunAkademik;
+    var tempTglAkhir = Model.TglAkhir != null? Model.TglAkhir.ToString("yyyy-MM-dd") : null;
+    var tempTglAwal = Model.TglAwal != null ? Model.TglAwal.ToString("yyyy-MM-dd") : null;
+    var tempTglSk = Model.TglSk != null ? Model.TglSk.ToString("yyyy-MM-dd") : null;
 }
 
 
@@ -80,43 +84,43 @@
                     <label asp-for="NoSk" class="control-label">No. SK</label>
                     @if (Model.NoSk == null || Model.NoSk == "")
                     {
-                        <input asp-for="NoSk" class="form-control" /> }
+                        <input asp-for="NoSk" class="form-control"  value="@Model.NoSk" /> }
                     else
                     {
-                        <input asp-for="NoSk" class="form-control" readonly />}
+                        <input asp-for="NoSk" class="form-control" readonly  value="@Model.NoSk" />}
                     <span asp-validation-for="NoSk" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="LevelSk" class="control-label">Level SK</label>
-                    <input asp-for="LevelSk" class="form-control" />
+                    <input asp-for="LevelSk" class="form-control" value="@Model.LevelSk" />
                     <span asp-validation-for="LevelSk" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="NoSemester" class="control-label">No Semester</label>
-                    <input asp-for="NoSemester" class="form-control" />
+                    <input asp-for="NoSemester" class="form-control" value="@Model.NoSemester" />
                     <span asp-validation-for="NoSemester" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DeskripsiSk" class="control-label">Deskripsi SK</label>
-                    <input asp-for="DeskripsiSk" class="form-control" />
+                    <input asp-for="DeskripsiSk" class="form-control" value="@Model.DeskripsiSk"/>
                     <span asp-validation-for="DeskripsiSk" class="text-danger"></span>
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
                         <label asp-for="TglSk" class=" control-label">Tanggal SK</label>
-                        <input type="date" asp-for="TglSk" class="form-control" placeholder="">
+                        <input type="date" asp-for="TglSk" class="form-control" placeholder="" value="@tempTglSk">
                         <span asp-validation-for="TglSk" class="text-danger"></span>
 
                     </div>
                     <div class="col-4">
                         <label asp-for="TglAwal" class="control-label">Tanggal Awal</label>
-                        <input type="date" asp-for="TglAwal" class="form-control" placeholder="">
+                        <input type="date" asp-for="TglAwal" class="form-control" placeholder="" value="@tempTglAwal">
                         <span asp-validation-for="TglAwal" class="text-danger"></span>
 
                     </div>
                     <div class="col-4">
                         <label asp-for="TglAkhir" class="control-label">Tanggal Akhir</label>
-                        <input type="date" asp-for="TglAkhir" class="form-control" placeholder="">
+                        <input type="date" asp-for="TglAkhir" class="form-control" placeholder="" value="@tempTglAkhir">
                         <span asp-validation-for="TglAkhir" class="text-danger"></span>
 
                     </div>
@@ -125,7 +129,7 @@
 
                 <div class="form-group">
                     <label asp-for="IdTahunAkademik" class="control-label"> Pilih Tahun Akademik</label>
-                    <select class="form-control" asp-for="IdTahunAkademik">
+                    <select class="form-control" asp-for="IdTahunAkademik" asp-items="@(new SelectList(Model.ListTahunAkademik,"IdTahunAkademik","TahunAkademik"))">
                         <option value="0">- Select -</option>
                     </select>
                 </div>
@@ -220,25 +224,34 @@
         var popup, dataTable;
 
         $(document).ready(function () {
+            console.log(@tempTglAkhir);
             if (document.getElementById("NoSk").value != "")
                 $("#NoSk").prop("readonly", true);
         //end bikin npp readonly saat edit
-            $.ajax({
+            @*$.ajax({
                 datatype: "text",
                 type: 'get',
                 url: '/SimkaAdmin/LoadDataTahunAkademik',//your url of handler
                 data: {
-                   
+
                 },
                 success: function (response) {
                     var len = response.length;
-                   
+
                     $("#IdTahunAkademik").empty();
                     for (var i = 0; i < len; i++) {
                         var id = response[i]['idTahunAkademik'];
                         var name = response[i]['tahunAkademik'];
-                        
-                        $("#IdTahunAkademik").append("<option value='" + id + "'>" + name + "</option>");
+                        if (@tahunAkademik != null) {
+                            if (@tahunAkademik == id)
+                                $("#IdTahunAkademik").append("<option selected value='" + id + "'>" + name + "</option>");
+                            else
+                                $("#IdTahunAkademik").append("<option value='" + id + "'>" + name + "</option>");
+                        }
+                        else {
+                            $("#IdTahunAkademik").append("<option value='" + id + "'>" + name + "</option>");
+
+                        }
                     }
 
                 },
@@ -250,7 +263,7 @@
 
 
 
-            });
+            });*@
             var data = $("#NoSk").val();
 
             dataTable = $('#example').DataTable({
@@ -302,20 +315,20 @@
                 denyButtonText: `Tidak`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                  
+
                     $("form").submit()
                 } else {
                     return false;
                 }
 
             });
-            
+
         });
 
         function post() {
             $("#formSimka")[0].preventDefault();
-            
-            
+
+
 
         }
         function ShowPopup(url) {
@@ -343,7 +356,7 @@
                         });
                     });
             }
-        
+
         }
 
 
@@ -365,9 +378,9 @@
 
                             ShowMessage(data.message);
                             dataTable.ajax.url(url).load();
-                            
+
                         }
-                            
+
                     }
                 });
 
@@ -393,7 +406,7 @@
                         if (data.success) {
                             alert("Simpan berhasil");
                             window.location.href = "/SimkaAdmin/KelolaSuratKeputusan";
-                           
+
                         }
                     },
                     error: function (data) {
@@ -419,12 +432,12 @@
                 $.ajax({
                     type: 'DELETE',
                     url: '/SimkaAdmin/DeleteListSK' + '?' + $.param({ "nosk": no, "npp": id }),
-                                      
+
                     success: function (data) {
                         if (data.success) {
                             ShowMessage(data.message);
                             dataTable.ajax.reload();
-                           
+
                         }
                     }
                 });

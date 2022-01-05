@@ -20,7 +20,8 @@
                 <span asp-validation-for="Nominal" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select asp-for="IsTetap">
+                <label asp-for="IsTetap">Status</label>
+                <select asp-for="IsTetap" class="form-control">
                          <option value=true>Tetap</option>
                         <option value=false>Tidak Tetap</option>
 

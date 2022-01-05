@@ -1782,7 +1782,9 @@ namespace APIConsume.Controllers
                     NamaTarifPayroll = butir.NamaTarifPayroll,
                     Nominal = butir.Nominal,
                     Jenis = butir.Jenis,
-                    JenjangKelas = butir.JenjangKelas
+                    JenjangKelas = butir.JenjangKelas,
+                    Masakerja = butir.Masakerja,
+                    Ket1 = butir.Ket1,
 
                 };
 
@@ -3151,7 +3153,8 @@ namespace APIConsume.Controllers
                  {
                      p.IdRefJbtnAkademik,
                      fungsional = p.IdRefFungsionalNavigation.Deskripsi,
-                     p.Deskripsi
+                     p.Deskripsi,
+                     p.UsiaPensiun
 
                  });
 
@@ -3189,7 +3192,8 @@ namespace APIConsume.Controllers
                     //mengambil data jabatan akademik yang telah dipilih
                     IdRefJbtnAkademik = id,
                     IdRefFungsional = butir.IdRefFungsional,
-                    Deskripsi = butir.Deskripsi
+                    Deskripsi = butir.Deskripsi,
+                    UsiaPensiun = butir.UsiaPensiun
                 };
 
                 return View(balikan);

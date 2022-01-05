@@ -124,12 +124,17 @@
                         title: "Deskripsi",
                              autoWidth: true
                     },
-                   
+                    
+                    {
+                        data: "usiaPensiun",
+                        title: "Usia Pensiun",
+                        autoWidth: true
+                    },
                   
                     {
                         "data": "idRefJbtnAkademik", // diganti sama id
                         "render": function (data) {
-                             console.log(data);
+                             
                             return "<a class='btn btn-default btn-sm' onclick=ShowPopup('/SimkaAdmin/AddEditRefJabatanAkademik/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class=' text-light btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i> Delete</a>";
                         }
                     }

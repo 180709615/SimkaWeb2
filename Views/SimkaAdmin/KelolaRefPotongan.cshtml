@@ -130,7 +130,13 @@
                     },
                          {
                         data: "isTetap",
-                        title: "IsTetap",
+                        title: "Status",
+                        render: function (data) {
+                            if (data == true)
+                                return "Tetap"
+                            else
+                                return "Tidak Tetap"
+                        }
                      
                     },
                   

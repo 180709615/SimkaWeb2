@@ -807,17 +807,17 @@ namespace APIConsume.Controllers
 
                                             if (SinkronAnggotaResult.status == false)
                                             {
-                                                return Json(new { success = false, nama = namaDosen, message = SinkronAnggotaResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronAnggotaResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                             if (SinkronMitraResult.status == false)
                                             {
-                                                return Json(new { success = false, nama = namaDosen, message = SinkronMitraResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronMitraResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                             if (SinkronDokumenResult.status == false)
                                             {
-                                                return Json(new { success = false, nama = namaDosen, message = SinkronDokumenResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronDokumenResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                         }
@@ -878,15 +878,15 @@ namespace APIConsume.Controllers
                                 DBOutput addTblLog = (new TblLogDAO()).AddTblLog(npp, 517, "Sinkronisasi Penelitian Sister");
                                 if(addTblLog.status == false)
                                 {
-                                    return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n"+addTblLog.pesan });
+                                    return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n"+addTblLog.pesan, npp = npp });
                                 }
-                                return Json(new { success = true, nama = namaDosen });
+                                return Json(new { success = true, nama = namaDosen, npp = npp });
                             }
                             else
                             {
 
                                 var ajar = JsonConvert.DeserializeObject<Penelitian>(apiResponse);
-                                return Json(new { success = false, nama = namaDosen, message = ajar.detail });
+                                return Json(new { success = false, nama = namaDosen, message = ajar.detail, npp = npp });
                             }
 
                             //return Json(new { success = true, message = "Sinkronisasi Penelitian sukses." });
@@ -894,7 +894,7 @@ namespace APIConsume.Controllers
                         }
                         else
                         {
-                            return Json(new { success = false, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan." });
+                            return Json(new { success = false, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan.", npp = npp });
                         }
 
 
@@ -1025,17 +1025,17 @@ namespace APIConsume.Controllers
 
                                             if (SinkronAnggotaResult.status == false)
                                             {
-                                                return Json(new { success = false, nama = namaDosen, message = SinkronAnggotaResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronAnggotaResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                             if (SinkronMitraResult.status == false)
                                             {
-                                                return Json(new { success = false, nama = namaDosen, message = SinkronMitraResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronMitraResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                             if (SinkronDokumenResult.status == false)
                                             {
-                                                return Json(new { success = false, nama = namaDosen, message = SinkronDokumenResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
+                                                return Json(new { success = false, npp = npp, nama = namaDosen, message = SinkronDokumenResult.pesan + " ====> \n ID =" + detail.id + "\n Judul =" + detail.judul });
                                             }
 
                                         }
@@ -1102,22 +1102,22 @@ namespace APIConsume.Controllers
                                 DBOutput addTblLog = (new TblLogDAO()).AddTblLog(npp, 517, "Sinkronisasi Pengabdian Sister");
                                 if (addTblLog.status == false)
                                 {
-                                    return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n" + addTblLog.pesan });
+                                    return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n" + addTblLog.pesan, npp = npp });
                                 }
-                                return Json(new { success = true, nama = namaDosen });
+                                return Json(new { success = true, nama = namaDosen, npp = npp });
                             }
                             else
                             {
 
                                 var ajar = JsonConvert.DeserializeObject<Penelitian>(apiResponse);
-                                return Json(new { success = false, nama = namaDosen, message = ajar.detail });
+                                return Json(new { success = false, nama = namaDosen, message = ajar.detail, npp = npp });
                             }
 
                         }
                         
                         else
                         {
-                            return Json(new { success = false, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan." });
+                            return Json(new { success = false, nama = namaDosen, message = "ID Dosen Sister tidak ditemukan.", npp = npp });
                         }
 
 
@@ -1354,16 +1354,16 @@ namespace APIConsume.Controllers
 
                                 if (addTblLog.status == false)
                                 {
-                                    return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n" + addTblLog.pesan  });
+                                    return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n" + addTblLog.pesan, npp = npp });
                                 }
-                                return Json(new { success = true, nama = namaDosen });
+                                return Json(new { success = true, nama = namaDosen, npp = npp });
 
 
                             }
                             else
                             {
                                 var ajar = JsonConvert.DeserializeObject<Penelitian>(apiResponse);
-                                return Json(new { success = false, nama = namaDosen, message = ajar.detail });
+                                return Json(new { success = false, nama = namaDosen, message = ajar.detail, npp = npp });
 
                             }
                         }
@@ -1544,15 +1544,15 @@ namespace APIConsume.Controllers
                                     DBOutput addTblLog = (new TblLogDAO()).AddTblLog(npp, 517, "Sinkronisasi Pengajaran Sister");
                                     if (addTblLog.status == false)
                                     {
-                                        return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n" + addTblLog.pesan });
+                                        return Json(new { success = false, nama = namaDosen, message = "Tambah Tbl Log gagal \n" + addTblLog.pesan, npp = npp });
                                     }
-                                    return Json(new { success = true, nama = namaDosen });
+                                    return Json(new { success = true, nama = namaDosen, npp = npp });
 
                                 }
                                 else
                                 {
                                     var ajar = JsonConvert.DeserializeObject<Pengajaran>(apiResponse);
-                                    return Json(new { success = false, nama = namaDosen, message = ajar.message });
+                                    return Json(new { success = false, nama = namaDosen, message = ajar.message, npp = npp });
 
                                 }
 

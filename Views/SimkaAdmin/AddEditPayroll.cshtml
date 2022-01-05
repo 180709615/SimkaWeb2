@@ -14,30 +14,39 @@
                 <label asp-for="IdRefJbtnAkademik" class="control-label">Jabatan Akademik</label>
                 <select asp-for="IdRefJbtnAkademik" class="form-control"
                         asp-items="@(new SelectList(Model.akademik,"IdRefJbtnAkademik","Deskripsi"))">
+                    <option value="">-</option>
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="IdRefStruktural" class="control-label">Jabatan Struktural</label>
-                <select asp-for="IdRefStruktural"  class="form-control"
+                <select asp-for="IdRefStruktural" class="form-control"
                         asp-items="@(new SelectList(Model.struktural,"IdRefStruktural","Deskripsi"))">
+                    <option value="">-</option>
+
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="IdRefGolongan" class="control-label">Golongan</label>
-                <select asp-for="IdRefGolongan"  class="form-control"
+                <select asp-for="IdRefGolongan" class="form-control"
                         asp-items="@(new SelectList(Model.golongan,"IdRefGolongan","Deskripsi"))">
+                    <option value="">-</option>
+
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="IdRefFungsional" class="control-label">Fungsional</label>
-                <select asp-for="IdRefFungsional"  class="form-control"
+                <select asp-for="IdRefFungsional" class="form-control"
                         asp-items="@(new SelectList(Model.fungsional,"IdRefFungsional","Deskripsi"))">
+                    <option value="">-</option>
+
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="IdRefJenjang" class="control-label">Jenjang</label>
-                <select asp-for="IdRefJenjang"  class="form-control"
+                <select asp-for="IdRefJenjang" class="form-control"
                         asp-items="@(new SelectList(Model.jenjang,"IdRefJenjang","Deskripsi"))">
+                    <option value="">-</option>
+
                 </select>
             </div>
             <div class="form-group">
@@ -71,7 +80,7 @@
                 <span asp-validation-for="JenjangKelas" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Isactive"></label>
+                <label asp-for="Isactive" class="control-label">Status </label>
                 <select asp-for="Isactive"  class="form-control">
                     <option value=true>Aktif</option>
                     <option value=false>Tidak Aktif</option>

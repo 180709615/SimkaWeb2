@@ -59,7 +59,7 @@
 
                             <li class="nav-item"><a class="nav-link" href="#pengajaran" data-toggle="tab">Pengajaran</a></li>
 
-                            <li class="nav-item"><a class="nav-link" href="#penelitian" data-toggle="tab">Penelitian</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#penelitian" data-toggle="tab">Penelitian</a></li>
                             <li class="nav-item"><a class="nav-link" href="#publikasi" data-toggle="tab">Publikasi</a></li>
                             <li class="nav-item"><a class="nav-link" href="#pengabdian" data-toggle="tab">Pengabdian</a></li>
                             @*<li class="nav-item"><a class="nav-link" href="#perbandinganpengajaran" data-toggle="tab">Perbandingan Pengajaran SPKP</a></li>
@@ -137,7 +137,7 @@
                             <!---  Penelitian-->
 
 
-                            <div class="tab-pane" id="penelitian">
+                            <div class="tab-pane active" id="penelitian">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <b>Penelitian dari Sister</b>
@@ -374,7 +374,35 @@
         </section>
     </div>
 </body>
-
+<div class="modal fade" tabindex="-1" role="dialog" id="modalHasilSinkron">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Hasil Sinkronisasi</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="bodyModalHasilSinkron">
+                
+                
+                
+                <table id="tabelHasilSinkron" style="width:100%;" class="table table-sm table-striped table-bordered m-2">
+                    <thead>
+                        <tr>
+                            <th> NPP </th>
+                            <th> Nama</th>
+                            <th> Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
 
 
 @section Scripts{
@@ -399,7 +427,17 @@
         var id_unitPengabdian;
         var id_unitPublikasi;
         var dataTableRefSemesterSISTER;
+        var tabelHasilSinkron;
+        var loading = `<div class="loading" style="margin:1rem" >
+                    <div class="loader" style="margin:auto"></div>
+                    <p style="text-align:center;margin:1rem"><strong>Proses Sinkronisasi...</strong></p>
+                </div>`;
+        var loadingSelesai = `<div class="selesai" style="margin: 1rem">
+                    <h4 style="color:green; text-align:center; "><strong>Sinkronisasi Selesai</strong></h4>
+                </div>`;
         $(document).ready(function () {
+            
+
             semester = $(".selectSemester").val("20201");
             semester = "20201";
 
@@ -724,6 +762,12 @@
 
         });
 
+        $('#modalHasilSinkron').on('show.bs.modal', function (e) {
+            $("#bodyModalHasilSinkron").before(loading);
+           
+
+        })
+
         function changeSelectPengajaran() {
             semester = $(".selectSemester").val();
             id_unitPengajaran = $(".selectUnitPengajaran").val();
@@ -769,12 +813,13 @@
 
         function SinkronPenelitianPerulanganSISTER() {
 
+           
             var namaProdi, listNpp;
             console.log(id_unitPenelitian)
             swal.fire({
                 //icon: 'info',
                 iconHtml:'<div class="loader"></div>',
-                html: '<h5>Loading...</h5>',
+                html: '<h5>Mengambil NPP...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
                 allowOutsideClick: false
@@ -794,9 +839,15 @@
                 success: function (data) {
                     if (data.success) {
 
+                        swal.close();
+                        $('#modalHasilSinkron').modal('show');
+
                         var promises = [];
                         listNpp = data.data;
-                        console.log(listNpp);
+                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
+                        tabelHasilSinkron.clear().draw();
+                        tabelHasilSinkron.destroy();
+
                         $(listNpp).each(function (index, value) {
                             var request =
                                 setTimeout(function () {
@@ -809,29 +860,34 @@
 
                                         datatype: 'json',
                                         success: function (data) {
+                                            var row;
                                             if (data.success) {
                                                 console.log(data.nama + " berhasil")
+                                                row = `<tr class=""><td>` + data.npp + `</td><td>` + data.nama + `</td><td>Berhasil</td></tr>`;
 
                                             } else if (data.error) {
-
                                                 console.log(data.nama + " " + data.npp + " gagal \n Error :" + data.message)
-
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message+`</td></tr>`;
 
                                             } else {
-                                                console.log(data.nama + " gagal \n Error :" + data.message)
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+
                                             }
+
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         },
                                         error: function (data) {
 
-                                            return (data.nama + " error")
-
+                                            console.log(data.nama + " error")
+                                            var row = `<tr class="table-danger">><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         }
                                     });
                                 }, index * 2000);
 
 
 
-                            var tes = console.log(index);
+                          
 
                             promises.push(request);
 
@@ -843,12 +899,21 @@
                                 setTimeout(function () {
                                     console.log("Sinkronisasi by NPP Selesai")
 
-                                    swal.fire({
-                                        icon: 'success',
-                                        html: '<h5>Sinkronisasi Berhasil</h5>'
-                                    });
+                                    //swal.fire({
+                                    //    icon: 'success',
+                                    //    html: '<h5>Sinkronisasi Berhasil</h5>'
+                                    //});
+                                    $(".loading").remove();
+                                    $("#bodyModalHasilSinkron").before(loadingSelesai);
+                                    $(".selesai").slideDown(1).delay(3000).slideUp(1);
                                 }, listNpp.length * 2000)
-
+                                tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
+                                    dom:'t',
+                                    language: {
+                                        "zeroRecords": " "
+                                    },  
+                                });
+                                $("#tabelHasilSinkron").find('tbody').empty();
                                 dataTablePenelitianSISTER.ajax.reload();
                             })
 
@@ -891,7 +956,7 @@
             swal.fire({
                 //icon: 'info',
                 iconHtml: '<div class="loader"></div>',
-                html: '<h5>Loading...</h5>',
+                html: '<h5>Mengambil NPP...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
                 allowOutsideClick: false
@@ -913,7 +978,12 @@
 
                         var promises = [];
                         listNpp = data.data;
-                        console.log(listNpp);
+                        swal.close();
+                        $('#modalHasilSinkron').modal('show');
+                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
+                        tabelHasilSinkron.clear().draw();
+                        tabelHasilSinkron.destroy();
+
                         $(listNpp).each(function (index, value) {
                             var request =
                                 setTimeout(function () {
@@ -928,25 +998,31 @@
                                         success: function (data) {
                                             if (data.success) {
                                                 console.log(data.nama + " berhasil")
+                                                row = `<tr class=""><td>` + data.npp + `</td><td>` + data.nama + `</td><td>Berhasil</td></tr>`;
 
                                             } else if (data.error) {
 
                                                 console.log(data.nama + " " + data.npp + " gagal \n Error :" + data.message)
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
 
 
                                             } else {
                                                 console.log(data.nama + " gagal \n Error :" + data.message)
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+
                                             }
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         },
                                         error: function (data) {
 
-                                            return (data.nama + " error")
-
+                                            console.log(data.nama + " error")
+                                            var row = `<tr class="table-danger">><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         }
                                     });
                                 }, index * 2000);
 
-                            var tes = console.log(index);
+                            
 
                             promises.push(request);
                         });
@@ -957,15 +1033,23 @@
                                 setTimeout(function () {
                                     console.log("Sinkronisasi by NPP Selesai")
 
-                                    swal.fire({
-                                        icon: 'success',
-                                        html: '<h5>Sinkronisasi Berhasil</h5>'
-                                    });
+                                    //swal.fire({
+                                    //    icon: 'success',
+                                    //    html: '<h5>Sinkronisasi Berhasil</h5>'
+                                    //});
+                                    $(".loading").remove();
+                                    $("#bodyModalHasilSinkron").before(loadingSelesai);
+                                    $(".selesai").slideDown(1).delay(3000).slideUp(1);
                                 }, listNpp.length * 2000)
-
-                                dataTablePengabdianSISTER.ajax.reload();
+                                tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
+                                    dom: 't',
+                                    language: {
+                                        "zeroRecords": " "
+                                    },
+                                });
+                                $("#tabelHasilSinkron").find('tbody').empty();
+                                dataTablePenelitianSISTER.ajax.reload();
                             })
-
                     } else {
                         console.log(data.success)
                         swal.fire({
@@ -986,16 +1070,6 @@
 
             });
 
-            //console.log("ini setelah ajax get npp");
-            //if (listNpp != null) {
-            //    console.log("ini didalam if listNPP");
-
-
-            //} else {
-            //    console.log("ini didalam else listNPP!= null")
-
-            //}
-
         }
 
         function SinkronPublikasiPerulanganSISTER() {
@@ -1005,7 +1079,7 @@
             swal.fire({
                 //icon: 'info',
                 iconHtml: '<div class="loader"></div>',
-                html: '<h5>Loading...</h5>',
+                html: '<h5>Mengambil NPP...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
                 allowOutsideClick: false
@@ -1027,7 +1101,12 @@
 
                         var promises = [];
                         listNpp = data.data;
-                        console.log(listNpp);
+                        swal.close();
+                        $('#modalHasilSinkron').modal('show');
+                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
+                        tabelHasilSinkron.clear().draw();
+                        tabelHasilSinkron.destroy();
+
                         $(listNpp).each(function (index, value) {
                             var request =
                                 setTimeout(function () {
@@ -1042,25 +1121,31 @@
                                         success: function (data) {
                                             if (data.success) {
                                                 console.log(data.nama + " berhasil")
+                                                row = `<tr class=""><td>` + data.npp + `</td><td>` + data.nama + `</td><td>Berhasil</td></tr>`;
 
                                             } else if (data.error) {
 
                                                 console.log(data.nama + " " + data.npp + " gagal \n Error :" + data.message)
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
 
 
                                             } else {
                                                 console.log(data.nama + " gagal \n Error :" + data.message)
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+
                                             }
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         },
                                         error: function (data) {
 
-                                            return (data.nama + " error")
-
+                                            console.log(data.nama + " error")
+                                            var row = `<tr class="table-danger">><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         }
                                     });
                                 }, index * 2000);
 
-                            var tes = console.log(index);
+                            
 
                             promises.push(request);
                         });
@@ -1071,15 +1156,23 @@
                                 setTimeout(function () {
                                     console.log("Sinkronisasi by NPP Selesai")
 
-                                    swal.fire({
-                                        icon: 'success',
-                                        html: '<h5>Sinkronisasi Berhasil</h5>'
-                                    });
+                                    //swal.fire({
+                                    //    icon: 'success',
+                                    //    html: '<h5>Sinkronisasi Berhasil</h5>'
+                                    //});
+                                    $(".loading").remove();
+                                    $("#bodyModalHasilSinkron").before(loadingSelesai);
+                                    $(".selesai").slideDown(1).delay(3000).slideUp(1);
                                 }, listNpp.length * 2000)
-
-                                dataTablePublikasiSISTER.ajax.reload();
+                                tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
+                                    dom: 't',
+                                    language: {
+                                        "zeroRecords": " "
+                                    },
+                                });
+                                $("#tabelHasilSinkron").find('tbody').empty();
+                                dataTablePenelitianSISTER.ajax.reload();
                             })
-
                     } else {
                         console.log(data.success)
                         swal.fire({
@@ -1119,7 +1212,7 @@
             swal.fire({
                 //icon: 'info',
                 iconHtml: '<div class="loader"></div>',
-                html: '<h5>Loading...</h5>',
+                html: '<h5>Mengambil NPP...</h5>',
                 showCancelButton: false,
                 showConfirmButton: false,
                 allowOutsideClick: false
@@ -1141,7 +1234,12 @@
 
                         var promises = [];
                         listNpp = data.data;
-                        console.log(listNpp);
+                        swal.close();
+                        $('#modalHasilSinkron').modal('show');
+                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
+                        tabelHasilSinkron.clear().draw();
+                        tabelHasilSinkron.destroy();
+
                         $(listNpp).each(function (index, value) {
                             var request =
                                 setTimeout(function () {
@@ -1157,27 +1255,32 @@
                                         success: function (data) {
                                             if (data.success) {
                                                 console.log(data.nama + " berhasil")
+                                                row = `<tr class=""><td>` + data.npp + `</td><td>` + data.nama + `</td><td>Berhasil</td></tr>`;
 
                                             } else if (data.error) {
 
                                                 console.log(data.nama + " " + data.npp + " gagal \n Error :" + data.message)
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
 
 
                                             } else {
                                                 console.log(data.nama + " gagal \n Error :" + data.message)
+                                                row = `<tr class="bg-danger"><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+
                                             }
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         },
                                         error: function (data) {
 
-                                            return (data.nama + " error")
-
+                                            console.log(data.nama + " error")
+                                            var row = `<tr class="table-danger">><td>` + data.npp + `</td><td>` + data.nama + `</td><td>` + data.message + `</td></tr>`;
+                                            $('#tabelHasilSinkron tbody').append(row);
                                         }
                                     });
                                 }, index * 2000);
 
 
 
-                            var tes = console.log(index);
 
                             promises.push(request);
                         });
@@ -1188,15 +1291,23 @@
                                 setTimeout(function () {
                                     console.log("Sinkronisasi by NPP Selesai")
 
-                                    swal.fire({
-                                        icon: 'success',
-                                        html: '<h5>Sinkronisasi Berhasil</h5>'
-                                    });
+                                    //swal.fire({
+                                    //    icon: 'success',
+                                    //    html: '<h5>Sinkronisasi Berhasil</h5>'
+                                    //});
+                                    $(".loading").remove();
+                                    $("#bodyModalHasilSinkron").before(loadingSelesai);
+                                    $(".selesai").slideDown(1).delay(3000).slideUp(1);
                                 }, listNpp.length * 2000)
-
-                                dataTablePengajaranSISTER.ajax.reload();
+                                tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
+                                    dom: 't',
+                                    language: {
+                                        "zeroRecords": " "
+                                    },
+                                });
+                                $("#tabelHasilSinkron").find('tbody').empty();
+                                dataTablePenelitianSISTER.ajax.reload();
                             })
-
                     } else {
                         console.log(data.success)
                         swal.fire({

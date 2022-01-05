@@ -132,6 +132,12 @@
                          {
                         data: "isActive",
                         title: "isActive",
+                             render: function (data) {
+                                 if (data == true)
+                                     return "Aktif"
+                                 else
+                                     return "Tidak Aktif"
+                             }
                      
                     },
                   

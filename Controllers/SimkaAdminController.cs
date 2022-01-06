@@ -3369,11 +3369,11 @@ namespace APIConsume.Controllers
                     DeskripsiSk = sk.DeskripsiSk,
                     FileSk = sk.FileSk,
                     LevelSk = sk.LevelSk,
-                    TglAkhir = (DateTime)(sk.TglAkhir != DateTime.MinValue ? sk.TglAkhir : null),
+                    TglAkhir = (DateTime)(sk.TglAkhir != null ? sk.TglAkhir : DateTime.MinValue),
                     IdTahunAkademik = sk.IdTahunAkademik,
                     NoSemester = sk.NoSemester,
-                    TglAwal = (DateTime)(sk.TglAwal != DateTime.MinValue ? sk.TglAwal : null),
-                    TglSk = (DateTime)(sk.TglSk != DateTime.MinValue ? sk.TglSk : null),
+                    TglAwal = (DateTime)(sk.TglAwal != null ? sk.TglAwal : DateTime.MinValue),
+                    TglSk = (DateTime)(sk.TglSk != null ? sk.TglSk : DateTime.MinValue),
 
                 };
 
@@ -3722,7 +3722,7 @@ namespace APIConsume.Controllers
                     NoIjazah = rp.NoIjazah,
                     Npp = rp.Npp,
                     NamaSekolah = rp.NamaSekolah,
-                    TglIjazah = (DateTime)(rp.TglIjazah != DateTime.MinValue ? rp.TglIjazah : null),
+                    TglIjazah = (DateTime)(rp.TglIjazah != null ? rp.TglIjazah : DateTime.MinValue),
 
                     TahunLulus = rp.TahunLulus,
                     TahunMasuk = rp.TahunMasuk,
@@ -5172,9 +5172,9 @@ namespace APIConsume.Controllers
                         NamaSekolah = studilanjut.NamaSekolah,
                         KotaSekolah = studilanjut.KotaSekolah,
                         NegaraSekolah = studilanjut.NegaraSekolah,
-                        TglMulai = (DateTime)(studilanjut.TglMulai != DateTime.MinValue ? studilanjut.TglMulai : null),
-                        TglLulus = (DateTime)(studilanjut.TglLulus != DateTime.MinValue ? studilanjut.TglLulus : null),
-                        TglPenempatanKmbli = (DateTime)(studilanjut.TglPenempatanKmbli != DateTime.MinValue ? studilanjut.TglPenempatanKmbli : null),
+                        TglMulai = (DateTime)(studilanjut.TglMulai != null ? studilanjut.TglMulai : DateTime.MinValue),
+                        TglLulus = (DateTime)(studilanjut.TglLulus != null ? studilanjut.TglLulus : DateTime.MinValue),
+                        TglPenempatanKmbli = (DateTime)(studilanjut.TglPenempatanKmbli != null ? studilanjut.TglPenempatanKmbli : DateTime.MinValue),
                         Fakultas = studilanjut.Fakultas,
                         Prodi = studilanjut.Prodi,
                         DlmNegriLuarNegri = studilanjut.DlmNegriLuarNegri,

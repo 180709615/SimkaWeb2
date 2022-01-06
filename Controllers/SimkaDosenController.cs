@@ -681,16 +681,28 @@ namespace APIConsume.Controllers
 
         
        
-        public JsonResult getListNppByProdi(int id_unit)
+        public async Task<JsonResult> getListNppByProdi(int id_unit)
         {
 
-            var listNPP = _context.MstKaryawan.AsNoTracking().Where(a => a.IdUnitAkademik == id_unit).ToList();
+            //var listNPP = _context.MstKaryawan.AsNoTracking().Where(a => a.IdUnitAkademik == id_unit).ToList();
+            var listNPP = await new MstKaryawanDAO().GetNPPbyIdUnit(id_unit);
+            //List<string> listNPP = new List<string>();
 
-            if (listNPP != null)
+            //foreach (var item in listdata.data)
+            //{
+            //    if (!String.IsNullOrEmpty(item))
+            //    {
+            //        listNPP.Add(item);
+
+            //    }
+            //}
+
+            //if (listNPP != null || listNPP.Count != 0)
+            if (listNPP.data != null || listNPP.data.Count != 0)
             {
                 return Json(new
                 {
-                    data = listNPP,
+                    data = listNPP.data,
                     success = true
                 });
             }

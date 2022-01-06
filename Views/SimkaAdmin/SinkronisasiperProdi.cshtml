@@ -374,14 +374,12 @@
         </section>
     </div>
 </body>
-<div class="modal fade" tabindex="-1" role="dialog" id="modalHasilSinkron">
+<div class="modal fade" tabindex="-1" role="dialog" id="modalHasilSinkron" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4>Hasil Sinkronisasi</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+               
             </div>
             <div class="modal-body" id="bodyModalHasilSinkron">
                 
@@ -435,6 +433,10 @@
         var loadingSelesai = `<div class="selesai" style="margin: 1rem">
                     <h4 style="color:green; text-align:center; "><strong>Sinkronisasi Selesai</strong></h4>
                 </div>`;
+        var modalCloseBtn = `<button class="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>`;
+     
         $(document).ready(function () {
             
 
@@ -757,17 +759,28 @@
             });
 
 
+            tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
+                columnDefs: [
+                    { targets: 0, orderable: false },
+                    { targets: 1, orderable: false },
+                    { targets: 2, orderable: false }
 
-
+                ]
+            });
+          
 
         });
 
         $('#modalHasilSinkron').on('show.bs.modal', function (e) {
+            $(".close").remove();
+            $(".selesai").remove();
+
             $("#bodyModalHasilSinkron").before(loading);
            
 
         })
 
+    
         function changeSelectPengajaran() {
             semester = $(".selectSemester").val();
             id_unitPengajaran = $(".selectUnitPengajaran").val();
@@ -844,7 +857,7 @@
 
                         var promises = [];
                         listNpp = data.data;
-                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
+                        
                         tabelHasilSinkron.clear().draw();
                         tabelHasilSinkron.destroy();
 
@@ -855,7 +868,8 @@
                                         type: 'get',
                                         url: "/SimkaDosen/SinkronDataPenelitianSISTERbyNPP",
                                         data: {
-                                            "npp": value.npp
+                                            //"npp": value.npp
+                                              "npp": value
                                         },
 
                                         datatype: 'json',
@@ -905,13 +919,21 @@
                                     //});
                                     $(".loading").remove();
                                     $("#bodyModalHasilSinkron").before(loadingSelesai);
-                                    $(".selesai").slideDown(1).delay(3000).slideUp(1);
-                                }, listNpp.length * 2000)
+                                    
+                                    $("#modalHasilSinkron .modal-header").append(modalCloseBtn);
+                                }, listNpp.length * 2000)     
                                 tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
                                     dom:'t',
                                     language: {
                                         "zeroRecords": " "
-                                    },  
+                                    },
+                                    columnDefs: [
+                                        { targets: 0, orderable: false },
+                                        { targets: 1, orderable: false },
+                                        { targets: 2, orderable: false }
+
+                                    ]
+
                                 });
                                 $("#tabelHasilSinkron").find('tbody').empty();
                                 dataTablePenelitianSISTER.ajax.reload();
@@ -980,7 +1002,7 @@
                         listNpp = data.data;
                         swal.close();
                         $('#modalHasilSinkron').modal('show');
-                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
+                        
                         tabelHasilSinkron.clear().draw();
                         tabelHasilSinkron.destroy();
 
@@ -991,7 +1013,7 @@
                                         type: 'get',
                                         url: "/SimkaDosen/SinkronDataPengabdianProdiSISTERbyNPP",
                                         data: {
-                                            "npp": value.npp
+                                            "npp": value
                                         },
 
                                         datatype: 'json',
@@ -1039,7 +1061,8 @@
                                     //});
                                     $(".loading").remove();
                                     $("#bodyModalHasilSinkron").before(loadingSelesai);
-                                    $(".selesai").slideDown(1).delay(3000).slideUp(1);
+                                   
+                                    $("#modalHasilSinkron .modal-header").append(modalCloseBtn);
                                 }, listNpp.length * 2000)
                                 tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
                                     dom: 't',
@@ -1103,7 +1126,6 @@
                         listNpp = data.data;
                         swal.close();
                         $('#modalHasilSinkron').modal('show');
-                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
                         tabelHasilSinkron.clear().draw();
                         tabelHasilSinkron.destroy();
 
@@ -1114,7 +1136,7 @@
                                         type: 'get',
                                         url: "/SimkaDosen/SinkronDataPublikasiProdiSISTERbyNPP",
                                         data: {
-                                            "npp": value.npp
+                                            "npp": value
                                         },
 
                                         datatype: 'json',
@@ -1162,7 +1184,8 @@
                                     //});
                                     $(".loading").remove();
                                     $("#bodyModalHasilSinkron").before(loadingSelesai);
-                                    $(".selesai").slideDown(1).delay(3000).slideUp(1);
+                                    $("#modalHasilSinkron .modal-header").append(modalCloseBtn);
+
                                 }, listNpp.length * 2000)
                                 tabelHasilSinkron = $('#tabelHasilSinkron').DataTable({
                                     dom: 't',
@@ -1236,7 +1259,7 @@
                         listNpp = data.data;
                         swal.close();
                         $('#modalHasilSinkron').modal('show');
-                        tabelHasilSinkron = $('#tabelHasilSinkron').DataTable();
+                     
                         tabelHasilSinkron.clear().draw();
                         tabelHasilSinkron.destroy();
 
@@ -1248,7 +1271,7 @@
                                         url: "/SimkaDosen/SinkronDataPengajaranProdiSISTERbyNPP",
                                         data: {
                                             "id_semester": semester,
-                                            "npp": value.npp
+                                            "npp": value
                                         },
 
                                         datatype: 'json',

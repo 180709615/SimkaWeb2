@@ -138,7 +138,7 @@ namespace SimkaUAJY.Controllers
                     if (data.PASSWORD_RIPEM != getHash(model.passwordLama))
                     {
                         TempData["ErrorMessage"] = "Password Lama Salah";
-                        return View();
+                        return View(model);
 
                     }
                     else
@@ -154,7 +154,7 @@ namespace SimkaUAJY.Controllers
                         catch (Exception ex)
                         {
                             TempData["ErrorMessage"] = "<script>alert('" + ex.Message + "');</script>";
-                            return View();
+                            return View(model);
                         }
                     }
 
@@ -162,7 +162,7 @@ namespace SimkaUAJY.Controllers
 
             }
             //var a = model;
-            return View();
+            return View(model);
         }
 
         public static string getHash(string password)

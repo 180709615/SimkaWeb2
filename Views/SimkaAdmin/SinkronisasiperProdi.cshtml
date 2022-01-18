@@ -539,8 +539,8 @@
                     },
                     { "data": "judul", "name": "nama_mata_kuliah", "autoWidth": true },
                     { "data": "jenis_publikasi", "name": "nama_jenis_evaluasi", "autoWidth": true },
-                    {
-                        "data": "tanggal", "name": "nama_kelas_kuliah", "autoWidth": true,
+                    
+                    { "data": "tanggal", title:"Tanggal Paten", autoWidth:true ,
                         render: function (data) {
                             return moment(data).format('DD-MM-YYYY');
                         }
@@ -912,11 +912,6 @@
                             .then(value => {
                                 setTimeout(function () {
                                     console.log("Sinkronisasi by NPP Selesai")
-
-                                    //swal.fire({
-                                    //    icon: 'success',
-                                    //    html: '<h5>Sinkronisasi Berhasil</h5>'
-                                    //});
                                     $(".loading").remove();
                                     $("#bodyModalHasilSinkron").before(loadingSelesai);
                                     

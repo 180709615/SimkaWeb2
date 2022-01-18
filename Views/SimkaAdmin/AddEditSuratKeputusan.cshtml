@@ -2,9 +2,9 @@
 @{
     Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
     var tahunAkademik = Model.IdTahunAkademik;
-    var tempTglAkhir = Model.TglAkhir != null? Model.TglAkhir.ToString("yyyy-MM-dd") : null;
-    var tempTglAwal = Model.TglAwal != null ? Model.TglAwal.ToString("yyyy-MM-dd") : null;
-    var tempTglSk = Model.TglSk != null ? Model.TglSk.ToString("yyyy-MM-dd") : null;
+    var tempTglAkhir = Model.TglAkhir != DateTime.MinValue ? Model.TglAkhir.ToString("yyyy-MM-dd") : null;
+    var tempTglAwal = Model.TglAwal != DateTime.MinValue ? Model.TglAwal.ToString("yyyy-MM-dd") : null;
+    var tempTglSk = Model.TglSk != DateTime.MinValue ? Model.TglSk.ToString("yyyy-MM-dd") : null;
 }
 
 
@@ -76,7 +76,7 @@
             <br />
             @*<h3 class="card-title">Add or Edit Studi Lanjut</h3>*@
 
-            <form method="post" asp-action="AddEditSuratKeputusan" enctype="multipart/form-data" id="formsimka">
+            <form method="post" asp-action="AddEditSuratKeputusan" enctype="multipart/form-data" id="formsimka" class="needs-validation" novalidate>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
@@ -84,44 +84,40 @@
                     <label asp-for="NoSk" class="control-label">No. SK</label>
                     @if (Model.NoSk == null || Model.NoSk == "")
                     {
-                        <input asp-for="NoSk" class="form-control"  value="@Model.NoSk" /> }
+                        <input asp-for="NoSk" class="form-control" value="@Model.NoSk" required/> }
                     else
                     {
-                        <input asp-for="NoSk" class="form-control" readonly  value="@Model.NoSk" />}
-                    <span asp-validation-for="NoSk" class="text-danger"></span>
+                        <input asp-for="NoSk" class="form-control" readonly value="@Model.NoSk" required />}
+                    <div class="invalid-feedback">
+                        Field tidak boleh kosong!
+                    </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="LevelSk" class="control-label">Level SK</label>
                     <input asp-for="LevelSk" class="form-control" value="@Model.LevelSk" />
-                    <span asp-validation-for="LevelSk" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="NoSemester" class="control-label">No Semester</label>
                     <input asp-for="NoSemester" class="form-control" value="@Model.NoSemester" />
-                    <span asp-validation-for="NoSemester" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DeskripsiSk" class="control-label">Deskripsi SK</label>
                     <input asp-for="DeskripsiSk" class="form-control" value="@Model.DeskripsiSk"/>
-                    <span asp-validation-for="DeskripsiSk" class="text-danger"></span>
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
                         <label asp-for="TglSk" class=" control-label">Tanggal SK</label>
                         <input type="date" asp-for="TglSk" class="form-control" placeholder="" value="@tempTglSk">
-                        <span asp-validation-for="TglSk" class="text-danger"></span>
 
                     </div>
                     <div class="col-4">
                         <label asp-for="TglAwal" class="control-label">Tanggal Awal</label>
                         <input type="date" asp-for="TglAwal" class="form-control" placeholder="" value="@tempTglAwal">
-                        <span asp-validation-for="TglAwal" class="text-danger"></span>
 
                     </div>
                     <div class="col-4">
                         <label asp-for="TglAkhir" class="control-label">Tanggal Akhir</label>
                         <input type="date" asp-for="TglAkhir" class="form-control" placeholder="" value="@tempTglAkhir">
-                        <span asp-validation-for="TglAkhir" class="text-danger"></span>
 
                     </div>
 
@@ -164,7 +160,7 @@
                 </div>
 
                 <div>
-                    <button type="button" id="btnSave" value="Save" class="btn btn-primary">Save</button>
+                    <button type="submit" id="btnSave" value="Save" class="btn btn-primary">Save</button>
                     @*<button type="button" value="Kembali" class="btn btn-danger" onclick="history.back(-1)" >Kembali</button>*@
                 </div>
 
@@ -305,25 +301,25 @@
 
         });
 
-        $("#btnSave").click(function (e) {
-           e.preventDefault();
-            Swal.fire({
-                title: 'Apakah data yang Anda isi sudah benar?',
-                text: "No SK tidak dapat dirubah setelah disimpan",
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                denyButtonText: `Tidak`,
-            }).then((result) => {
-                if (result.isConfirmed) {
+        //$("#btnSave").click(function (e) {
+        //   e.preventDefault();
+        //    Swal.fire({
+        //        title: 'Apakah data yang Anda isi sudah benar?',
+        //        text: "No SK tidak dapat dirubah setelah disimpan",
+        //        showCancelButton: true,
+        //        confirmButtonText: 'Ya',
+        //        denyButtonText: `Tidak`,
+        //    }).then((result) => {
+        //        if (result.isConfirmed) {
 
-                    $("form").submit()
-                } else {
-                    return false;
-                }
+        //            $("form").submit()
+        //        } else {
+        //            return false;
+        //        }
 
-            });
+        //    });
 
-        });
+        //});
 
         function post() {
             $("#formSimka")[0].preventDefault();
@@ -486,7 +482,30 @@
 
         document.querySelector('#FileSkform').addEventListener("change", previewFoto);
 
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            console.log("check validity false")
 
+                        }
+                        form.classList.add('was-validated');
+
+                        if (form.checkValidity() === true) {
+
+                            event.preventDefault();
+                            $('.needs-validation').submit()
+                        }
+
+                    }, false);
+                });
+            }, false);
+        })();
     </script>
 
 

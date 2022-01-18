@@ -103,139 +103,9 @@ namespace APIControllers.Controllers
             return ("emailsender");
 
         }
-        //public async Task<IActionResult> Index(string username, string password, int fungsional)
-        //{
-
-        //    if (HttpContext.Session.GetString("role") == "admin")
-        //        return await Task.FromResult(RedirectToAction("SimkaAdmin"));
-        //    else
-        //    if (HttpContext.Session.GetString("role") == "dosen")
-        //        return await Task.FromResult(RedirectToAction("Simkadosen"));
-        //    else
-
-        //    if (HttpContext.Session.GetString("role") == "karyawan")
-        //        return await Task.FromResult(RedirectToAction("SimkaKaryawan"));
-        //    else
-        //    {
-        //        var balikan = new FungsionalLogin();
-        //        balikan.fungsional = _context.RefFungsional.ToList();
-        //        string[] npp_admin = new String[5];// daftar anggota role ksdm
-        //        npp_admin[0] = "00.00.001";
-        //        npp_admin[1] = "03.96.582";
-
-        //        if (username != null && password != null)
-        //        {
-        //            var mstKaryawan = _context.MstKaryawan.FirstOrDefault(a => a.Npp == username);
-        //            if (mstKaryawan != null)// npp cocok
-        //            {
-        //                if (mstKaryawan.PASSWORD_RIPEM == getHash(password))//password sesusai dengan npp
-        //                {
-        //                    var informasilogin = "  <br><br><br> TESTING SIMKA 2 DEV <br> Berikut informasi login Bapak Ibu <br><br>" +
-        //                    "Waktu Dan Tanggal:  " + DateTime.Now + "<br> IP Adress: "
-        //                    + HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString() + "<br>" +
-        //                    "Apabila Bapak/ Ibu tidak mengenali aktivitas ini agar segera menghubungi KSI melalui " +
-        //                    "<a href='http://ksi.uajy.ac.id/helpdesk/open.php' target='_blank'> http://ksi.uajy.ac.id/helpdesk</a>" +
-        //                    "<br>Terimakasih ";
-        //                    //kirim email notifikasi login
-        //                    var emails = mstKaryawan.Email; // ambil email 
-        //                    if (emails != null || emails != "") //memastikan email tidak null
-        //                    {
-
-        //                        _ = await (SendEmail("test", emails, informasilogin));
-        //                    }
-        //                    else
-        //                    if (emails == null || emails == "") // bila email ternyata null /kosong
-        //                    {
-        //                        emails = mstKaryawan.EmailInstitusi;
-        //                        if (emails != null || emails != "")
-        //                        {
-
-        //                            _ = await SendEmail("test", emails, informasilogin);
-        //                        }
-        //                    }
-
-
-
-        //                    //akhir kirim email notifikasi login
-        //                    SendWa();
-
-        //                    var getRole = (new LoginDAO()).GetUserRole(username);
-        //                    var listRole = new List<string>();
-        //                    foreach (var role in getRole)
-        //                    {
-        //                        listRole.Add(role.Deskripsi);
-        //                    }
-
-
-        //                    HttpContext.Session.SetString("NPP", username);
-        //                    HttpContext.Session.SetString("Nama", mstKaryawan.NamaLengkapGelar);
-        //                    if (fungsional == 1 && mstKaryawan.IdRefFungsional == 1)// user merupakan dosen dan memilih sebagai dosen
-        //                    {
-        //                        HttpContext.Session.SetString("role", "dosen");
-        //                        return await Task.FromResult(RedirectToAction("Simkadosen"));
-        //                    }
-        //                    else if (fungsional == 1 && mstKaryawan.IdRefFungsional != 1)// user bukan dosen (karyawan)
-        //                    {
-        //                        HttpContext.Session.SetString("role", "karyawan");
-        //                        return await Task.FromResult(RedirectToAction("SimkaKaryawan"));
-        //                    }
-        //                    else if (fungsional == 7)//cek role ksdm
-        //                    {
-        //                        for (int i = 0; i < 5; i++)
-        //                        {
-        //                            if (npp_admin[i] == mstKaryawan.Npp)
-        //                            {
-        //                                HttpContext.Session.SetString("role", "admin");
-        //                                return await Task.FromResult(RedirectToAction("SimkaAdmin"));
-
-        //                            }
-        //                        }
-        //                        if (mstKaryawan.IdRefFungsional == 1) //dosen mencoba akses role ksdm tapi gagal
-        //                        {
-        //                            HttpContext.Session.SetString("role", "dosen");
-        //                            return await Task.FromResult(RedirectToAction("Simkadosen"));
-        //                        }
-        //                        else
-        //                        {
-        //                            HttpContext.Session.SetString("role", "karyawan"); //karyawan mencoba akses role ksdm tapi gagal
-        //                            return await Task.FromResult(RedirectToAction("SimkaKaryawan"));
-        //                        }
-
-        //                    }
-        //                    else
-        //                    {
-        //                        HttpContext.Session.SetString("role", "karyawan");
-        //                        return await Task.FromResult(RedirectToAction("SimkaKaryawan"));
-        //                    }
-
-        //                }
-        //                else
-        //                {
-        //                    TempData["Message"] = "Password salah.";
-
-        //                    return await Task.FromResult(View(balikan));
-        //                }
-        //            }
-        //            else
-        //            {
-        //                TempData["Message"] = "User Id Tidak Ditemukan.";
-        //                return await Task.FromResult(View(balikan));
-        //            }
-
-        //        }
-        //        else
-        //        {
-
-        //            TempData["Message"] = "";
-        //            return await Task.FromResult(View(balikan));
-
-        //        }
-        //    }
-        //    //return RedirectToAction("_LayoutSidebar");
-
-        //}
-
-        public async Task<IActionResult> Index(string username, string password)
+        
+        [HttpPost]
+        public IActionResult do_login(string username, string password)
         {
             
             TempData["username"] = username;
@@ -275,15 +145,15 @@ namespace APIControllers.Controllers
                     else
                     {
                         // password tidak sesuai
-                        TempData["Message"] = "Gagal Login! Password anda salah.";
-                        return await Task.FromResult(View());
+                        TempData["err_message"] = "Gagal Login! Password anda salah.";
+                        
                     }
                 }
                 else
                 {
                     // password tidak sesuai
-                    TempData["Message"] = "Data Karyawan tidak ditemukan";
-                    return await Task.FromResult(View());
+                    TempData["err_message"] = "Data Karyawan tidak ditemukan";
+                   
                 }
 
             }
@@ -300,10 +170,15 @@ namespace APIControllers.Controllers
             else
             {
                 // gagal login
-                return await Task.FromResult(View());
+                return RedirectToAction("Index");
             }
         }
 
+        public IActionResult Index()
+        {
+            
+            return View();
+        }
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
@@ -735,8 +610,8 @@ namespace APIControllers.Controllers
             return str;
         }
        
-        
-        public async Task<IActionResult> LupaPassword(string npp)
+        [HttpPost]
+        public async Task<IActionResult> do_lupaPW(string npp)
         {
             if (npp != null)
             {
@@ -753,8 +628,8 @@ namespace APIControllers.Controllers
                                     "Waktu Dan Tanggal:  " + DateTime.Now +
                                     
                                     "<br> Silahkan klik link di bawah ini untuk memperbarui password Anda " +
-                                     //"<br><a href='https://localhost:44393/Home/ResetPasswordForm?uuid="+uuid+"' class='btn btn-info' target='_blank'>https://localhost:44393/Home/ResetPasswordForm?uuid="+uuid+" </a>" +
-                                     "<br><a href='https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid +  " </a>" +
+                                     "<br><a href='https://localhost:44393/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://localhost:44393/Home/ResetPasswordForm?uuid=" + uuid + " </a>" +
+                                     //"<br><a href='https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid +  " </a>" +
 
                                     "<br>Apabila Bapak/ Ibu tidak mengenali aktivitas ini agar segera menghubungi KSI melalui " +
                                     "<a href='http://ksi.uajy.ac.id/helpdesk/open.php' target='_blank'> http://ksi.uajy.ac.id/helpdesk</a>" +
@@ -775,7 +650,7 @@ namespace APIControllers.Controllers
 
 
                         var email = new MimeMessage();
-                        email.From.Add(MailboxAddress.Parse("dkmasprayoga2@gmail.com"));
+                        email.From.Add(MailboxAddress.Parse("dkmasprayoga2@gmail.com")); // Nanti diganti dengan email dari KSI
                         //email.To.Add(MailboxAddress.Parse("180709615@students.uajy.ac.id"));
                         email.To.Add(MailboxAddress.Parse("dimasprayoga2@gmail.com"));
 
@@ -788,7 +663,7 @@ namespace APIControllers.Controllers
 
                         var smtpProvider =""; // Menentukan Provider SMTP
                         //if (sampleUsername.Contains("gmail"))
-                        //    smtpProvider = "smtp.gmail.com";
+                        //    smtpProvider = "smtp.office365.com"; // Kalau Email asal menggunakan Outlook
                         //else
                             smtpProvider = "smtp.gmail.com";
 
@@ -806,9 +681,8 @@ namespace APIControllers.Controllers
                         Console.WriteLine("aaaaa");
                         Console.WriteLine(e.Message);
 
-                        TempData["Message"] = e.Message;
+                        TempData["err_message"] = e.Message;
                         TempData["success"] = false;
-                        return await Task.FromResult(View());
                     }
                     finally
                     {
@@ -821,30 +695,27 @@ namespace APIControllers.Controllers
                     string pattern = @"(?<=[\w]{2})[\w-\._\+%]*(?=[\w]{1}@)";
                     string hideEmail = Regex.Replace(emailDosen, pattern, m => new string('*', m.Length));
 
-                    TempData["Message"] = "Silahkan cek email Anda ";
+                    TempData["err_message"] = "Silahkan cek email Anda " + hideEmail;
                     TempData["success"] = true;
-                    TempData["alertLupaPassword"] = "<script>alert('Silahkan cek email Anda " + hideEmail + "');window.location.replace('/Home')</script>";
-
-                    return await Task.FromResult(View());
-
+                   
 
                 }
                 else
                 {
                     TempData["success"] = false;
-                    TempData["Message"] = "Data tidak ditemukan";
+                    TempData["err_message"] = "Data tidak ditemukan";
 
-                    return await Task.FromResult(View());
                 }
             }
-            else
-            {
-                TempData["Message"] = "";
-                return await Task.FromResult(View());
-            }
+
+            return RedirectToAction("LupaPassword");
+            
             
         }
-
+        public IActionResult LupaPassword()
+        {
+            return View();
+        }
         public IActionResult ResetPasswordForm(string uuid)
         {
             if (uuid != null)

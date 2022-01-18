@@ -30,6 +30,7 @@
 
                             <form onsubmit="return SubmitAddEdit (this)" enctype="multipart/form-data" id="formsimka">
                                 <div class="card-body">
+                                    <input type="hidden" asp-for="isTambahDataBaru">
 
                                     <div class="tab-content  card card-outline">
 
@@ -37,7 +38,16 @@
                                             <div class="form-group ">
                                                 <label asp-for="Npp" class="control-label">Npp</label>
                                                 <div class="col-sm-5">
-                                                    <input type="text" asp-for="Npp" class="form-control" placeholder="Npp">
+                                                    @if (Model.Npp != null)
+                                                    {
+                                                        <input type="text" asp-for="Npp" class="form-control" placeholder="Npp" readonly>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" asp-for="Npp" class="form-control" placeholder="Npp">
+
+                                                    }
                                                     <span asp-validation-for="Npp" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -64,12 +74,12 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                
-                                                
+
+
 
                                             </div>
-                                            
-                                            
+
+
                                         </div>
                                         <div class="active tab-pane" id="pribadi">
                                             <div class="card-body card card-primary card-outline ">
@@ -1335,7 +1345,7 @@
                                                 <div class="form-group ">
                                                     <label asp-for="Nidn" class="control-label">NIDN</label>
                                                     <div class="col-sm-10">
-                                                        <input type="number" asp-for="Nidn" class="form-control" >
+                                                        <input type="number" asp-for="Nidn" class="form-control">
                                                         <span asp-validation-for="Nidn" class="text-danger"></span>
                                                     </div>
                                                 </div>
@@ -1464,18 +1474,18 @@
                                         <div class="tab-pane" id="karir">
                                             <div class="card-body card card-primary card-outline ">
                                                 @*<div class="form-group ">
-            <label for="inputName" class="control-label">Status Kepegawaian</label>
-            <div class="col-sm-10">
+                        <label for="inputName" class="control-label">Status Kepegawaian</label>
+                        <div class="col-sm-10">
 
-                <input type="radio" asp-for="StatusKepegawaian" id="cln" value="Calon">
-                <label for="male">Calon</label>
-                <input type="radio" asp-for="StatusKepegawaian" id="ttp" value="Tetap">
-                <label for="male">Tetap</label>
-                <input type="radio" asp-for="StatusKepegawaian" id="dpk" value="DPK">
-                <label for="male">DPK</label>
+                            <input type="radio" asp-for="StatusKepegawaian" id="cln" value="Calon">
+                            <label for="male">Calon</label>
+                            <input type="radio" asp-for="StatusKepegawaian" id="ttp" value="Tetap">
+                            <label for="male">Tetap</label>
+                            <input type="radio" asp-for="StatusKepegawaian" id="dpk" value="DPK">
+                            <label for="male">DPK</label>
 
-            </div>
-        </div>*@
+                        </div>
+                    </div>*@
                                                 <div class="form-group ">
                                                     <label for="inputName" class="control-label">Status Fungsional</label>
                                                     <div class="col-sm-10">
@@ -1672,7 +1682,7 @@
 
 
                 // Make sure `file.name` matches our extensions criteria
-                if (!/\.(jpe?g)$/i.test(file.name)) {
+                if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
                     document.getElementById("FileKtp").value = "";
                     $("#previewKtp").empty();
                     return alert(file.name + " is not an image");
@@ -1712,7 +1722,7 @@
 
 
                 // Make sure `file.name` matches our extensions criteria
-                if (!/\.(jpe?g)$/i.test(file.name)) {
+                if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
                     document.getElementById("FileNpwp").value = "";
                     $("#previewNpwp").empty();
                     return alert(file.name + " is not an image");
@@ -1754,7 +1764,7 @@
 
                 // Make sure `file.name` matches our extensions criteria
                 // Make sure `file.name` matches our extensions criteria
-                if (!/\.(jpe?g)$/i.test(file.name)) {
+                if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
                     document.getElementById("FileKartuPegawai").value = "";
                     $("#previewKartu").empty();
                     return alert(file.name + " is not an image");
@@ -1835,7 +1845,7 @@
 
 
                 // Make sure `file.name` matches our extensions criteria
-                if (!/\.(jpe?g|)$/i.test(file.name)) {
+                if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
                     document.getElementById("FileAsuransi").value = "";
                     $("#previewAsuransi").empty();
                     return alert(file.name + " bukan JPG");

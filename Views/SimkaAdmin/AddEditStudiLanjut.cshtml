@@ -4,9 +4,9 @@
     ViewData["Title"] = "AddEditStudiLanjut";
     Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
 
-    var tempTglMulai = Model.TglMulai != null ? Model.TglMulai.ToString("yyyy-MM-dd") : null;
-    var tempTglLulus = Model.TglLulus != null ? Model.TglLulus.ToString("yyyy-MM-dd") : null;
-    var tempTglPenempatanKmbli = Model.TglPenempatanKmbli != null ? Model.TglPenempatanKmbli.ToString("yyyy-MM-dd") : null;
+    var tempTglMulai = Model.TglMulai != DateTime.MinValue ? Model.TglMulai.ToString("yyyy-MM-dd") : null;
+    var tempTglLulus = Model.TglLulus != DateTime.MinValue ? Model.TglLulus.ToString("yyyy-MM-dd") : null;
+    var tempTglPenempatanKmbli = Model.TglPenempatanKmbli != DateTime.MinValue ? Model.TglPenempatanKmbli.ToString("yyyy-MM-dd") : null;
 }
 
 
@@ -40,283 +40,277 @@
                 <br />
                 @*<h3 class="card-title">Add or Edit Studi Lanjut</h3>*@
 
-                <form method="post" asp-action="AddEditStudiLanjut" enctype="multipart/form-data" id="formStudiLanjut">
+            <form method="post" asp-action="AddEditStudiLanjut" enctype="multipart/form-data" id="formStudiLanjut" class="needs-validation" novalidate>
 
 
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+
+                <input asp-for="IdStudiLanjut" type="hidden" class="form-control" />
 
 
-                    <input asp-for="IdStudiLanjut" type="hidden" class="form-control" />
-                    @*<div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="IdStudiLanjut" class="control-label">ID</label>
-
-                        </div>
-
-                        <div class="col-sm-5">
-                            <input asp-for="IdStudiLanjut" readonly class="form-control" />
-
-
-
-                        </div>
-                    </div>*@
-
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="Npp" class="control-label">NPP</label>
-
-                        </div>
-
-                        <div class="col-sm-5">
-                            <input asp-for="Npp" class="form-control" value="@Model.Npp"/>
-                            <span asp-validation-for="Npp" class="text-danger"></span>
-                            <span class="text-danger">@TempData["NPPError"]</span>
-
-
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="IdRefJenjang" class="control-label">Jenjang</label>
-                        </div>
-                        <div class="col-sm-5">
-                            <select asp-for="IdRefJenjang" class="form-select" id="inputJabAkademik" asp-items="@(new SelectList(Model.listJenjang, "IdRefJenjang", "Deskripsi"))">
-                                <option value="">-All-</option>
-                                
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="NamaSekolah" class="control-label">Nama Sekolah</label>
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="NamaSekolah" class="form-control" value="@Model.NamaSekolah"/>
-                            <span asp-validation-for="NamaSekolah" class="text-danger"></span>
-                            @*<div class="invalid-feedback">
-                                Field tidak boleh kosong!
-                            </div>*@
-                        </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="Npp" class="control-label">NPP</label>
 
                     </div>
 
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="KotaSekolah" class="control-label">Kota Sekolah</label>
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="KotaSekolah" class="form-control" value="@Model.KotaSekolah"/>
-                            <span asp-validation-for="KotaSekolah" class="text-danger"></span>
+                    <div class="col-sm-5">
+                        <input asp-for="Npp" class="form-control"  onchange="getNamaKaryawan()" value="@Model.Npp" required />
+                        <span class="text-danger">@TempData["NPPError"]</span>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
                         </div>
 
                     </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label  class="control-label">Nama Karyawan</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input id="nama" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="IdRefJenjang" class="control-label">Jenjang</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <select asp-for="IdRefJenjang" class="form-select" id="inputJabAkademik" asp-items="@(new SelectList(Model.listJenjang, "IdRefJenjang", "Deskripsi"))" required>
+                            <option value="">-All-</option>
 
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="NegaraSekolah" class="control-label">Negara Sekolah</label>
+                        </select>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
                         </div>
-                        <div class="col-sm-5">
-                            <input asp-for="NegaraSekolah" class="form-control" value="@Model.NegaraSekolah" />
-                            <span asp-validation-for="NegaraSekolah" class="text-danger"></span>
-                        </div>
+                    </div>
+                </div>
 
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="NamaSekolah" class="control-label">Nama Sekolah</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="NamaSekolah" class="form-control" value="@Model.NamaSekolah" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="TglMulai" class="control-label">Tanggal Mulai</label>
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="TglMulai" type="date" class="form-control" value="@tempTglMulai"/>
-                            <span asp-validation-for="TglMulai" class="text-danger"></span>
-                        </div>
+                </div>
 
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="KotaSekolah" class="control-label">Kota Sekolah</label>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="TglLulus" class="control-label">Tanggal Lulus</label>
+                    <div class="col-sm-5">
+                        <input asp-for="KotaSekolah" class="form-control" value="@Model.KotaSekolah" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
                         </div>
-                        <div class="col-sm-5">
-                            <input asp-for="TglLulus" type="date" class="form-control" value="@tempTglLulus"/>
-                            <span asp-validation-for="TglLulus" class="text-danger"></span>
-                        </div>
-
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="TglPenempatanKmbli" class="control-label">Tanggal Penempatan Kembali</label>
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="TglPenempatanKmbli" type="date" class="form-control" value="@tempTglPenempatanKmbli"/>
-                            <span asp-validation-for="TglPenempatanKmbli" class="text-danger"></span>
-                        </div>
-
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="Fakultas" class="control-label">Fakultas</label>
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="Fakultas" class="form-control" value="@Model.Fakultas"/>
-                            <span asp-validation-for="Fakultas" class="text-danger"></span>
-                        </div>
-
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="Prodi" class="control-label">Prodi</label>
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="Prodi" class="form-control" value="@Model.Prodi" />
-                            <span asp-validation-for="Prodi" class="text-danger"></span>
-                        </div>
-
                     </div>
 
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="DlmNegriLuarNegri" class="control-label">Dalam / Luar Negeri</label>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="NegaraSekolah" class="control-label">Negara Sekolah</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="NegaraSekolah" class="form-control" value="@Model.NegaraSekolah" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
                         </div>
-                        <div class="col-sm-5">
-                            <select asp-for="DlmNegriLuarNegri" class="form-control">
-                                @if (Model.DlmNegriLuarNegri != null)
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="TglMulai" class="control-label">Tanggal Mulai</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="TglMulai" type="date" class="form-control" value="@tempTglMulai" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="TglLulus" class="control-label">Tanggal Lulus</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="TglLulus" type="date" class="form-control" value="@tempTglLulus" />
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="TglPenempatanKmbli" class="control-label">Tanggal Penempatan Kembali</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="TglPenempatanKmbli" type="date" class="form-control" value="@tempTglPenempatanKmbli" />
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="Fakultas" class="control-label">Fakultas</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="Fakultas" class="form-control" value="@Model.Fakultas" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="Prodi" class="control-label">Prodi</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="Prodi" class="form-control" value="@Model.Prodi" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="DlmNegriLuarNegri" class="control-label">Dalam / Luar Negeri</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <select asp-for="DlmNegriLuarNegri" class="form-control" required>
+                            @if (Model.DlmNegriLuarNegri != null)
+                            {
+                                @if (Model.DlmNegriLuarNegri == "D")
                                 {
-                                    @if (Model.DlmNegriLuarNegri == "D")
-                                    {
-                                        <option value="D" selected>Dalam Negeri</option>
-                                        <option value="L">Luar Negeri</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="D">Dalam Negeri</option>
-                                        <option value="L" selected>Luar Negeri</option>
-                                    }
+                                    <option value="D" selected>Dalam Negeri</option>
+                                    <option value="L">Luar Negeri</option>
                                 }
                                 else
                                 {
                                     <option value="D">Dalam Negeri</option>
-                                    <option value="L" >Luar Negeri</option>
+                                    <option value="L" selected>Luar Negeri</option>
                                 }
+                            }
+                            else
+                            {
+                                <option value="D">Dalam Negeri</option>
+                                <option value="L">Luar Negeri</option>
+                            }
 
 
 
-                            </select>
-                            <span asp-validation-for="DlmNegriLuarNegri" class="text-danger"></span>
+                        </select>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
                         </div>
-
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="NoSkTugasBljr" class="control-label">No SK Tugas</label>
-
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="NoSkTugasBljr" class="form-control" value="@Model.NoSkTugasBljr" />
-                            <span asp-validation-for="NoSkTugasBljr" class="text-danger"></span>
-                        </div>
-
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="TargetLulus" class="control-label">Target Lulus</label>
-
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="number" asp-for="TargetLulus" class="form-control" value="@Model.TargetLulus"/>
-                            <span asp-validation-for="TargetLulus" class="text-danger"></span>
-                        </div>
-
                     </div>
 
-
-
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="IdRefSs" class="control-label">Status Studi</label>
-
-                        </div>
-                        <div class="col-sm-5">
-                            <select asp-for="IdRefSs" class="form-control" asp-items="@(new SelectList(Model.listStatusStudi,"IdRefSs","Deskripsi"))">
-                            </select>
-                            <span asp-validation-for="IdRefSs" class="text-danger"></span>
-                        </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="NoSkTugasBljr" class="control-label">No SK Tugas</label>
 
                     </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="SK" class="control-label">File SK</label>
-
+                    <div class="col-sm-5">
+                        <input asp-for="NoSkTugasBljr" class="form-control" value="@Model.NoSkTugasBljr" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
                         </div>
-                        <div class="col-sm-5">
-                            <input asp-for="SK" type="file" class="form-control" />
-                            <div id="previewFoto">
-                                @if (Model != null)
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="TargetLulus" class="control-label">Target Lulus</label>
+
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="number" asp-for="TargetLulus" class="form-control" value="@Model.TargetLulus" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="IdRefSs" class="control-label">Status Studi</label>
+
+                    </div>
+                    <div class="col-sm-5">
+                        <select asp-for="IdRefSs" class="form-control" asp-items="@(new SelectList(Model.listStatusStudi,"IdRefSs","Deskripsi"))" required>
+                        </select>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="SK" class="control-label">File SK</label>
+
+                    </div>
+                    <div class="col-sm-5">
+                        <input asp-for="SK" type="file" class="form-control" />
+                        <div id="previewFoto">
+                            @if (Model != null)
+                            {
+                                @if (Model.SKm != null)
                                 {
-                                    @if (Model.SKm != null)
-                                    {
-                                        <img src="data:image/jpeg;base64,@System.Convert.ToBase64String(Model.SKm) ">
-                                    }
+                                    <img src="data:image/jpeg;base64,@System.Convert.ToBase64String(Model.SKm) ">
                                 }
+                            }
 
-                            </div>
                         </div>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="SkPenempatanKmbl" class="control-label">File SK Penempatan Kembali</label>
 
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label asp-for="SkPenempatanKmbl" class="control-label">File SK Penempatan Kembali</label>
-
-                        </div>
-                        <div class="col-sm-5">
-                            <input asp-for="SkPenempatanKmbl" type="file" class="form-control" />
-                            <div id="previewFoto2">
-                                @if (Model != null)
+                    <div class="col-sm-5">
+                        <input asp-for="SkPenempatanKmbl" type="file" class="form-control" />
+                        <div id="previewFoto2">
+                            @if (Model != null)
+                            {
+                                @if (Model.SkPenempatanKmblm != null)
                                 {
-                                    @if (Model.SkPenempatanKmblm != null)
-                                    {
-                                        <img src="data:image/jpeg;base64,@System.Convert.ToBase64String(Model.SkPenempatanKmblm) ">
-                                    }
+                                    <img src="data:image/jpeg;base64,@System.Convert.ToBase64String(Model.SkPenempatanKmblm) ">
                                 }
+                            }
 
-                            </div>
                         </div>
-
                     </div>
 
-                    @*<div class="card" style="width:65% !important">
-                        <div class="card-header bg-light">
-                            <div class="d-flex align-items-center">
-                                <span class=" flex-grow-1 " style="font-size:1.1rem">Sumber Biaya</span>
-                                <button type="button" onclick="tambahSumberBiaya('','')" style="margin-right:1%" class="btn btn-success">
-                                    <i class="fa fa-plus " style="font-size:10px"></i>
-                                    Tambah
-                                </button>
-                                <button type="button" onclick="hapusSumberBiaya()" style="margin-left:1%" class="btn btn-danger">
-                                    <i class="fa fa-minus " style="font-size:10px"></i>
-                                    Hapus
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body" id="bodySumberBiaya">
-                            <input asp-for="hiddenIdSumberBiayaSL" type="hidden" />
-                            <input asp-for="hiddenSumberBiaya" type="hidden" />
-                            <input asp-for="hiddenSumberBiayaKe" type="hidden" />
-                        </div>
-
-                    </div>*@
+                </div>
 
 
 
 
 
-                    <button type="submit" @*onclick="PostStudiLanjut()"*@ value="Simpan" class="btn btn-primary">Simpan</button>
+
+
+                <button type="submit" @*onclick="PostStudiLanjut()"*@ value="Simpan" class="btn btn-primary">Simpan</button>
 
 
 
-                </form>
+            </form>
 
 
 
@@ -362,9 +356,23 @@
                         tambahSumberBiaya(arraySB[i], arraySBKe[i])
                     }
                 }
-                
+                getNamaKaryawan();
 
             });
+
+            function getNamaKaryawan() {
+                console.log($("#Npp").val());
+                $.ajax({
+                    type: 'get',
+                    url: "getNamaKaryawanbyNPP?npp=" + $("#Npp").val(),
+                    dataType: "json",
+                    success: function (data) {
+                        $("#nama").val(data)
+                    }, error: function (data) {
+                        $("#nama").val("")
+                    }
+                });
+            }
             function previewFoto() {
 
                 var preview = document.querySelector('#previewFoto');
@@ -486,79 +494,31 @@
             //    return false;
             //}
 
-            function tambahSumberBiaya(value1, value2) {
-                countSB++;
-                var html =
-                    "<div class='d-flex' id='inputSB" + countSB + "'>" +
-                    "<h6 style='margin-right: 4%'>" + countSB + "</h6>" +
-                    "<div class='form-row flex-fill'>" +
-                    "<div class='form-group col-md-6'>" +
-                    "<label for='SumberBiaya" + countSB + "'>Sumber Biaya</label>" +
-                    "<select id='SumberBiaya" + countSB + "' class='form-select' required ></select>" +
-                    `<div class="invalid-feedback">
-                                                    Tidak boleh kosong.
-                                                 </div>`+
-                    "</div>" +
-                    "<div class='form-group col-md-6'>" +
-                    "<label for='SumberBiayaKe" + countSB + "'>Sumber Biaya Ke</label>" +
-                    "<select id='SumberBiayaKe" + countSB + "' class='form-select' required></select>" +
-                    `<div class="invalid-feedback">
-                                                    Tidak boleh kosong.
-                                                </div>`+
-                    "</div>" +
-                    "</div>" +
-                 
-                    "</div>";
-           
-                console.log(countSB)
-                $('#bodySumberBiaya').append(html);
+            
+            (function () {
+                'use strict';
+                window.addEventListener('load', function () {
+                    var forms = document.getElementsByClassName('needs-validation');
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                console.log("check validity false")
 
+                            }
+                            form.classList.add('was-validated');
 
-                generateSelectSB('SumberBiaya' + countSB, 'SumberBiayaKe' + countSB, value1, value2)
+                            if (form.checkValidity() === true) {
 
+                                event.preventDefault();
+                                $('.needs-validation').submit()
+                            }
 
-            }
-
-            function hapusSumberBiaya() {
-
-                if (countSB > 0) {
-                    var input = '#inputSB' + countSB;
-                    console.log(input)
-                    $(input).remove();
-                    countSB--;
-
-                }
-                console.log(countSB)
-
-
-            }
-
-            function generateSelectSB(id1, id2, valueSumberBiaya, valueSumberBiayaKe) {
-                $('#' + id1).empty();
-                $('#' + id2).empty();
-                $.ajax({
-                    type: 'GET',
-                    url: '/SimkaAdmin/getRefSumberBiaya',
-
-                    contentType: 'application/json',
-                    success: function (data) {
-                        for (let i = 0; i < data.length; i++) {
-                            var index = data[i];
-                            $('#' + id1).append("<option value='" + index['idSumberBiaya'] + "'>" + index['deskripsi'] + "</option>")
-                            $('#' + id2).append("<option value='" + index['idSumberBiaya'] + "'>" + index['deskripsi'] + "</option>")
-
-                        }
-
-                        if (valueSumberBiaya != undefined || valueSumberBiaya != "") { // Kalau terisi berarti posisi edit form bukan Add
-                            $("#SumberBiaya" + countSB).val(valueSumberBiaya).change();
-                        }
-                        if (valueSumberBiayaKe != null || valueSumberBiayaKe != undefined || valueSumberBiayaKe != "") {
-                            $("#SumberBiayaKe" + countSB).val(valueSumberBiayaKe).change();
-                        }
-                    },
-
-                });
-            }
+                        }, false);
+                    });
+                }, false);
+            })();
         </script>
         @*<script>
             (function () {
@@ -577,6 +537,7 @@
                 }, false);
             })();
         </script>*@
+
     }
 
 

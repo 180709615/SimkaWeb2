@@ -1,6 +1,9 @@
 ﻿@model TrPengembanganForm
 @*SIMKA DOSEN*@
-@{ Layout = null; }
+@{ Layout = null; 
+   
+    
+    }
 <html>
 <body>
     <div class="row">
@@ -29,7 +32,7 @@
                     <div class="form-group">
                         <label for="" class="control-label">Jenis Pengembangan</label>
 
-                        <select class="form-control" asp-for="@Model.IdRefPengembangan" id="pengembangan">
+                        <select class="form-control" asp-for="IdRefPengembangan" id="pengembangan">
                             <option value="">-</option>
                         </select>
                         <span asp-validation-for="IdRefPengembangan" class="text-danger"></span>
@@ -225,6 +228,10 @@
                 var item = "<option value=''>-</option>";
                 $("#pengembangan").empty();
                 $.each(data, function (i, color) {
+                    if (@Model.IdRefPengembangan != null) {
+                        if (@Model.IdRefPengembangan == color.idRefPengembangan)
+                            item += '<option selected value="' + color.idRefPengembangan + '">' + color.deskripsi + '</option>'
+                    }else
                     item += '<option value="' + color.idRefPengembangan + '">' + color.deskripsi + '</option>'
                 });
                 $("#pengembangan").html(item);

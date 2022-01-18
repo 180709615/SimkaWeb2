@@ -23,7 +23,6 @@ namespace APIConsume.Models
         [Required(ErrorMessage = "Field tidak boleh kosong")]
 
         public string NegaraSekolah { get; set; }
-        [Required(ErrorMessage = "Field tidak boleh kosong")]
 
         public DateTime TglMulai { get; set; }
         public DateTime TglLulus { get; set; }

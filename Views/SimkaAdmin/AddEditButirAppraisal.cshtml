@@ -14,21 +14,19 @@
                 <input asp-for="Deskripsi" class="form-control" />
                 <span asp-validation-for="Deskripsi" class="text-danger"></span>
 
-            </div><br />
-            <br />
+            </div>
 
             <div class="form-group">
                 <label asp-for="IdRefJnsAppraisal" class="control-label">Jenis Appraisal</label>
-                <select asp-for="IdRefJnsAppraisal"
+                <select asp-for="IdRefJnsAppraisal" class="form-control"
                         asp-items="@(new SelectList(Model.jenis,"IdRefJnsAppraisal","Deskripsi"))">
                     <option>Please select one</option>
                 </select>
             </div>
-            <br />
-            <br />
+
             <div class="form-group">
                 <label asp-for="IdRefFungsional" class="control-label">Fungsional</label>
-                <select asp-for="IdRefFungsional"
+                <select asp-for="IdRefFungsional" class="form-control"
                         asp-items="@(new SelectList(Model.fungsi,"IdRefFungsional","Deskripsi"))">
                     <option>Please select one</option>
                 </select>

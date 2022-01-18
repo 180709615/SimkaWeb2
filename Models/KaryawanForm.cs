@@ -8,6 +8,9 @@ namespace APIConsume.Models
 {
     public class KaryawanForm
     {
+
+        public bool isTambahDataBaru { get; set; }
+
         public string? NIDK { get; set; }
 
         [Required]

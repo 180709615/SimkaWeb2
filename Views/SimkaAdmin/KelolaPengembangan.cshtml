@@ -108,20 +108,21 @@
                 },
                 "columns": [
                     {
-                        data: "idTrPengembangan",
+                        //idTrPengembangan
+                        data: "ID_TR_PENGEMBANGAN",
                         title: "ID",
 
                         type: "readonly",
                         "visible": true,
 
                     },
-                    {
-                        data: "npp",
+                    {//npp
+                        data: "NPP",
                         title: "NPP",
 
                     },
-                    {
-                        data: "judul",
+                    {//judul
+                        data: "JUDUL",
                         title: "Judul",
 
                     },
@@ -136,8 +137,8 @@
                     },
                    
 
-                    {
-                        "data": "idTrPengembangan", // diganti sama id
+                    {//idTrPengembangan
+                        "data": "ID_TR_PENGEMBANGAN", // diganti sama id
                         "render": function (data) {
                             return "<a class='btn btn-default btn-sm' onclick=ShowPopup('/SimkaDosen/AddEditPengembangan/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class=' text-light btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i> Delete</a>";
                         }

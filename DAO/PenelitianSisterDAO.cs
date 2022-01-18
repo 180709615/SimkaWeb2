@@ -25,7 +25,8 @@ namespace APIConsume.DAO
                                                       ANGGOTA.id_sdm
                                     FROM     PENELITIAN INNER JOIN
                                                      ANGGOTA ON PENELITIAN.id_penelitian_pengabdian = ANGGOTA.id_penelitian_pengabdian
-                                    WHERE(ANGGOTA.id_sdm = @id_dosen)";
+                                    WHERE(ANGGOTA.id_sdm = @id_dosen)
+                                    ORDER BY PENELITIAN.tahun_kegiatan DESC ";
                     var param = new { id_dosen = idDosen };
                     var data = conn.Query<PenelitianExcelModel>(query, param).ToList();
 

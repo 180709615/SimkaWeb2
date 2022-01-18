@@ -721,14 +721,12 @@ namespace APIConsume.Controllers
         public async Task<IActionResult> SinkronDataPenelitianSISTERbyNPP(string npp)
         {
             if (String.IsNullOrEmpty(npp))
-                npp = HttpContext.Session.GetString("NPP"); // Kalau null berarti diakses dari Profile Dosen, sedangkan kalau ada nilainya berarti dipanggil dari TestingLoadDosen
+                npp = HttpContext.Session.GetString("NPP"); // Kalau null berarti diakses dari Profile Dosen, sedangkan kalau ada nilainya berarti dipanggil dari SinkronisasiProdi
 
             string idDosen = null;
             string namaDosen = _context.MstKaryawan.FirstOrDefault(a => a.Npp == npp).Nama;
 
-            //string npp = HttpContext.Session.GetString("NPP");
-            //string npp = "02.11.817"; 
-            //string npp = "03.17.953";
+
             idDosen = _context.MstKaryawan.FirstOrDefault(a => a.Npp == npp).ID_DOSEN_SISTER;
             idDosen = idDosen != null ? idDosen.Trim() : null;
 
@@ -769,9 +767,7 @@ namespace APIConsume.Controllers
 
                                 if (ajar != null)
                                 {
-                                    int noIncrementDokumen = _DATA_SISTERcontext.TblDokumen_DATA_SISTER.Max(a => (int?)a.no) ?? 0;
-                                    int noIncrementMitra = _DATA_SISTERcontext.TblMitra_Litabmas_DATA_SISTER.Max(a => (int?)a.no) ?? 0;
-
+                          
 
                                     foreach (Penelitian itemPenelitian in ajar)
                                     {
@@ -935,9 +931,6 @@ namespace APIConsume.Controllers
             }
             string namaDosen = _context.MstKaryawan.FirstOrDefault(a => a.Npp == npp).Nama;
 
-
-
-
             string idDosen = _context.MstKaryawan.FirstOrDefault(a => a.Npp == npp).ID_DOSEN_SISTER;
             idDosen = idDosen != null ? idDosen.Trim() : null;
 
@@ -978,11 +971,6 @@ namespace APIConsume.Controllers
 
                                 if (ajar != null)
                                 {
-                                    int noIncrementAnggota = _DATA_SISTERcontext.TblAnggota_DATA_SISTER.Max(a => (int?)a.no) ?? 0;
-                                    int noIncrementDokumen = _DATA_SISTERcontext.TblDokumen_DATA_SISTER.Max(a => (int?)a.no) ?? 0;
-                                    int noIncrementMitra = _DATA_SISTERcontext.TblMitra_Litabmas_DATA_SISTER.Max(a => (int?)a.no) ?? 0;
-
-
                                     foreach (Penelitian itemPenelitian in ajar)
                                     {
                                         index++;
@@ -1022,12 +1010,6 @@ namespace APIConsume.Controllers
                                             entrydata.afiliasi = detail.afiliasi;
                                             entrydata.id_kelompok_bidang = detail.id_kelompok_bidang;
                                             entrydata.nama_kelompok_bidang = detail.kelompok_bidang;
-
-                                            //if (_DATA_SISTERcontext.TrPengabdian_DATA_SISTER.Any(a => a.id_penelitian_pengabdian == detail.id) ) // cek apakah ada data di tabel yang                                                                                               // kalau returnya true berarti harus dinegasi kan                                                                                   
-                                            //                                                                        // karena list ini bakal dimasukkin ke masterlist juga jadi nanti bisa ke dobel
-                                            //{
-                                            //    masterList.Add(_DATA_SISTERcontext.TrPengabdian_DATA_SISTER.AsNoTracking().FirstOrDefault(a => a.id_penelitian_pengabdian == detail.id)); // untuk dosen yang punya id_penelitian yg sudah tersimpan di database,                                                                                                     // jadi jatuhnya cuma mengupdate row, nambahin dosen ke NPP2 dst
-                                            //}
                                             
                                                 compareList.Add(entrydata);
 
@@ -1051,16 +1033,7 @@ namespace APIConsume.Controllers
                                             }
 
                                         }
-                                        //else
-                                        //{
-                                        //    TrPengabdian_DATA_SISTER entrydata = new TrPengabdian_DATA_SISTER();
-                                        //    entrydata.id_penelitian_pengabdian = itemPenelitian.id;
-                                        //    entrydata.judul_penelitian_pengabdian = itemPenelitian.judul;
-                                        //    entrydata.tahun_pelaksanaan = itemPenelitian.tahun_pelaksanaan;
 
-                                           
-                                        //        compareList.Add(entrydata);
-                                        //}
 
                                     }
                                     List<TrPengabdian_DATA_SISTER> toBeAdded = new List<TrPengabdian_DATA_SISTER>();
@@ -1152,7 +1125,7 @@ namespace APIConsume.Controllers
 
         }
 
-        public async Task<IActionResult> SinkronDataPublikasiProdiSISTERbyNPP(string npp)                                                                                                                                                                                                                                                                                                            
+        public async Task<IActionResult> SinkronDataPublikasiProdiSISTERbyNPP(string npp)                                
         {
             if (String.IsNullOrEmpty(npp))
                 npp = HttpContext.Session.GetString("NPP"); // Kalau null berarti diakses dari Profile Dosen, sedangkan kalau ada nilainya berarti dipanggil dari TestingLoadDosen
@@ -1165,9 +1138,6 @@ namespace APIConsume.Controllers
             var index = 0;
             string idDosen = _context.MstKaryawan.FirstOrDefault(a => a.Npp == npp).ID_DOSEN_SISTER;
             idDosen = idDosen != null ? idDosen.Trim() : null;
-
-
-            //Masih bug, entah kenaa dosen bu hetty harusnya ada 17 di masterlist tapi kok yg ada cuma 10
             var masterListTest =
                 from publikasi in _DATA_SISTERcontext.TrPublikasi_DATA_SISTER
                  join penulis in _DATA_SISTERcontext.TblPenulis_DATA_SISTER on publikasi.id_riwayat_publikasi_paten equals penulis.id_riwayat_publikasi_paten
@@ -1176,11 +1146,6 @@ namespace APIConsume.Controllers
 
             string a = masterListTest.ToString();
             List<TrPublikasi_DATA_SISTER> masterList =(new PublikasiSisterDAO()).GetPublikasiSisterTrPublikasi(idDosen).data;
-            //List<TrPublikasi_DATA_SISTER> masterList = _DATA_SISTERcontext.TrPublikasi_DATA_SISTER.
-            //    Join(_DATA_SISTERcontext.TblPenulis_DATA_SISTER,
-            //    publikasi => publikasi.id,
-            //    penulis => penulis.id_riwayat_publikasi_paten
-            //    (publikasi, penulis) => new { Publikasi = post, Meta = meta })
             List<TrPublikasi_DATA_SISTER> compareList = new List<TrPublikasi_DATA_SISTER>();
 
             if (HttpContext.Session.GetString("NPP") != null)
@@ -1191,8 +1156,6 @@ namespace APIConsume.Controllers
                     try
                     {
                         Sister_Token TokenSister = await getTokenSister();
-                        
-                        
                         if (!String.IsNullOrEmpty(idDosen) && idDosen.Length == 36) // Cek apakah Id Dosen valid atau tidak
                         {
                             var url = baseUrl + "/publikasi?id_sdm=" + idDosen;
@@ -1261,12 +1224,7 @@ namespace APIConsume.Controllers
                                                 prosiding = detail.prosiding == true ? 1 : 0,
                                                 asal_data = detail.asal_data
                                             }; // Membuat Objek yang nanti akan dimasukkan ke compareList
-                                            
 
-
-                                            // Masukkan data ke masterlist kalau ID saat ini sudah ada di dalam database(berarti akan menjadi update)
-                                            //if (_DATA_SISTERcontext.TrPublikasi_DATA_SISTER.Any(a => a.id == detail.id))
-                                            //    masterList.Add(_DATA_SISTERcontext.TrPublikasi_DATA_SISTER.AsNoTracking().FirstOrDefault(a => a.id == detail.id));
 
                                             compareList.Add(entrydata);
 
@@ -1284,25 +1242,6 @@ namespace APIConsume.Controllers
                                             }
 
                                         }
-                                        //else // jika ID yang  dicari tidak bisa ditemukan detailnya 
-                                        //{
-                                        //    TrPublikasi_DATA_SISTER entrydata = new TrPublikasi_DATA_SISTER();
-                                        //    entrydata.id = itemPublikasi.id;
-                                        //    entrydata.kategori_kegiatan = itemPublikasi.kategori_kegiatan;
-                                        //    entrydata.judul = itemPublikasi.judul;
-                                        //    entrydata.quartile = itemPublikasi.quartile;
-                                        //    entrydata.jenis_publikasi = itemPublikasi.jenis_publikasi;
-                                        //    entrydata.tanggal = Convert.ToDateTime(itemPublikasi.tanggal);
-                                        //    entrydata.asal_data = itemPublikasi.asal_data;
-
-
-
-                                        //    //if (_DATA_SISTERcontext.TrPublikasi_DATA_SISTER.Any(a => a.id == itemPublikasi.id)) // Cek apakah ID tersebut sudah ada di database
-                                        //    //    masterList.Add(_DATA_SISTERcontext.TrPublikasi_DATA_SISTER.AsNoTracking().FirstOrDefault(a => a.id == itemPublikasi.id));
-
-
-                                        //    compareList.Add(entrydata);
-                                        //}
 
 
                                     }
@@ -1476,22 +1415,12 @@ namespace APIConsume.Controllers
                                                 entrydata.jenis_evaluasi = detail.jenis_evaluasi;
                                                 entrydata.nama_substansi = detail.nama_substansi;
                                                 entrydata.NPP = npp;
-
-
-                                                //if (_DATA_SISTERcontext.TrPengajaran_DATA_SISTER.Any(a => a.id == detail.id) ) // cek apakah ada data di tabel yang                                                                                               // kalau returnya true berarti harus dinegasi kan                                                                                   
-                                                //                                                // karena list ini bakal dimasukkin ke masterlist juga jadi nanti bisa ke dobel
-                                                //{
-                                                //    masterList.Add(_DATA_SISTERcontext.TrPengajaran_DATA_SISTER.AsNoTracking().FirstOrDefault(a => a.id == detail.id)); // untuk dosen yang punya id_penelitian yg sudah tersimpan di database,
-                                                //                                                                                                                // jadi jatuhnya cuma mengupdate row, nambahin dosen ke NPP2 dst
-                                                //}
                                                 
-                                                    compareList.Add(entrydata);
-
+                                                compareList.Add(entrydata);
 
                                             }
                                             else
                                             {
-
 
                                                 TrPengajaran_Data_SISTER entrydata = new TrPengajaran_Data_SISTER();
                                                 entrydata.id = itemPengajaran.id;
@@ -1500,13 +1429,8 @@ namespace APIConsume.Controllers
                                                 entrydata.semester = itemPengajaran.semester;
                                                 entrydata.sks = itemPengajaran.sks;
                                                 entrydata.NPP = npp;
-                                                //if (_DATA_SISTERcontext.TrPengajaran_DATA_SISTER.Any(a => a.id == itemPengajaran.id) ) // cek apakah ada data di tabel yang                                                                                               // kalau returnya true berarti harus dinegasi kan                                                                                   
-                                                //                                                        // karena list ini bakal dimasukkin ke masterlist juga jadi nanti bisa ke dobel
-                                                //{
-                                                //    masterList.Add(_DATA_SISTERcontext.TrPengajaran_DATA_SISTER.AsNoTracking().FirstOrDefault(a => a.id == itemPengajaran.id)); // untuk dosen yang punya id_penelitian yg sudah tersimpan di database,
-                                                //}
                                                 
-                                                    compareList.Add(entrydata);
+                                                compareList.Add(entrydata);
                                             }
 
 
@@ -1756,7 +1680,7 @@ namespace APIConsume.Controllers
             //    item.tanggal = item.tanggal.ToString();
             //}
             var data = (new PublikasiSisterDAO()).GetPublikasiSister(dosen.ID_DOSEN_SISTER);
-            
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var package = new ExcelPackage())
             {
                 try
@@ -2584,34 +2508,6 @@ namespace APIConsume.Controllers
                         }
                     }
 
-                    
-                    //_DATA_SISTERcontext.TblPenulis_DATA_SISTER.AddRange(toBeAddedPenulis);
-                    //_DATA_SISTERcontext.TblPenulis_DATA_SISTER.RemoveRange(toBeDeletedPenulis);
-                    //int counterAnggota = 0;
-                    //foreach (var item in toBeUpdatedPenulis)
-                    //{
-                    //    counterAnggota++;
-                    //    var itemToUpdate = _DATA_SISTERcontext.TblPenulis_DATA_SISTER
-                    //        .FirstOrDefault(a => a.id_riwayat_publikasi_paten == item.id_riwayat_publikasi_paten && a.id_sdm == item.id_sdm || a.nama == item.nama);
-
-                    //    if(itemToUpdate != null)
-                    //    {
-                    //        itemToUpdate.afiliasi = item.afiliasi;
-                    //        itemToUpdate.corresponding_author = item.corresponding_author;
-                    //        itemToUpdate.id_orang = item.id_orang;
-                    //        itemToUpdate.id_peserta_didik = item.id_peserta_didik;
-                    //        itemToUpdate.id_riwayat_publikasi_paten = item.id_riwayat_publikasi_paten;
-                    //        itemToUpdate.id_sdm = item.id_sdm;
-                    //        itemToUpdate.jenis = item.jenis;
-                    //        itemToUpdate.nama = item.nama;
-                    //        itemToUpdate.nomor_induk_peserta_didik = item.nomor_induk_peserta_didik;
-                    //        itemToUpdate.peran = item.peran;
-                    //        itemToUpdate.urutan = item.urutan;
-
-                    //    }
-                    //}
-                    //await _DATA_SISTERcontext.SaveChangesAsync();
-
                 }
                 output.status = true;
                 return output;
@@ -2695,31 +2591,6 @@ namespace APIConsume.Controllers
                             return output;
                         }
                     }
-
-                    //_DATA_SISTERcontext.TblDokumen_DATA_SISTER.AddRange(toBeAddedDokumen);
-                    //_DATA_SISTERcontext.TblDokumen_DATA_SISTER.RemoveRange(toBeDeletedDokumen);
-                    //int counterAnggota = 0;
-                    //foreach (var item in toBeUpdatedDokumen)
-                    //{
-                    //    counterAnggota++;
-                    //    var itemToUpdate = _DATA_SISTERcontext.TblDokumen_DATA_SISTER
-                    //        .FirstOrDefault(a => a.id_dokumen == item.id_dokumen && a.id_dokumen == item.id_dokumen);
-
-                    //    if (itemToUpdate != null)
-                    //    {
-                    //        itemToUpdate.id_dokumen = item.id_dokumen;
-                    //        itemToUpdate.id_publikasi_atau_penelitian = item.id_publikasi_atau_penelitian;
-                    //        itemToUpdate.jenis_file = item.jenis_file;
-                    //        itemToUpdate.keterangan_dokumen = item.keterangan_dokumen;
-                    //        itemToUpdate.nama_dokumen = item.nama_dokumen;
-                    //        itemToUpdate.nama_file = item.nama_file;
-                    //        itemToUpdate.nama_jenis_dokumen = item.nama_jenis_dokumen;
-                    //        itemToUpdate.tanggal_upload = item.tanggal_upload;
-                    //        itemToUpdate.tautan = item.tautan;
-                    //    }
-
-                    //}
-                    //await _DATA_SISTERcontext.SaveChangesAsync();
 
                 }
                 output.status = true;
@@ -2889,19 +2760,6 @@ namespace APIConsume.Controllers
                     }
 
                 }
-
-                //_DATA_SISTERcontext.TblMitra_Litabmas_DATA_SISTER.AddRange(toBeAddedMitra);
-                //_DATA_SISTERcontext.TblMitra_Litabmas_DATA_SISTER.RemoveRange(toBeDeletedMitra);
-                //int counterAnggota = 0;
-                //foreach (var item in toBeUpdatedMitra)
-                //{
-                //    counterAnggota++;
-                //    var itemToUpdate = _DATA_SISTERcontext.TblMitra_Litabmas_DATA_SISTER
-                //        .FirstOrDefault(a => a.id == item.id);
-                //    itemToUpdate = item;
-                //}
-            
-
                 
                 output.status = true;
                 return output;

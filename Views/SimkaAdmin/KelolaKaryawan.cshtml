@@ -363,6 +363,10 @@
                                     popup.dialog('close');
                                     ShowMessage(data.message);
                                     dataTable.ajax.reload();
+                                } else {
+                                    toastr.error(data.message)
+                                    dataTable.ajax.reload();
+
                                 }
                             },
                             error: function (data) {

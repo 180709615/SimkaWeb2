@@ -2,8 +2,8 @@
 
 
 @{ Layout = "~/Views/Shared/_LayoutDynamic.cshtml";
-    var tempTglIjazah = Model.TglIjazah != null? Model.TglIjazah.ToString("yyyy-MM-dd") : null;
-   
+    var tempTglIjazah = Model.TglIjazah != DateTime.MinValue ? Model.TglIjazah.ToString("yyyy-MM-dd") : null;
+
 
     }
 <head>
@@ -30,78 +30,84 @@
             <br />
             @*<h3 class="card-title">Add or Edit Studi Lanjut</h3>*@
 
-            <form method="post" asp-action="AddEditRiwayatPendidikan" enctype="multipart/form-data" id="form">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form method="post" asp-action="AddEditRiwayatPendidikan" enctype="multipart/form-data" id="form" class="needs-validation"  novalidate>
+                @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
                 <input type="hidden" asp-for="IdTrRp" />
 
                 <div class="form-group">
                     <label class="control-label">NPP</label>
-                    <input asp-for="Npp" class="form-control" value="@Model.Npp"/>
-                    <span asp-validation-for="Npp" class="text-danger"></span>
+                    <input asp-for="Npp" class="form-control" value="@Model.Npp" required/>
                     <span class="text-danger">@TempData["NPPError"]</span>
+                    <div class="invalid-feedback">
+                        Field tidak boleh kosong!
+                    </div>
 
 
                 </div>
                 <div class="form-group">
                     <label class="control-label">Jenjang</label>
                     <select asp-for="IdRefJenjang" class="form-control"
-                            asp-items="@(new SelectList(Model.jenjang,"IdRefJenjang","Deskripsi"))" >
+                            asp-items="@(new SelectList(Model.jenjang,"IdRefJenjang","Deskripsi"))" required>
                         <option value="" disabled selected>Please select one</option>
                     </select>
-                    <span asp-validation-for="IdRefJenjang" class="text-danger"></span>
+                    <div class="invalid-feedback">
+                        Field tidak boleh kosong!
+                    </div>
 
                 </div>
                 <div class="form-group">
                     <label class="control-label">Status Studi</label>
                     <select asp-for="IdRefSs" class="form-control"
-                            asp-items="@(new SelectList(Model.StatusStudi,"IdRefSs","Deskripsi"))">
+                            asp-items="@(new SelectList(Model.StatusStudi,"IdRefSs","Deskripsi"))" required>
                         <option value="" disabled selected>Please select one</option>
                     </select>
-                    <span asp-validation-for="IdRefSs" class="text-danger"></span>
+                    <div class="invalid-feedback">
+                        Field tidak boleh kosong!
+                    </div>
 
                 </div>
                 <div class="form-group row">
                     <div class="col-3">
                         <label asp-for="NamaSekolah" class="control-label">Nama Sekolah</label>
-                        <input asp-for="NamaSekolah" class="form-control" value="@Model.NamaSekolah" />
-                        <span asp-validation-for="NamaSekolah" class="text-danger"></span>
+                        <input asp-for="NamaSekolah" class="form-control" value="@Model.NamaSekolah" required/>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
                     <div class="col-3">
                         <label asp-for="Fakultas" class="control-label">Fakultas</label>
-                        <input asp-for="Fakultas" class="form-control" value="@Model.Fakultas"/>
-                        <span asp-validation-for="Fakultas" class="text-danger"></span>
+                        <input asp-for="Fakultas" class="form-control" value="@Model.Fakultas" required/>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
                     <div class="col-3">
                         <label asp-for="Jurusan" class="control-label">Jurusan</label>
-                        <input asp-for="Jurusan" class="form-control" value="@Model.Jurusan"/>
-                        <span asp-validation-for="Jurusan" class="text-danger"></span>
+                        <input asp-for="Jurusan" class="form-control" value="@Model.Jurusan" required/>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
                     <div class="col-3">
                         <label asp-for="ProgramStudi" class="control-label">Program Studi</label>
-                        <input asp-for="ProgramStudi" class="form-control" value="@Model.ProgramStudi"/>
-                        <span asp-validation-for="ProgramStudi" class="text-danger"></span>
+                        <input asp-for="ProgramStudi" class="form-control" value="@Model.ProgramStudi" required/>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
 
                 </div>
                 <div class="form-group row">
                     <div class="col-6">
                         <label asp-for="NoIjazah" class="control-label">No. Ijazah</label>
-                        <input asp-for="NoIjazah" class="form-control" value="@Model.NoIjazah"/>
-                        <span asp-validation-for="NoIjazah" class="text-danger"></span>
+                        <input asp-for="NoIjazah" class="form-control" value="@Model.NoIjazah" required/>
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
                     <div class="col-6">
                         <label asp-for="TglIjazah" class="control-label">Tanggal Ijazah</label>
-                        @*@if (tempTglIjazah != null)
-                        {
-                            <input asp-for="TglIjazah" type="date" class="form-control" value="@tempTglIjazah" />
-                        }
-                        else
-                        {
-                            <input asp-for="TglIjazah" type="date" class="form-control"  />
-
-                        }*@
                         <input asp-for="TglIjazah" type="date" class="form-control" value="@tempTglIjazah" />
-                        <span asp-validation-for="TglIjazah" class="text-danger"></span>
                     </div>
 
 
@@ -110,38 +116,44 @@
 
                 <div class="form-group">
                     <label asp-for="Ipk" class="control-label">IPK</label>
-                    <input type="number" asp-for="Ipk" class="form-control" value="@Model.Ipk" />
-                    <span asp-validation-for="Ipk" min="0" max="4" class="text-danger"></span>
+                    <input type="number" asp-for="Ipk" class="form-control" value="@Model.Ipk" required/>
+                    <div class="invalid-feedback">
+                        Field tidak boleh kosong!
+                    </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="Gelar" class="control-label"> Gelar</label>
-                    <input asp-for="Gelar" class="form-control" value="@Model.Gelar"/>
-                    <span asp-validation-for="Gelar" class="text-danger"></span>
+                    <input asp-for="Gelar" class="form-control" value="@Model.Gelar" required />
+                    <div class="invalid-feedback">
+                        Field tidak boleh kosong!
+                    </div>
                 </div>
 
                 <div class="form-group row">
                     <div class="col-6">
                         <label asp-for="TahunMasuk" class="control-label">Tahun Masuk</label>
-                        <input asp-for="TahunMasuk" type="number" min="1900" max="2100" class="form-control" value="@Model.TahunMasuk"/>
-                        <span asp-validation-for="TahunMasuk" class="text-danger"></span>
+                        <input asp-for="TahunMasuk" type="number" min="1900" max="2100" class="form-control" value="@Model.TahunMasuk" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
                     <div class="col-6">
                         <label asp-for="TahunLulus" class="control-label">Tahun Lulus</label>
-                        <input asp-for="TahunLulus" type="number" min="1900" max="2100" class="form-control" value="@Model.TahunMasuk"/>
-                        <span asp-validation-for="TahunLulus" class="text-danger"></span>
+                        <input asp-for="TahunLulus" type="number" min="1900" max="2100" class="form-control" value="@Model.TahunMasuk" required />
+                        <div class="invalid-feedback">
+                            Field tidak boleh kosong!
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="AsalBeasiswa" class="control-label">Asal Beasiswa</label>
                     <input asp-for="AsalBeasiswa" class="form-control" value="@Model.AsalBeasiswa"/>
-                    <span asp-validation-for="AsalBeasiswa" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="Keterangan" class="control-label">Keterangan</label>
                     <textarea asp-for="Keterangan" class="form-control" rows="2" value="@Model.Keterangan"></textarea>
-                    <span asp-validation-for="Keterangan" class="text-danger"></span>
                 </div>
 
                 <div class="form-group ">
@@ -163,7 +175,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="button" id="btnSave" value="Save" class="btn btn-primary">Save</button>
+                    <button type="submit" id="btnSave" value="Save" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -260,24 +272,48 @@
 
         document.querySelector('#ScanTranskripForm').addEventListener("change", previewAsuransi);
 
-        $("#btnSave").click(function (e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Apakah data yang Anda isi sudah benar?',
-                //text: "No SK tidak dapat dirubah setelah disimpan",
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                denyButtonText: `Tidak`,
-            }).then((result) => {
-                if (result.isConfirmed) {
+        //$("#btnSave").click(function (e) {
+        //    e.preventDefault();
+        //    Swal.fire({
+        //        title: 'Apakah data yang Anda isi sudah benar?',
+        //        //text: "No SK tidak dapat dirubah setelah disimpan",
+        //        showCancelButton: true,
+        //        confirmButtonText: 'Ya',
+        //        denyButtonText: `Tidak`,
+        //    }).then((result) => {
+        //        if (result.isConfirmed) {
 
-                    $("form").submit()
-                } else {
-                    return false;
-                }
+        //            $("form").submit()
+        //        } else {
+        //            return false;
+        //        }
 
-            });
+        //    });
 
-        });
+        //});
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            console.log("check validity false")
+
+                        }
+                        form.classList.add('was-validated');
+
+                        if (form.checkValidity() === true) {
+
+                            event.preventDefault();
+                            $('.needs-validation').submit()
+                        }
+
+                    }, false);
+                });
+            }, false);
+        })();
     </script>
 }

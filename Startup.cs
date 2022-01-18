@@ -32,7 +32,7 @@ namespace APIConsume
 
             services.AddMvc();
             services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.IdleTimeout = TimeSpan.FromDays(1);
                 
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;

@@ -425,7 +425,7 @@ namespace APIConsume.Controllers
             {
                 var balikan = new KaryawanForm()
                 {
-
+                    isTambahDataBaru = true,
                     struktural = _context.RefJabatanStruktural.ToList(),
 
                     fungsional = _context.RefFungsional.ToList(),
@@ -454,8 +454,9 @@ namespace APIConsume.Controllers
                 //var karyawan = new MstKaryawanDAO().GetDataKaryawanbyNPP(npp);
                 var balikan = new KaryawanForm()
                 {
+                    isTambahDataBaru = false,
 
-                    struktural = _context.RefJabatanStruktural.ToList(),
+                struktural = _context.RefJabatanStruktural.ToList(),
 
                     fungsional = _context.RefFungsional.ToList(),
                     unit = _context.MstUnit.OrderBy(c => c.NamaUnit).ToList(),
@@ -716,11 +717,19 @@ namespace APIConsume.Controllers
                 data.BiografiSingkat = karyawandb.BiografiSingkat;
                 data.Password = karyawandb.Password;
             }
-            if (!karyawanada)
+            if (karyawan.isTambahDataBaru == true)
             {
-                _context.MstKaryawan.Add(data);
-                await _context.SaveChangesAsync();
-                return Json(new { success = true, message = "Add new data success." });
+                if (!karyawanada){
+                    _context.MstKaryawan.Add(data);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Add new data success." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "NPP Sudah ada" });
+
+                }
+
             }
 
             else
@@ -3353,7 +3362,7 @@ namespace APIConsume.Controllers
 
                 var balikan = new HstSkForm()
                 {
-                    ListTahunAkademik = _context.TblTahunAkademik.ToList()
+                    ListTahunAkademik = _context.TblTahunAkademik.OrderByDescending(a => a.TahunAkademik).ToList()
                 };
                 return View(balikan);
             }
@@ -3363,7 +3372,7 @@ namespace APIConsume.Controllers
 
                 var balikan = new HstSkForm()
                 {
-                    ListTahunAkademik = _context.TblTahunAkademik.ToList(),
+                    ListTahunAkademik = _context.TblTahunAkademik.OrderByDescending(a => a.TahunAkademik).ToList(),
                     NoSk = sk.NoSk,
                     DateInserted = sk.DateInserted,
                     DeskripsiSk = sk.DeskripsiSk,
@@ -3390,7 +3399,7 @@ namespace APIConsume.Controllers
                 {
                     String id = data.NoSk;
                     var golonganada = await _context.HstSk.AnyAsync(x => x.NoSk == id);
-                    data.ListTahunAkademik = _context.TblTahunAkademik.ToList();
+                data.ListTahunAkademik = _context.TblTahunAkademik.OrderByDescending(a => a.TahunAkademik).ToList();
                     HstSk skdb = await _context.HstSk.AsNoTracking().FirstOrDefaultAsync(x => x.NoSk == id);
                     //mengambil data dari form
                     data.DateInserted = DateTime.Now;
@@ -3399,10 +3408,10 @@ namespace APIConsume.Controllers
                     input.DeskripsiSk = data.DeskripsiSk;
                     input.DateInserted = data.DateInserted;
                     input.LevelSk = data.LevelSk;
-                    input.TglSk = data.TglSk;
-                    input.TglAwal = data.TglAwal;
-                    input.TglAkhir = data.TglAkhir;
-                    input.NoSemester = data.NoSemester;
+                    input.TglSk = data.TglSk !=  DateTime.MinValue ? data.TglSk : (DateTime?)null;
+                input.TglAwal = data.TglAwal != DateTime.MinValue ? data.TglAwal : (DateTime?)null;
+                input.TglAkhir = data.TglAwal != DateTime.MinValue ? data.TglAwal : (DateTime?)null;
+                input.NoSemester = data.NoSemester;
                     input.IdTahunAkademik = data.IdTahunAkademik;
                     if (data.FileSkform != null && data.FileSkform.Length > 0)
                     {
@@ -3421,10 +3430,10 @@ namespace APIConsume.Controllers
                         data.FileSk = skdb.FileSk;
                     else data.FileSk = null;
 
-                    if (!ModelState.IsValid)
-                    {
-                        return View(data);
-                    }
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    return View(data);
+                    //}
 
                     if (!golonganada)
                     {
@@ -3436,7 +3445,7 @@ namespace APIConsume.Controllers
                     {
                         _context.Update(input);
                         await _context.SaveChangesAsync();
-                        TempData["SuccessMessage"] = "Tambah Data Surat Keputusan Berhasil";
+                        TempData["SuccessMessage"] = "Ubah Data Surat Keputusan Berhasil";
                     }
                     return RedirectToAction("KelolaSuratKeputusan","SimkaAdmin");
                 }
@@ -3448,68 +3457,68 @@ namespace APIConsume.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostSuratKeputusan(HstSkForm data)
+        //public async Task<IActionResult> PostSuratKeputusan(HstSkForm data)
 
-        {
-            String id = data.NoSk;
-            var golonganada = await _context.HstSk.AnyAsync(x => x.NoSk == id);
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            HstSk skdb = await _context.HstSk.AsNoTracking().FirstOrDefaultAsync(x => x.NoSk == id);
-            //mengambil data dari form
-            data.DateInserted = DateTime.Now;
-            var input = new HstSk();
-            input.NoSk = data.NoSk;
-            input.DeskripsiSk = data.DeskripsiSk;
-            input.DateInserted = data.DateInserted;
-            input.LevelSk = data.LevelSk;
-            input.TglSk = data.TglSk;
-            input.TglAwal = data.TglAwal;
-            input.TglAkhir = data.TglAkhir;
-            input.NoSemester = data.NoSemester;
-            input.IdTahunAkademik = data.IdTahunAkademik;
-            if (data.FileSkform != null && data.FileSkform.Length > 0)
-            {
-                byte[] p1 = null;
-                using (var fs1 = data.FileSkform.OpenReadStream())
-                using (var ms1 = new MemoryStream())
-                {
-                    fs1.CopyTo(ms1);
-                    p1 = ms1.ToArray();
-                }
-                input.FileSk = p1;
+        //{
+        //    String id = data.NoSk;
+        //    var golonganada = await _context.HstSk.AnyAsync(x => x.NoSk == id);
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    HstSk skdb = await _context.HstSk.AsNoTracking().FirstOrDefaultAsync(x => x.NoSk == id);
+        //    //mengambil data dari form
+        //    data.DateInserted = DateTime.Now;
+        //    var input = new HstSk();
+        //    input.NoSk = data.NoSk;
+        //    input.DeskripsiSk = data.DeskripsiSk;
+        //    input.DateInserted = data.DateInserted;
+        //    input.LevelSk = data.LevelSk;
+        //    input.TglSk = data.TglSk;
+        //    input.TglAwal = data.TglAwal;
+        //    input.TglAkhir = data.TglAkhir;
+        //    input.NoSemester = data.NoSemester;
+        //    input.IdTahunAkademik = data.IdTahunAkademik;
+        //    if (data.FileSkform != null && data.FileSkform.Length > 0)
+        //    {
+        //        byte[] p1 = null;
+        //        using (var fs1 = data.FileSkform.OpenReadStream())
+        //        using (var ms1 = new MemoryStream())
+        //        {
+        //            fs1.CopyTo(ms1);
+        //            p1 = ms1.ToArray();
+        //        }
+        //        input.FileSk = p1;
 
-            }
-            else if (skdb != null)
-                data.FileSk = skdb.FileSk;
-            else data.FileSk = null;
+        //    }
+        //    else if (skdb != null)
+        //        data.FileSk = skdb.FileSk;
+        //    else data.FileSk = null;
 
-            if (!golonganada)
-            {
-                // refJenisAppraisal.IdRefJnsAppraisal = _context.RefJenisAppraisal.Max(p => p.IdRefJnsAppraisal) + 1;
-                //code ini buat mengambil id baru dari database
+        //    if (!golonganada)
+        //    {
+        //        // refJenisAppraisal.IdRefJnsAppraisal = _context.RefJenisAppraisal.Max(p => p.IdRefJnsAppraisal) + 1;
+        //        //code ini buat mengambil id baru dari database
 
-                _context.HstSk.Add(input);
+        //        _context.HstSk.Add(input);
 
-                await _context.SaveChangesAsync();
+        //        await _context.SaveChangesAsync();
 
-                return Json(new { success = true, message = "Add new data success." });
-            }
-            else
-            {
-                _context.Update(input);
+        //        return Json(new { success = true, message = "Add new data success." });
+        //    }
+        //    else
+        //    {
+        //        _context.Update(input);
 
-                await _context.SaveChangesAsync();
+        //        await _context.SaveChangesAsync();
 
-                return Json(new { success = true, message = "Edit data success." });
-            }
-        }
+        //        return Json(new { success = true, message = "Edit data success." });
+        //    }
+        //}
 
 
-
-        public async Task<IActionResult> DeleteSuratKeputusan([FromRoute] String id)
+        [HttpGet]
+        public async Task<IActionResult> DeleteSuratKeputusan( String id)
         {
             if (!ModelState.IsValid)
             {
@@ -3517,6 +3526,7 @@ namespace APIConsume.Controllers
             }
 
             var todo = await _context.HstSk.SingleOrDefaultAsync(m => m.NoSk == id);
+            await DeleteSemuaNPPSK(id);
             if (todo == null)
             {
                 return NotFound();
@@ -3560,21 +3570,55 @@ namespace APIConsume.Controllers
         }
         public async Task<IActionResult> DeleteListSK(string npp, string nosk)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var todo = _context.TblSkKaryawan.AsNoTracking().Where(m => (m.Npp == npp && m.NoSk == nosk)).ToList();
+                if (todo == null)
+                {
+                    return NotFound();
+                }
+
+                _context.TblSkKaryawan.RemoveRange(todo);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, message = "Delete success." });
+            }catch(Exception ex)
+            {
+                throw;
+            }
+            
+        }
+
+        public async Task<IActionResult> DeleteSemuaNPPSK(string nosk)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var todo = _context.TblSkKaryawan.AsNoTracking().Where(m =>  m.NoSk == nosk).ToList();
+                if (todo == null)
+                {
+                    return NotFound();
+                }
+
+                _context.TblSkKaryawan.RemoveRange(todo);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, message = "Delete success." });
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
 
-            var todo = await _context.TblSkKaryawan.AsNoTracking().SingleOrDefaultAsync(m => (m.Npp == npp && m.NoSk == nosk));
-            if (todo == null)
-            {
-                return NotFound();
-            }
-
-            _context.TblSkKaryawan.Remove(todo);
-            await _context.SaveChangesAsync();
-
-            return Json(new { success = true, message = "Delete success." });
         }
         public async Task<IActionResult> PostListSK([FromBody] TblSkKaryawan refJenisAppraisal)
 
@@ -3750,6 +3794,7 @@ namespace APIConsume.Controllers
                     rp.karyawan = _context.MstKaryawan.Select(x => new MstKaryawan { Npp = x.Npp, Nama = x.Nama }).OrderBy(a => a.Nama).ToList();
                     rp.jenjang = _context.RefJenjang.Select(x => new RefJenjang { IdRefJenjang = x.IdRefJenjang, Deskripsi = x.Deskripsi }).ToList();
                     rp.StatusStudi = _context.RefStatusStudi.Select(x => new RefStatusStudi { IdRefSs = x.IdRefSs, Deskripsi = x.Deskripsi }).ToList();
+                    rp.TglIjazah = rp.TglIjazah == null ? DateTime.MinValue : rp.TglIjazah;
                     var rpdb = _context.TrRiwayatPendidikan.AsNoTracking().FirstOrDefault(x => x.IdTrRp == rp.IdTrRp);
                     rp.DateInserted = DateTime.Now; // mengganti tanggal isnserted
                     TrRiwayatPendidikan data = new TrRiwayatPendidikan()
@@ -3770,7 +3815,7 @@ namespace APIConsume.Controllers
                         NoIjazah = rp.NoIjazah,
                         Npp = rp.Npp,
                         NamaSekolah = rp.NamaSekolah,
-                        TglIjazah = rp.TglIjazah,
+                        TglIjazah = rp.TglIjazah != DateTime.MinValue ? rp.TglIjazah : (DateTime?)null,
                         TahunLulus = rp.TahunLulus,
                         TahunMasuk = rp.TahunMasuk,
                         ProgramStudi = rp.ProgramStudi,
@@ -3814,10 +3859,10 @@ namespace APIConsume.Controllers
                     else data.ScanTranskrip = null;
 
                     var cekNPP = _context.MstKaryawan.AsNoTracking().Any(a => a.Npp == rp.Npp);
-                    if (!ModelState.IsValid)
-                    {
-                        return View(rp);
-                    }
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    return View(rp);
+                    //}
 
                     if (cekNPP == false)
                     {
@@ -4276,7 +4321,7 @@ namespace APIConsume.Controllers
                      apr = p.IdRefJnsAppraisaliNavigation.Deskripsi,
                      p.Judul
                  });
-
+                
                 return Json(new { data = customerData });
 
             }
@@ -4575,17 +4620,17 @@ namespace APIConsume.Controllers
         {
                 try
                 {
-                    var customerData = _context.TrPengembangan
-                     .Select(p => new
-                     {
-                         p.Npp,
-                         p.IdTrPengembangan,
-                         refPe = p.IdRefPengembanganNavigation.Deskripsi,
-                         apr = p.IdRefJnsAppraisaliNavigation.Deskripsi,
-                         p.Judul
-                     });
-
-                    return Json(new { data = customerData });
+                    //var customerData = _context.TrPengembangan
+                    // .Select(p => new
+                    // {
+                    //     p.Npp,
+                    //     p.IdTrPengembangan,
+                    //     refPe = p.IdRefPengembanganNavigation.Deskripsi,
+                    //     apr = p.IdRefJnsAppraisaliNavigation.Deskripsi,
+                    //     p.Judul
+                    // });
+                var customerData = new TrPengembanganDAO().GetTrPengembangan();
+                return Json(new { data = customerData.data });
 
                 }
                 catch (Exception)
@@ -5202,9 +5247,11 @@ namespace APIConsume.Controllers
                 {
                     studiLanjut.listJenjang = _context.RefJenjang.ToList();
                     studiLanjut.listStatusStudi = _context.RefStatusStudi.ToList();
-
-
-                    bool studiLanjutAda = _context.TblStudiLanjut.AsNoTracking().Any(a => a.IdStudiLanjut == studiLanjut.IdStudiLanjut);
+                    studiLanjut.TglLulus = studiLanjut.TglLulus == null ? DateTime.MinValue : studiLanjut.TglLulus;
+                studiLanjut.TglMulai = studiLanjut.TglMulai == null ? DateTime.MinValue : studiLanjut.TglMulai;
+                studiLanjut.TglPenempatanKmbli = studiLanjut.TglPenempatanKmbli == null ? DateTime.MinValue : studiLanjut.TglPenempatanKmbli;
+           
+                bool studiLanjutAda = _context.TblStudiLanjut.AsNoTracking().Any(a => a.IdStudiLanjut == studiLanjut.IdStudiLanjut);
                     var datadb = _context.TblStudiLanjut.AsNoTracking().FirstOrDefault(a => a.IdStudiLanjut == studiLanjut.IdStudiLanjut);
                     var dataSumberBiayadb = _context.TblSumberBiayaSl.FirstOrDefault(a => a.IdStudiLanjut == studiLanjut.IdStudiLanjut);
                     TblStudiLanjut data = new TblStudiLanjut()
@@ -5215,9 +5262,9 @@ namespace APIConsume.Controllers
                         NamaSekolah = studiLanjut.NamaSekolah,
                         KotaSekolah = studiLanjut.KotaSekolah,
                         NegaraSekolah = studiLanjut.NegaraSekolah,
-                        TglMulai = studiLanjut.TglMulai,
-                        TglLulus = studiLanjut.TglLulus,
-                        TglPenempatanKmbli = studiLanjut.TglPenempatanKmbli,
+                        TglMulai = studiLanjut.TglMulai != DateTime.MinValue ? studiLanjut.TglMulai : (DateTime?)null,
+                        TglLulus = studiLanjut.TglLulus != DateTime.MinValue ? studiLanjut.TglLulus : (DateTime?)null,
+                        TglPenempatanKmbli = studiLanjut.TglPenempatanKmbli != DateTime.MinValue ? studiLanjut.TglPenempatanKmbli : (DateTime?)null,
                         Fakultas = studiLanjut.Fakultas,
                         Prodi = studiLanjut.Prodi,
                         DlmNegriLuarNegri = studiLanjut.DlmNegriLuarNegri,
@@ -5263,10 +5310,10 @@ namespace APIConsume.Controllers
                     else data.SkPenempatanKmbl = null;
                     // ----------------- Pengecekan-------------------
                     var cekNPP = _context.MstKaryawan.AsNoTracking().Any(a => a.Npp == studiLanjut.Npp);
-                    if (!ModelState.IsValid)
-                    {
-                        return View(studiLanjut);
-                    }
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    return View(studiLanjut);
+                    //}
 
                     if (cekNPP == false)
                     {
@@ -5303,6 +5350,11 @@ namespace APIConsume.Controllers
 
         }
 
+        public JsonResult getNamaKaryawanbyNPP(string npp)
+        {
+            MstKaryawan data = new MstKaryawanDAO().GetDataKaryawanbyNPP(npp);
+            return Json(data.Nama);
+        }
         public IActionResult LoadDataStudiLanjutbyNPP(string npp, string nama, int idJenjang, int idSumberBiaya, string Universitas, string Fakultas, string ProgramStudi, string Kota, string Negara, DateTime tanggalMulai, DateTime tanggalLulus, int targetLulus, string DalamAtauLuarNegeri, int idRefSs)
         {
             try
@@ -5473,6 +5525,10 @@ namespace APIConsume.Controllers
             {
                 return BadRequest(ModelState);
             }
+            //Hapus 
+            var listDetailBiaya = _context.TblBiayaSlInternal.Where(a => a.IdSumberBiayaSl == id).ToList();
+            _context.TblBiayaSlInternal.RemoveRange(listDetailBiaya);
+            _context.SaveChanges();
 
             var todo = await _context.TblSumberBiayaSl.SingleOrDefaultAsync(m => m.IdSumberBiayaSl == id);
             if (todo == null)

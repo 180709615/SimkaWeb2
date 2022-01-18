@@ -181,7 +181,7 @@
                     {
                         "data": "noSk", // diganti sama id
                         "render": function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=gotoAddEdit('"+data+"')><i class='fa fa-pencil'></i> Edit</a><a class=' text-light btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i> Delete</a>";
+                            return "<a class='btn btn-default btn-sm' onclick=gotoAddEdit('" + data +"')><i class='fa fa-pencil'></i> Edit</a><a class=' text-light btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete('" + data + "')><i class='fa fa-trash'></i> Delete</a>";
                             //return "<a class='btn btn-default btn-sm' onclick=ShowPopup('/SimkaAdmin/AddEditSuratKeputusan?noSk=" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class=' text-light btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i> Delete</a>";
                         }
                     }

@@ -15,13 +15,12 @@ namespace APIConsume.DAO
             {
                 try
                 {
-                    //string query = @"SELECT *
-                    //                FROM     PUBLIKASI INNER JOIN PENULIS ON PUBLIKASI.id_riwayat_publikasi_paten = PENULIS.id_riwayat_publikasi_paten
-                    //                WHERE(PENULIS.id_sdm = @id_dosen)            ";
-                    string query = @"SELECT PUBLIKASI.judul as judul, PUBLIKASI.id_riwayat_publikasi_paten as id_publikasi ,PUBLIKASI.judul_artikel as judul_artikel, PUBLIKASI.kategori_kegiatan as kategori_kegiatan ,CONVERT(VARCHAR,PUBLIKASI.tanggal,105) as tanggal,
+              
+                    string query = @"SELECT PUBLIKASI.judul as judul, PUBLIKASI.id_riwayat_publikasi_paten as id_publikasi ,PUBLIKASI.judul_artikel as judul_artikel, PUBLIKASI.kategori_kegiatan as kategori_kegiatan ,PUBLIKASI.tanggal as tanggal,
                                     PENULIS.peran as peran, PENULIS.urutan as urutan
                                     FROM   PUBLIKASI INNER JOIN PENULIS ON PUBLIKASI.id_riwayat_publikasi_paten = PENULIS.id_riwayat_publikasi_paten                                    
-                                    WHERE(PENULIS.id_sdm = @id_dosen)  ";
+                                    WHERE(PENULIS.id_sdm = @id_dosen)  
+                                    ORDER BY PUBLIKASI.tanggal DESC";
                     //string query = @"SELECT PUBLIKASI.judul as judul, PUBLIKASI.id_riwayat_publikasi_paten as id_publikasi ,PUBLIKASI.judul_artikel as judul_artikel, PUBLIKASI.kategori_kegiatan as kategori_kegiatan ,CONVERT(VARCHAR,PUBLIKASI.tanggal,105) as tanggal,
                     //                PENULIS.peran as peran, PENULIS.urutan as urutan, DOKUMEN.id_dokumen, DOKUMEN.nama_dokumen
                     //                FROM   PUBLIKASI INNER JOIN PENULIS ON PUBLIKASI.id_riwayat_publikasi_paten = PENULIS.id_riwayat_publikasi_paten

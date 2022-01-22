@@ -144,27 +144,19 @@ namespace APIControllers.Controllers
                     }
                     else
                     {
-                        // password tidak sesuai
                         TempData["err_message"] = "Gagal Login! Password anda salah.";
-                        
                     }
                 }
                 else
                 {
-                    // password tidak sesuai
                     TempData["err_message"] = "Data Karyawan tidak ditemukan";
-                   
                 }
-
             }
-
             if (isAuthenticated)
             {
                 // berhasil login
                 var principal = new ClaimsPrincipal(identity);
                 var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-
                 return RedirectToAction("Dashboard", "Home");
             }
             else
@@ -628,8 +620,8 @@ namespace APIControllers.Controllers
                                     "Waktu Dan Tanggal:  " + DateTime.Now +
                                     
                                     "<br> Silahkan klik link di bawah ini untuk memperbarui password Anda " +
-                                     "<br><a href='https://localhost:44393/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://localhost:44393/Home/ResetPasswordForm?uuid=" + uuid + " </a>" +
-                                     //"<br><a href='https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid +  " </a>" +
+                                     //"<br><a href='https://localhost:44393/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://localhost:44393/Home/ResetPasswordForm?uuid=" + uuid + " </a>" +
+                                     "<br><a href='https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid + "' class='btn btn-info' target='_blank'>https://simka2-dev.uajy.ac.id/Home/ResetPasswordForm?uuid=" + uuid + " </a>" +
 
                                     "<br>Apabila Bapak/ Ibu tidak mengenali aktivitas ini agar segera menghubungi KSI melalui " +
                                     "<a href='http://ksi.uajy.ac.id/helpdesk/open.php' target='_blank'> http://ksi.uajy.ac.id/helpdesk</a>" +
@@ -653,11 +645,11 @@ namespace APIControllers.Controllers
                         email.From.Add(MailboxAddress.Parse("dkmasprayoga2@gmail.com")); // Nanti diganti dengan email dari KSI
                         //email.To.Add(MailboxAddress.Parse("180709615@students.uajy.ac.id"));
                         email.To.Add(MailboxAddress.Parse("dimasprayoga2@gmail.com"));
-
+                       //email.To.Add(MailboxAddress.Parse(dataDosen.Email));
                         email.Subject = "Lupa password";
 
                         var bodyBuilder = new BodyBuilder();
-                        bodyBuilder.HtmlBody = informasilogin;
+                        bodyBuilder.HtmlBody = informasilogin;  
                         email.Body = bodyBuilder.ToMessageBody();
 
 

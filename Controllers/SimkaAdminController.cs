@@ -3430,10 +3430,6 @@ namespace APIConsume.Controllers
                         data.FileSk = skdb.FileSk;
                     else data.FileSk = null;
 
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    return View(data);
-                    //}
 
                     if (!golonganada)
                     {
@@ -3859,10 +3855,7 @@ namespace APIConsume.Controllers
                     else data.ScanTranskrip = null;
 
                     var cekNPP = _context.MstKaryawan.AsNoTracking().Any(a => a.Npp == rp.Npp);
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    return View(rp);
-                    //}
+             
 
                     if (cekNPP == false)
                     {
